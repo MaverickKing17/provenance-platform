@@ -1,3 +1,5 @@
+import './global.css'; // <-- THIS IS THE CRITICAL LINE to load Tailwind styles
+
 import React from 'react';
 import { Hero } from './components/Hero';
 import { Footer } from './components/Footer';
