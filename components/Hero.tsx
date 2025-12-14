@@ -4,7 +4,29 @@ import { ShieldCheck, BarChart3, Globe, Lock, Search, Scan, Database } from 'luc
 export const Hero: React.FC = () => {
   return (
     <section className="relative w-full min-h-screen flex items-center bg-brand-navy pt-20 pb-12 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+      
+      {/* Background Dynamic Effects */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* Technical Grid */}
+        <div className="absolute inset-0 opacity-[0.03]" 
+             style={{
+               backgroundImage: 'linear-gradient(#E2E8F0 1px, transparent 1px), linear-gradient(90deg, #E2E8F0 1px, transparent 1px)',
+               backgroundSize: '40px 40px',
+               maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'
+             }}>
+        </div>
+
+        {/* Rotating Geometric Elements */}
+        <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] rounded-full border border-brand-gold/5 border-dashed animate-spin" style={{ animationDuration: '120s' }}></div>
+        <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] rounded-full border border-brand-offWhite/5 animate-spin" style={{ animationDuration: '90s', animationDirection: 'reverse' }}></div>
+        <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] rounded-full border border-brand-gold/5 border-dotted animate-spin" style={{ animationDuration: '150s' }}></div>
+        
+        {/* Ambient Glows */}
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-gold/5 blur-[120px] rounded-full mix-blend-screen opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-navy/80 blur-[100px] rounded-full z-10"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 relative z-10">
         
         {/* Left Content */}
         <div className="w-full lg:w-1/2 z-10 flex flex-col justify-center space-y-8">
