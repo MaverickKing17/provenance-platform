@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Building2, 
   ShieldCheck, 
@@ -74,23 +75,23 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="space-y-4">
               {[
-                { label: 'Terms of Service', href: '#' },
-                { label: 'Privacy Policy', href: '#' },
-                { label: 'Security Policy', href: '#' },
-                { label: 'AI Ethics Statement', href: '#', badge: 'Essential', badgeColor: 'text-brand-amber border-brand-amber/30 bg-brand-amber/10' },
-                { label: 'Web3 Provenance Policy', href: '#' },
-                { label: 'Supplier Vetting Standards', href: '#' },
-                { label: 'Data Protection & GDPR', href: '#' },
+                { label: 'Terms of Service', href: '/terms-of-service' },
+                { label: 'Privacy Policy', href: '/privacy-policy' },
+                { label: 'Security Policy', href: '/security-policy' },
+                { label: 'AI Ethics Statement', href: '/ai-ethics', badge: 'Essential', badgeColor: 'text-brand-amber border-brand-amber/30 bg-brand-amber/10' },
+                { label: 'Web3 Provenance Policy', href: '/web3-provenance' },
+                { label: 'Supplier Vetting Standards', href: '/vetting-standards' },
+                { label: 'Data Protection & GDPR', href: '/gdpr' },
               ].map((link, idx) => (
                 <li key={idx}>
-                  <a href={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
+                  <Link to={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
                     <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
                     {link.badge && (
                       <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-wider ${link.badgeColor}`}>
                         {link.badge}
                       </span>
                     )}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -104,31 +105,31 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="space-y-4">
               {[
-                { label: 'About Us / Our Story', href: '#' },
-                { label: 'Careers', href: '#', badge: "We're Hiring", badgeColor: 'text-brand-success border-brand-success/30 bg-brand-success/10' },
-                { label: 'Press & Newsroom', href: '#' },
-                { label: 'Investor Relations', href: '#' },
-                { label: 'Case Studies', href: '#' },
-                { label: 'Industry Insights Blog', href: '#' },
-                { label: 'ROI Calculator', href: '#' },
-                { label: 'Help Center', href: '#' },
-                { label: 'Contact Us', href: '#' },
+                { label: 'About Us / Our Story', href: '/about-us' },
+                { label: 'Careers', href: '/careers', badge: "We're Hiring", badgeColor: 'text-brand-success border-brand-success/30 bg-brand-success/10' },
+                { label: 'Press & Newsroom', href: '/press' },
+                { label: 'Investor Relations', href: '/investors' },
+                { label: 'Case Studies', href: '/case-studies' },
+                { label: 'Industry Insights Blog', href: '/blog' },
+                { label: 'ROI Calculator', href: '/roi-calculator' },
+                { label: 'Help Center', href: '/help' },
+                { label: 'Contact Us', href: '/contact' },
               ].map((link, idx) => (
                 <li key={idx}>
-                  <a href={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
+                  <Link to={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
                     <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
                     {link.badge && (
                       <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-wider ${link.badgeColor}`}>
                         {link.badge}
                       </span>
                     )}
-                  </a>
+                  </Link>
                 </li>
               ))}
                <li className="mt-4">
-                  <a href="#" className="inline-flex items-center text-brand-gold hover:text-white transition-colors text-sm font-semibold group">
+                  <Link to="/schedule-demo" className="inline-flex items-center text-brand-gold hover:text-white transition-colors text-sm font-semibold group">
                     Schedule Demo <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                </li>
             </ul>
           </div>
@@ -141,17 +142,17 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="space-y-4">
               {[
-                { label: 'Sourcing Hub', href: '#' },
-                { label: 'Active Projects', href: '#' },
-                { label: 'Supplier Network', href: '#' },
-                { label: 'Pricing & Plans', href: '#' },
-                { label: 'API Documentation', href: '#', highlight: true },
-                { label: 'Integration Partners', href: '#' },
+                { label: 'Sourcing Hub', href: '/sourcing-hub' },
+                { label: 'Active Projects', href: '/active-projects' },
+                { label: 'Supplier Network', href: '/supplier-network' },
+                { label: 'Pricing & Plans', href: '/pricing' },
+                { label: 'API Documentation', href: '/api-docs', highlight: true },
+                { label: 'Integration Partners', href: '/integrations' },
               ].map((link, idx) => (
                 <li key={idx}>
-                  <a href={link.href} className={`text-sm ${link.highlight ? 'text-brand-offWhite font-medium' : 'text-brand-mutedGray'} hover:text-white transition-colors duration-200 flex items-center group`}>
+                  <Link to={link.href} className={`text-sm ${link.highlight ? 'text-brand-offWhite font-medium' : 'text-brand-mutedGray'} hover:text-white transition-colors duration-200 flex items-center group`}>
                     <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li className="pt-4">
@@ -175,15 +176,15 @@ export const Footer: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-6">
-             <a href="#" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
+             <Link to="/linkedin" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
                <Linkedin className="w-5 h-5" />
-             </a>
-             <a href="#" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
+             </Link>
+             <Link to="/twitter" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
                <Twitter className="w-5 h-5" />
-             </a>
-             <a href="#" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
+             </Link>
+             <Link to="/instagram" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
                <Instagram className="w-5 h-5" />
-             </a>
+             </Link>
           </div>
         </div>
       </div>
