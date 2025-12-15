@@ -3,189 +3,126 @@ import { Link } from 'react-router-dom';
 import { 
   Building2, 
   ShieldCheck, 
-  Cpu, 
-  Lock, 
   Linkedin, 
   Twitter, 
-  Instagram, 
-  LayoutGrid, 
-  CheckCircle2, 
-  ArrowRight
+  MapPin,
+  Phone
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-brand-darkNavy text-brand-lightGray border-t border-white/5">
+    <footer className="bg-brand-navy text-white font-sans border-t border-white/10">
       
-      {/* Trusted By Section (Above columns) */}
-      <div className="border-b border-white/5 bg-brand-navy/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <p className="text-center text-sm font-semibold text-brand-mutedGray mb-8 uppercase tracking-widest">Trusted by Leading Firms</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
-            {/* Placeholder Logos */}
-            {['Architek', 'ConstructOne', 'Velox', 'Empire', 'Struxure', 'OmniPlan'].map((name) => (
-              <div key={name} className="h-8 flex items-center justify-center w-full">
-                <span className="text-xl font-serif font-bold tracking-tight text-white">{name}</span>
-              </div>
-            ))}
+      {/* Pre-Footer Section (Conversion) */}
+      <div className="border-b border-white/10 bg-brand-navy">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <div className="space-y-2">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold tracking-tight text-white">
+              De-Risk Your Next Project.
+            </h2>
+            <p className="text-2xl md:text-3xl font-serif text-brand-offWhite/80">
+              Achieve Digital Certainty.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+            <Link 
+              to="/demo" 
+              className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-brand-darkNavy font-semibold rounded hover:bg-brand-goldHover transition-colors text-center whitespace-nowrap shadow-lg shadow-brand-gold/10"
+            >
+              Request a Custom Demo
+            </Link>
+            <Link 
+              to="/contact" 
+              className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white text-white font-semibold rounded hover:bg-white/5 transition-colors text-center whitespace-nowrap"
+            >
+              Contact Sales
+            </Link>
           </div>
         </div>
       </div>
 
+      {/* Main Footer Body */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           
-          {/* Column 1: Brand */}
+          {/* Column 1: Branding */}
           <div className="space-y-6">
-            <div className="flex items-center space-x-2 text-white">
-              <Building2 className="w-6 h-6 stroke-[1.5]" />
-              <span className="text-xl font-bold font-serif">Classic Homes</span>
-            </div>
-            <p className="text-brand-mutedGray text-sm leading-relaxed">
-              The premier enterprise sourcing platform for luxury construction. We connect verified global artisans with top-tier contractors through AI-driven matching and immutable Web3 provenance.
-            </p>
+            <Link to="/" className="flex items-center space-x-2 text-white group w-fit">
+              <Building2 className="w-8 h-8 stroke-1 text-brand-gold" />
+              <span className="text-2xl font-serif font-bold tracking-tight">Classic Homes</span>
+            </Link>
             
-            <div className="flex flex-col space-y-3">
-              <div className="flex items-center space-x-2 group cursor-help">
-                <ShieldCheck className="w-5 h-5 text-brand-gold group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium border-b border-dashed border-brand-mutedGray/50 hover:border-brand-gold transition-colors">SOC2 Type II Compliant</span>
-              </div>
-              <div className="flex items-center space-x-2 group cursor-help">
-                <Cpu className="w-5 h-5 text-brand-gold group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium border-b border-dashed border-brand-mutedGray/50 hover:border-brand-gold transition-colors">AI Bias-Free Vetting</span>
-              </div>
+            <p className="text-brand-offWhite/90 font-medium tracking-wide">
+              Verified Provenance. <br />Digital Certainty.
+            </p>
+
+            {/* SOC 2 Badge Placeholder */}
+            <div className="inline-flex items-center px-3 py-2 border border-white/15 rounded bg-white/5 space-x-2">
+                <ShieldCheck className="w-5 h-5 text-brand-gold" />
+                <span className="text-xs font-bold tracking-widest text-brand-offWhite">SOC 2 TYPE II COMPLIANT</span>
             </div>
 
-            <div className="pt-2">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-brand-success/10 border border-brand-success/20">
-                <span className="relative flex h-2 w-2 mr-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-success opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-success"></span>
-                </span>
-                <span className="text-xs font-semibold text-brand-success tracking-wide">System Operational</span>
-              </div>
+            {/* Address / Contact Placeholder */}
+            <div className="space-y-3 pt-4 text-sm text-brand-offWhite/60">
+                <div className="flex items-start space-x-3">
+                    <MapPin className="w-4 h-4 text-brand-gold mt-0.5 shrink-0" />
+                    <span className="leading-relaxed">100 Enterprise Way, Suite 500<br/>San Francisco, CA 94105</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                    <Phone className="w-4 h-4 text-brand-gold shrink-0" />
+                    <span>+1 (888) 555-0123</span>
+                </div>
             </div>
           </div>
 
-          {/* Column 2: Trust & Compliance */}
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <Lock className="w-5 h-5 text-brand-mutedGray" />
-              <h3 className="text-white font-semibold tracking-wide">Trust & Compliance</h3>
-            </div>
+          {/* Column 2: Platform */}
+          <div className="lg:pl-8">
+            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Platform</h3>
             <ul className="space-y-4">
-              {[
-                { label: 'Terms of Service', href: '/terms-of-service' },
-                { label: 'Privacy Policy', href: '/privacy-policy' },
-                { label: 'Security Policy', href: '/security-policy' },
-                { label: 'AI Ethics Statement', href: '/ai-ethics', badge: 'Essential', badgeColor: 'text-brand-amber border-brand-amber/30 bg-brand-amber/10' },
-                { label: 'Web3 Provenance Policy', href: '/web3-provenance' },
-                { label: 'Supplier Vetting Standards', href: '/vetting-standards' },
-                { label: 'Data Protection & GDPR', href: '/gdpr' },
-              ].map((link, idx) => (
-                <li key={idx}>
-                  <Link to={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
-                    <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
-                    {link.badge && (
-                      <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-wider ${link.badgeColor}`}>
-                        {link.badge}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
+              <li><Link to="/" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Home</Link></li>
+              <li><Link to="/about-us" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">About Us</Link></li>
+              <li><Link to="/careers" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Careers</Link></li>
+              <li><Link to="/partners" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Partners</Link></li>
             </ul>
           </div>
 
-          {/* Column 3: Company & Resources */}
+          {/* Column 3: Insights */}
           <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <Building2 className="w-5 h-5 text-brand-mutedGray" />
-              <h3 className="text-white font-semibold tracking-wide">Company & Resources</h3>
-            </div>
+            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Insights</h3>
             <ul className="space-y-4">
-              {[
-                { label: 'About Us / Our Story', href: '/about-us' },
-                { label: 'Careers', href: '/careers', badge: "We're Hiring", badgeColor: 'text-brand-success border-brand-success/30 bg-brand-success/10' },
-                { label: 'Press & Newsroom', href: '/press' },
-                { label: 'Investor Relations', href: '/investors' },
-                { label: 'Case Studies', href: '/case-studies' },
-                { label: 'Industry Insights Blog', href: '/blog' },
-                { label: 'ROI Calculator', href: '/roi-calculator' },
-                { label: 'Help Center', href: '/help' },
-                { label: 'Contact Us', href: '/contact' },
-              ].map((link, idx) => (
-                <li key={idx}>
-                  <Link to={link.href} className="text-sm text-brand-mutedGray hover:text-white transition-colors duration-200 flex items-center group">
-                    <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
-                    {link.badge && (
-                      <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-wider ${link.badgeColor}`}>
-                        {link.badge}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-               <li className="mt-4">
-                  <Link to="/schedule-demo" className="inline-flex items-center text-brand-gold hover:text-white transition-colors text-sm font-semibold group">
-                    Schedule Demo <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-               </li>
+              <li><Link to="/blog" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">The Blueprint Hub</Link></li>
+              <li><Link to="/case-studies" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Case Studies</Link></li>
+              <li><Link to="/help" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">FAQ / Help Center</Link></li>
             </ul>
           </div>
 
-          {/* Column 4: Platform */}
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <LayoutGrid className="w-5 h-5 text-brand-mutedGray" />
-              <h3 className="text-white font-semibold tracking-wide">Platform</h3>
-            </div>
-            <ul className="space-y-4">
-              {[
-                { label: 'Sourcing Hub', href: '/sourcing-hub' },
-                { label: 'Active Projects', href: '/active-projects' },
-                { label: 'Supplier Network', href: '/supplier-network' },
-                { label: 'Pricing & Plans', href: '/pricing' },
-                { label: 'API Documentation', href: '/api-docs', highlight: true },
-                { label: 'Integration Partners', href: '/integrations' },
-              ].map((link, idx) => (
-                <li key={idx}>
-                  <Link to={link.href} className={`text-sm ${link.highlight ? 'text-brand-offWhite font-medium' : 'text-brand-mutedGray'} hover:text-white transition-colors duration-200 flex items-center group`}>
-                    <span className="group-hover:translate-x-1 transition-transform duration-200">{link.label}</span>
-                  </Link>
-                </li>
-              ))}
-              <li className="pt-4">
-                <button className="w-full px-4 py-2 border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-darkNavy rounded-md text-sm font-medium transition-all duration-300">
-                  Request Demo
-                </button>
-              </li>
+          {/* Column 4: Trust */}
+          <div className="flex flex-col h-full">
+            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Trust</h3>
+            <ul className="space-y-4 mb-8">
+              <li><Link to="/privacy-policy" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Terms of Service</Link></li>
+              <li><Link to="/cookies" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Cookie Preferences</Link></li>
             </ul>
+            
+            <div className="mt-auto pt-6 border-t border-white/10 md:border-none md:pt-0">
+               <div className="flex space-x-6">
+                 <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" className="text-brand-offWhite/50 hover:text-brand-gold transition-colors">
+                    <Linkedin className="w-5 h-5" />
+                 </a>
+                 <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener noreferrer" className="text-brand-offWhite/50 hover:text-brand-gold transition-colors">
+                    <Twitter className="w-5 h-5" />
+                 </a>
+               </div>
+            </div>
           </div>
 
         </div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-white/5 bg-black/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-xs text-brand-mutedGray text-center md:text-left">
-            <span className="opacity-80">© 2024 Classic Homes Marketplace Inc. All rights reserved.</span>
-            <span className="hidden sm:inline mx-2 text-brand-gold/50">•</span>
-            <span className="opacity-60 block sm:inline mt-1 sm:mt-0">"Trust & Transparency" in Luxury Sourcing.</span>
-          </div>
-          
-          <div className="flex items-center space-x-6">
-             <Link to="/linkedin" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
-               <Linkedin className="w-5 h-5" />
-             </Link>
-             <Link to="/twitter" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
-               <Twitter className="w-5 h-5" />
-             </Link>
-             <Link to="/instagram" className="text-brand-mutedGray hover:text-brand-gold transition-colors duration-300 transform hover:scale-110">
-               <Instagram className="w-5 h-5" />
-             </Link>
-          </div>
+        
+        {/* Copyright */}
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-offWhite/40">
+            <p>&copy; {new Date().getFullYear()} Classic Homes Marketplace Inc. All rights reserved.</p>
+            <p>Designed for Enterprise Excellence.</p>
         </div>
       </div>
     </footer>
