@@ -50,9 +50,9 @@ export const Hero: React.FC = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
-            <button className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-black rounded-md font-semibold text-base hover:bg-brand-goldHover transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transform hover:-translate-y-0.5">
+            <a href="https://apps.classichomesremodeling.com" className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-black rounded-md font-semibold text-base hover:bg-brand-goldHover transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transform hover:-translate-y-0.5 text-center">
               Secure Executive Demo
-            </button>
+            </a>
             <div className="flex items-center space-x-4 text-sm text-brand-offWhite/60 px-2">
               <span className="flex items-center">
                 <ShieldCheck className="w-4 h-4 mr-1.5 text-brand-gold" />

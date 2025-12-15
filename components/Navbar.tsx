@@ -19,12 +19,12 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <Link to="/login" className="hidden sm:block text-brand-offWhite hover:text-white text-sm font-medium transition-colors">
+          <a href="https://apps.classichomesremodeling.com" className="hidden sm:block text-brand-offWhite hover:text-white text-sm font-medium transition-colors">
             Log In
-          </Link>
-          <button className="bg-transparent border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-darkNavy px-5 py-2 rounded-md text-sm font-medium transition-all duration-300">
+          </a>
+          <a href="https://apps.classichomesremodeling.com" className="bg-transparent border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-darkNavy px-5 py-2 rounded-md text-sm font-medium transition-all duration-300">
             Request Access
-          </button>
+          </a>
           <button className="md:hidden text-white">
             <Menu className="w-6 h-6" />
           </button>

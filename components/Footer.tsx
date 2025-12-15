@@ -25,12 +25,12 @@ export const Footer: React.FC = () => {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-            <Link 
-              to="/demo" 
+            <a 
+              href="https://apps.classichomesremodeling.com" 
               className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-brand-darkNavy font-semibold rounded hover:bg-brand-goldHover transition-colors text-center whitespace-nowrap shadow-lg shadow-brand-gold/10"
             >
               Request a Custom Demo
-            </Link>
+            </a>
             <Link 
               to="/contact" 
               className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white text-white font-semibold rounded hover:bg-white/5 transition-colors text-center whitespace-nowrap"
