@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { GenericPage } from './components/GenericPage';
+import { Dashboard } from './components/Dashboard';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Hero />} />
+            <Route path="/sourcing-hub" element={<Dashboard />} />
             {/* Catch-all route for footer pages */}
             <Route path="/:slug" element={<GenericPage />} />
           </Routes>
