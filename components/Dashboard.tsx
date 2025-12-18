@@ -5,12 +5,12 @@ import {
   RefreshCw, 
   TrendingUp, 
   FileText, 
-  AlertCircle,
-  CheckCircle2,
-  Building,
-  DollarSign,
-  ShieldAlert,
-  Link2
+  AlertCircle, 
+  CheckCircle2, 
+  Building, 
+  DollarSign, 
+  ShieldAlert, 
+  Link2 
 } from 'lucide-react';
 
 /** 
@@ -332,22 +332,29 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Connection Status Indicator */}
-      <div className="mt-12 py-6 border-t border-white/5 text-center flex items-center justify-center space-x-3">
-        {BASE_URL ? (
-          <div className="flex items-center space-x-2 px-4 py-1.5 bg-brand-success/10 rounded-full border border-brand-success/20 shadow-sm">
-            <CheckCircle2 className="w-3.5 h-3.5 text-brand-success" />
-            <span className="text-[10px] font-bold text-brand-success uppercase tracking-widest">Status: Connected to Xano</span>
+      <div className="mt-12 py-6 border-t border-white/5 text-center flex flex-col items-center justify-center space-y-4">
+        <div className="flex items-center justify-center space-x-3">
+          {BASE_URL ? (
+            <div className="flex items-center space-x-2 px-4 py-1.5 bg-brand-success/10 rounded-full border border-brand-success/20 shadow-sm">
+              <CheckCircle2 className="w-3.5 h-3.5 text-brand-success" />
+              <span className="text-[10px] font-bold text-brand-success uppercase tracking-widest">Status: Connected to Xano</span>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm">
+              <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+              <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected (Missing Base URL)</span>
+            </div>
+          )}
+          <div className="h-4 w-px bg-white/10"></div>
+          <div className="flex items-center space-x-2 text-brand-offWhite/30">
+            <Link2 className="w-3 h-3" />
+            <span className="text-[9px] font-mono tracking-tighter max-w-[200px] truncate">{BASE_URL || 'No Endpoint Detected'}</span>
           </div>
-        ) : (
-          <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm">
-            <AlertCircle className="w-3.5 h-3.5 text-red-400" />
-            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected (Missing Base URL)</span>
-          </div>
-        )}
-        <div className="h-4 w-px bg-white/10"></div>
-        <div className="flex items-center space-x-2 text-brand-offWhite/30">
-          <Link2 className="w-3 h-3" />
-          <span className="text-[9px] font-mono tracking-tighter max-w-[200px] truncate">{BASE_URL || 'No Endpoint Detected'}</span>
+        </div>
+        
+        {/* Specific Build Verification Footer requested by user */}
+        <div className="text-[10px] font-mono text-brand-offWhite/20 tracking-wider">
+          Build Verified: {BASE_URL || 'PENDING_ENVIRONMENT_SYNC'}
         </div>
       </div>
     </div>
