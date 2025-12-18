@@ -6,7 +6,7 @@ import {
   Wallet, 
   BarChart3, 
   Users, 
-  Settings, 
+  Settings2, 
   Search, 
   Map as MapIcon, 
   Filter, 
@@ -23,6 +23,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { GlobalSearch } from './GlobalSearch';
 
 const SUPPLIERS = [
   {
@@ -93,10 +94,10 @@ export const Network: React.FC = () => {
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
           <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
-          <NavItem icon={<Wallet size={18} />} label="Wallet" />
-          <NavItem icon={<BarChart3 size={18} />} label="Analytics" />
+          <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
+          <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
           <NavItem icon={<Users size={18} />} label="Vetted Suppliers" active />
-          <NavItem icon={<Settings size={18} />} label="Settings" />
+          <NavItem icon={<Settings2 size={18} />} label="Settings" to="/settings" />
         </nav>
 
         <div className="p-6 border-t border-white/5">
@@ -129,20 +130,11 @@ export const Network: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-4 w-full md:w-auto">
+            <GlobalSearch />
             <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm">
               <MapIcon className="w-4 h-4" />
               <span>Toggle Risk Map</span>
             </button>
-            <div className="relative group flex-grow md:flex-grow-0">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray" />
-              <input 
-                type="text" 
-                placeholder="Search institutional suppliers..." 
-                className="pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm w-full md:w-80 focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
             <button className="flex items-center justify-center p-2.5 bg-brand-navy text-white rounded-lg hover:bg-brand-darkNavy transition-all">
               <Filter className="w-4 h-4" />
             </button>

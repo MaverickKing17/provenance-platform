@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -31,6 +30,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { GlobalSearch } from './GlobalSearch';
 
 const getEnv = (key: string): string => {
   if (typeof window !== 'undefined') {
@@ -175,11 +175,10 @@ export const Dashboard: React.FC = () => {
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
           <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
-          <NavItem icon={<Wallet size={18} />} label="Wallet" />
+          <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
           <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
           <NavItem icon={<Users size={18} />} label="Vetted Suppliers" to="/network" />
-          {/* Using Settings2 as suggested by the error to fix the undefined Settings icon */}
-          <NavItem icon={<Settings2 size={18} />} label="Settings" />
+          <NavItem icon={<Settings2 size={18} />} label="Settings" to="/settings" />
         </nav>
 
         <div className="p-6 border-t border-white/5">
@@ -214,6 +213,7 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 md:gap-8">
+              <GlobalSearch />
               <button onClick={() => setIsConfigModalOpen(true)} className="flex items-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
                 <Settings2 className="w-4 h-4 text-brand-gold group-hover:rotate-90 transition-transform" />
                 <span className="text-[10px] font-bold text-brand-offWhite/80 uppercase tracking-widest">System Admin</span>
