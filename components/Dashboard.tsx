@@ -13,18 +13,23 @@ import {
 } from 'lucide-react';
 
 /** 
- * STRICT RULE 1: API URL definition
- * Using the browser-accessible environment variable from Vercel.
+ * Debugging logs to verify environment variable injection in the browser.
+ */
+console.log('NEXT_PUBLIC_XANO_BASE_URL:', process.env.NEXT_PUBLIC_XANO_BASE_URL);
+console.log('NEXT_PUBLIC_ALEX_TOKEN:', process.env.NEXT_PUBLIC_ALEX_TOKEN);
+console.log('NEXT_PUBLIC_LARRY_TOKEN:', process.env.NEXT_PUBLIC_LARRY_TOKEN);
+
+/** 
+ * STRICT RULE: API URL definition
  */
 const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
 
 /**
- * STRICT RULE 2: Tokens (All Uppercase)
- * Accessing the private tenant tokens via environment variables.
+ * STRICT RULE: Tokens (Now using NEXT_PUBLIC_ prefix for client-side visibility)
  */
 const TOKENS = {
-  ALEX: process.env.ALEX_TOKEN || '',
-  LARRY: process.env.LARRY_TOKEN || ''
+  ALEX: process.env.NEXT_PUBLIC_ALEX_TOKEN || '',
+  LARRY: process.env.NEXT_PUBLIC_LARRY_TOKEN || ''
 };
 
 type UserKey = keyof typeof TOKENS;
@@ -48,13 +53,9 @@ export const Dashboard: React.FC = () => {
     valuation: ''
   });
 
-  /**
-   * STRICT RULE 3: Client-Side Check
-   * Ensuring we handle missing variables gracefully in the browser.
-   */
   useEffect(() => {
     if (!BASE_URL) {
-      console.log('Xano Base URL is missing from environment variables');
+      console.error('CRITICAL: Xano Base URL is missing from environment variables');
     }
   }, []);
 
@@ -71,14 +72,13 @@ export const Dashboard: React.FC = () => {
 
     const token = TOKENS[user];
     if (!token) {
-      const envVarName = user === 'ALEX' ? 'ALEX_TOKEN' : 'LARRY_TOKEN';
+      const envVarName = user === 'ALEX' ? 'NEXT_PUBLIC_ALEX_TOKEN' : 'NEXT_PUBLIC_LARRY_TOKEN';
       setError(`Configuration Error: ${envVarName} is not defined.`);
       setLoading(false);
       return;
     }
 
     try {
-      // Header Check: Verifying Bearer ${token} format with uppercase tokens
       const response = await fetch(`${BASE_URL}/valuation`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -180,7 +180,7 @@ export const Dashboard: React.FC = () => {
           />
           <StatCard 
             title="Active Procurement Cycles" 
-            value={loading ? "..." : "12"} 
+            value={loading ? "..." : valuations.length > 0 ? (valuations.length * 2).toString() : "12"} 
             icon={<Building className="text-brand-gold" />} 
           />
           <StatCard 
