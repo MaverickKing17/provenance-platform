@@ -22,11 +22,13 @@ console.log('NEXT_PUBLIC_LARRY_TOKEN:', process.env.NEXT_PUBLIC_LARRY_TOKEN);
 
 /** 
  * STRICT RULE: API URL definition
+ * Now strictly using the client-side exposed NEXT_PUBLIC variable.
  */
 const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
 
 /**
- * STRICT RULE: Tokens (Using NEXT_PUBLIC_ prefix as renamed in Vercel)
+ * STRICT RULE: Tokens
+ * Updated to match the new unique NEXT_PUBLIC_ naming convention in Vercel.
  */
 const TOKENS = {
   ALEX: process.env.NEXT_PUBLIC_ALEX_TOKEN || '',
@@ -53,12 +55,6 @@ export const Dashboard: React.FC = () => {
     name: '',
     valuation: ''
   });
-
-  useEffect(() => {
-    if (!BASE_URL) {
-      console.error('CRITICAL: Xano Base URL is missing from environment variables');
-    }
-  }, []);
 
   const fetchValuations = async (user: UserKey) => {
     setValuations([]);
@@ -338,12 +334,12 @@ export const Dashboard: React.FC = () => {
       {/* Connection Status Indicator */}
       <div className="mt-12 py-6 border-t border-white/5 text-center flex items-center justify-center space-x-3">
         {BASE_URL ? (
-          <div className="flex items-center space-x-2 px-4 py-1.5 bg-brand-success/10 rounded-full border border-brand-success/20">
+          <div className="flex items-center space-x-2 px-4 py-1.5 bg-brand-success/10 rounded-full border border-brand-success/20 shadow-sm">
             <CheckCircle2 className="w-3.5 h-3.5 text-brand-success" />
             <span className="text-[10px] font-bold text-brand-success uppercase tracking-widest">Status: Connected to Xano</span>
           </div>
         ) : (
-          <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20">
+          <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm">
             <AlertCircle className="w-3.5 h-3.5 text-red-400" />
             <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected (Missing Base URL)</span>
           </div>
@@ -351,7 +347,7 @@ export const Dashboard: React.FC = () => {
         <div className="h-4 w-px bg-white/10"></div>
         <div className="flex items-center space-x-2 text-brand-offWhite/30">
           <Link2 className="w-3 h-3" />
-          <span className="text-[9px] font-mono">{BASE_URL || 'No Endpoint Detected'}</span>
+          <span className="text-[9px] font-mono tracking-tighter max-w-[200px] truncate">{BASE_URL || 'No Endpoint Detected'}</span>
         </div>
       </div>
     </div>
@@ -365,7 +361,7 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon }) => (
-  <div className="bg-brand-navy/40 border border-white/5 rounded-xl p-5 flex items-center justify-between backdrop-blur-md shadow-lg group hover:border-brand-gold/20 transition-colors">
+  <div className="bg-brand-navy/40 border border-white/5 rounded-xl p-5 flex items-center justify-between backdrop-blur-md shadow-lg group hover:border-brand-gold/20 transition-all duration-300">
     <div className="space-y-1">
       <p className="text-[10px] font-bold text-brand-offWhite/40 uppercase tracking-widest">{title}</p>
       <p className="text-2xl font-serif font-bold text-white group-hover:text-brand-gold transition-colors">{value}</p>
