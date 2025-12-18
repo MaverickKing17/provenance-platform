@@ -65,11 +65,10 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Trust Signals (Subtle below hero) */}
+          {/* Trust Signals */}
           <div className="pt-8 border-t border-white/10 mt-8">
             <p className="text-xs text-brand-mutedGray uppercase tracking-widest mb-4 font-medium">Trusted by industry leaders</p>
             <div className="flex flex-wrap gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-               {/* Placeholder Logos (Text based for simplicity as per instructions using font styles) */}
                <span className="text-lg font-serif italic font-bold">A&O</span>
                <span className="text-lg font-sans font-black tracking-tighter">BUILD.CORP</span>
                <span className="text-lg font-serif font-medium">LuxeSpace</span>
@@ -78,130 +77,159 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Visual (3D Product Showcase) */}
+        {/* Right Visual (Photorealistic 3D Material Showcase) */}
         <div className="w-full lg:w-1/2 relative z-0 mt-12 lg:mt-0 perspective-1000 group/scene">
-            {/* The Floating Container */}
-            <div className="relative w-full max-w-md mx-auto aspect-[3/4] sm:aspect-square md:aspect-[4/3] lg:aspect-square transform rotate-y-[-6deg] rotate-x-[6deg] group-hover/scene:rotate-y-0 group-hover/scene:rotate-x-0 transition-transform duration-1000 ease-out preserve-3d">
+            <div className="relative w-full max-w-md mx-auto aspect-[3/4] sm:aspect-square md:aspect-[4/3] lg:aspect-square transform rotate-y-[-8deg] rotate-x-[8deg] group-hover/scene:rotate-y-0 group-hover/scene:rotate-x-0 transition-transform duration-1000 ease-out preserve-3d">
                 
-                {/* Backplate / Glow */}
-                <div className="absolute inset-0 bg-brand-gold/10 transform translate-z-[-40px] rounded-2xl blur-3xl transition-opacity duration-500 opacity-60"></div>
+                {/* Backplate / Atmospheric Glow */}
+                <div className="absolute inset-0 bg-brand-gold/15 transform translate-z-[-60px] rounded-2xl blur-[120px] transition-opacity duration-700 opacity-40 group-hover/scene:opacity-70"></div>
 
                 {/* Main Interface Card */}
-                <div className="absolute inset-0 bg-brand-darkNavy/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col">
+                <div className="absolute inset-0 bg-brand-darkNavy/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col">
                     
                     {/* UI Header */}
-                    <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-white/5">
+                    <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-white/[0.02]">
                         <div className="flex items-center space-x-3">
-                             <div className="w-2 h-2 rounded-full bg-brand-success shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse"></div>
-                             <span className="text-xs font-mono text-brand-offWhite/70 tracking-widest uppercase">Live_Feed :: Asset_8829</span>
+                             <div className="w-1.5 h-1.5 rounded-full bg-brand-success shadow-[0_0_12px_rgba(16,185,129,0.8)] animate-pulse"></div>
+                             <span className="text-[10px] font-mono text-brand-offWhite/60 tracking-[0.2em] uppercase">Auth_Session :: Active</span>
                         </div>
-                        <div className="flex items-center space-x-4">
-                           <Database className="w-4 h-4 text-brand-offWhite/30" />
-                           <Search className="w-4 h-4 text-brand-offWhite/30" />
+                        <div className="flex items-center space-x-4 opacity-40">
+                           <Database className="w-4 h-4" />
+                           <Search className="w-4 h-4" />
                         </div>
                     </div>
 
-                    {/* Viewport Area */}
-                    <div className="relative flex-grow w-full bg-[#0F172A] overflow-hidden group/product">
-                         {/* Background Grid */}
-                         <div className="absolute inset-0 opacity-20" 
+                    {/* High-Fidelity Material Viewport */}
+                    <div className="relative flex-grow w-full bg-[#030712] overflow-hidden group/product">
+                         {/* Precision Grid */}
+                         <div className="absolute inset-0 opacity-10" 
                               style={{
                                   backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
-                                  backgroundSize: '40px 40px'
+                                  backgroundSize: '20px 20px'
                               }}>
                          </div>
                          
-                         {/* Vignette */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-brand-darkNavy via-transparent to-brand-darkNavy/50"></div>
+                         {/* Cinematic Lighting Vignette */}
+                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_30%,_#030712_100%)] z-10"></div>
 
-                         {/* The Material Sample (Floating 3D Object simulated) */}
+                         {/* The Material Sample (Floating 3D Object) */}
                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 transition-all duration-700 transform group-hover/product:scale-105">
                             
+                            {/* PHOTOREALISTIC SHADOWS */}
+                            {/* Contact Occlusion Shadow (Sharp) */}
+                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[60%] h-4 bg-black/90 blur-lg rounded-[100%] transform rotate-12 transition-transform duration-700 group-hover/product:scale-110"></div>
+                            {/* Soft Environmental Shadow */}
+                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[90%] h-12 bg-black/60 blur-[40px] rounded-[100%] transform rotate-12 transition-transform duration-700 opacity-60"></div>
+
                             {/* Material Slab */}
-                            <div className="relative w-full h-full bg-slate-200 rounded-lg shadow-2xl overflow-hidden transform rotate-12 group-hover/product:rotate-6 transition-all duration-700 ease-in-out border-[1px] border-white/20">
-                                {/* Texture Image (Marble) */}
+                            <div className="relative w-full h-full bg-slate-300 rounded-xl overflow-hidden transform rotate-12 group-hover/product:rotate-6 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/20">
+                                
+                                {/* Texture Layer (Marble) */}
                                 <div className="absolute inset-0 bg-white">
                                   <img 
-                                    src="https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=800&auto=format&fit=crop" 
+                                    src="https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=1200&auto=format&fit=crop" 
                                     alt="Marble Sample"
-                                    className="w-full h-full object-cover opacity-90 contrast-110"
+                                    className="w-full h-full object-cover opacity-95 contrast-[1.2] brightness-[0.95]"
                                   />
                                 </div>
-                                
-                                {/* Specular Highlight / Shine */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover/product:opacity-100 transition-opacity duration-700 z-10"></div>
-                                
-                                {/* Inner Shadow */}
-                                <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.2)] z-20"></div>
 
-                                {/* Label on Sample */}
-                                <div className="absolute bottom-4 right-4 z-30">
-                                  <div className="bg-black/60 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded text-[10px] font-mono text-white/80">
-                                    Lot: #993-A
+                                {/* LIGHTING MODEL LAYERS */}
+                                
+                                {/* 1. Key Light (Soft directional glow from top-left) */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent z-10"></div>
+                                
+                                {/* 2. Fill Light (Subtle warmth from bottom-right) */}
+                                <div className="absolute inset-0 bg-gradient-to-tl from-brand-gold/[0.08] via-transparent to-transparent z-10"></div>
+
+                                {/* 3. Specular Highlight (The 'Shine' that responds to movement) */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover/product:opacity-100 transition-opacity duration-1000 z-20 pointer-events-none transform translate-x-[-50%] group-hover/product:translate-x-[50%] transition-transform"></div>
+
+                                {/* 4. Rim Lighting (Crisp edge highlight) */}
+                                <div className="absolute inset-0 border-t-2 border-l-2 border-white/40 z-30 rounded-xl"></div>
+                                <div className="absolute inset-0 border-b-2 border-r-2 border-black/20 z-30 rounded-xl"></div>
+
+                                {/* 5. Ambient Occlusion / Inner Shadow */}
+                                <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.15)] z-40"></div>
+
+                                {/* Procedural Noise/Grain for Realism */}
+                                <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay z-50" 
+                                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
+                                </div>
+
+                                {/* Technical Marker */}
+                                <div className="absolute bottom-4 right-4 z-[60]">
+                                  <div className="bg-brand-darkNavy/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-mono text-brand-gold/90 shadow-xl">
+                                    LOT_993-A_CERT
                                   </div>
                                 </div>
                             </div>
-
-                            {/* Shadow under the slab */}
-                            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-black/60 blur-xl rounded-[100%] transform rotate-12 transition-transform duration-700 group-hover/product:rotate-6 group-hover/product:scale-90"></div>
                          </div>
 
-                         {/* Scanning Effect Overlay */}
-                         <div className="absolute top-0 left-0 w-full h-1 bg-brand-gold/40 shadow-[0_0_20px_rgba(212,175,55,0.6)] animate-pulse opacity-0 group-hover/scene:opacity-100 transition-opacity duration-500 top-1/2"></div>
+                         {/* AI Scanline Overlay */}
+                         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent shadow-[0_0_15px_rgba(212,175,55,0.4)] opacity-0 group-hover/scene:opacity-100 transition-opacity duration-500 animate-[scan_3s_linear_infinite] z-50"></div>
                          
-                         {/* AR Markers */}
-                         <div className="absolute top-12 left-12 w-8 h-8 border-l-2 border-t-2 border-brand-gold/30 rounded-tl"></div>
-                         <div className="absolute top-12 right-12 w-8 h-8 border-r-2 border-t-2 border-brand-gold/30 rounded-tr"></div>
-                         <div className="absolute bottom-12 left-12 w-8 h-8 border-l-2 border-b-2 border-brand-gold/30 rounded-bl"></div>
-                         <div className="absolute bottom-12 right-12 w-8 h-8 border-r-2 border-b-2 border-brand-gold/30 rounded-br"></div>
+                         {/* AR Viewport Targets */}
+                         <div className="absolute top-10 left-10 w-6 h-6 border-l border-t border-brand-gold/40 rounded-tl-sm"></div>
+                         <div className="absolute top-10 right-10 w-6 h-6 border-r border-t border-brand-gold/40 rounded-tr-sm"></div>
+                         <div className="absolute bottom-10 left-10 w-6 h-6 border-l border-b border-brand-gold/40 rounded-bl-sm"></div>
+                         <div className="absolute bottom-10 right-10 w-6 h-6 border-r border-b border-brand-gold/40 rounded-br-sm"></div>
                     </div>
 
-                    {/* Footer: Metadata */}
-                    <div className="h-24 bg-brand-navy/50 backdrop-blur-md border-t border-white/5 p-5 grid grid-cols-3 gap-px">
-                        <div className="flex flex-col justify-center px-4 border-r border-white/5">
-                            <span className="text-[10px] text-brand-mutedGray uppercase tracking-wider mb-1">Origin</span>
-                            <span className="text-sm font-semibold text-white">Carrara, IT</span>
+                    {/* Metadata Analytics Footer */}
+                    <div className="h-28 bg-white/[0.03] backdrop-blur-3xl border-t border-white/5 p-6 grid grid-cols-3 gap-6">
+                        <div className="flex flex-col justify-center border-r border-white/5">
+                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Provenance</span>
+                            <span className="text-sm font-bold text-white tracking-tight">Carrara, IT</span>
                         </div>
-                        <div className="flex flex-col justify-center px-4 border-r border-white/5">
-                            <span className="text-[10px] text-brand-mutedGray uppercase tracking-wider mb-1">Purity</span>
-                            <span className="text-sm font-semibold text-brand-gold">99.8% Grade A</span>
+                        <div className="flex flex-col justify-center border-r border-white/5">
+                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Density</span>
+                            <span className="text-sm font-bold text-brand-gold tracking-tight">2.71 g/cm³</span>
                         </div>
-                         <div className="flex flex-col justify-center px-4">
-                            <span className="text-[10px] text-brand-mutedGray uppercase tracking-wider mb-1">Verification</span>
-                            <div className="flex items-center space-x-1 text-brand-success">
-                              <ShieldCheck className="w-3 h-3" />
-                              <span className="text-sm font-semibold">Passed</span>
+                         <div className="flex flex-col justify-center">
+                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Audit</span>
+                            <div className="flex items-center space-x-2 text-brand-success">
+                              <ShieldCheck className="w-3.5 h-3.5" />
+                              <span className="text-sm font-bold tracking-tight">SECURE</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Floating "Smart" Badges */}
-                 <div className="absolute -right-6 top-16 bg-brand-navy border border-brand-gold/20 p-3 rounded-lg shadow-xl shadow-black/50 backdrop-blur-xl transform translate-z-10 animate-pulse-slow hidden sm:flex items-center space-x-3 z-50">
-                     <div className="bg-brand-gold/10 p-1.5 rounded-md">
-                         <Scan className="w-4 h-4 text-brand-gold" />
+                {/* Floating HUD Elements */}
+                 <div className="absolute -right-8 top-1/4 bg-brand-navy border border-brand-gold/30 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transform translate-z-40 animate-pulse-slow hidden lg:flex items-center space-x-4 z-[100]">
+                     <div className="bg-brand-gold/10 p-2 rounded-xl">
+                         <Scan className="w-5 h-5 text-brand-gold" />
                      </div>
-                     <div className="flex flex-col">
-                         <span className="text-xs font-bold text-white tracking-wide">AI Analysis</span>
-                         <span className="text-[9px] text-brand-gold font-mono">Structure: Intact</span>
+                     <div className="flex flex-col pr-2">
+                         <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none mb-1">AI Structural Sync</span>
+                         <span className="text-[9px] text-brand-gold font-mono uppercase">99.2% Accuracy</span>
                      </div>
                  </div>
 
-                 <div className="absolute -left-6 bottom-28 bg-brand-navy border border-white/10 p-3 rounded-lg shadow-xl shadow-black/50 backdrop-blur-xl transform translate-z-20 hidden sm:flex items-center space-x-3 z-50">
-                     <div className="bg-brand-success/10 p-1.5 rounded-md">
-                         <Globe className="w-4 h-4 text-brand-success" />
+                 <div className="absolute -left-12 bottom-1/3 bg-brand-darkNavy/80 border border-white/10 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transform translate-z-60 hidden lg:flex items-center space-x-4 z-[100]">
+                     <div className="bg-blue-500/10 p-2 rounded-xl">
+                         <Globe className="w-5 h-5 text-blue-400" />
                      </div>
-                     <div className="flex flex-col">
-                         <span className="text-xs font-bold text-white tracking-wide">Net Zero</span>
-                         <span className="text-[9px] text-brand-mutedGray font-mono">Verified Logistics</span>
+                     <div className="flex flex-col pr-2">
+                         <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none mb-1">Logistics Core</span>
+                         <span className="text-[9px] text-brand-offWhite/50 font-mono uppercase">Emission Verified</span>
                      </div>
                  </div>
             </div>
           
-          {/* Decorative Background Elements behind the 3D card */}
-          <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-brand-gold/5 blur-[100px] rounded-full pointer-events-none"></div>
+          {/* Chromatic Aberration / Lens Blur Effect Behind */}
+          <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.08)_0%,_transparent_70%)] blur-[120px] rounded-full pointer-events-none opacity-50"></div>
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes scan {
+          0% { transform: translateY(-100%); opacity: 0; }
+          10% { opacity: 0.8; }
+          90% { opacity: 0.8; }
+          100% { transform: translateY(400%); opacity: 0; }
+        }
+      `}} />
     </section>
   );
 };
