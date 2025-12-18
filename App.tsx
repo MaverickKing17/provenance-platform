@@ -7,19 +7,20 @@ import { GenericPage } from './components/GenericPage';
 import { Dashboard } from './components/Dashboard';
 import { Network } from './components/Network';
 import { Projects } from './components/Projects';
+import { Materials } from './components/Materials';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  // Don't show the global navbar on the Projects page as it has its own professional sidebar
-  const showNavbar = location.pathname !== '/projects';
+  // Don't show the global navbar on specialized project/material cockpit views
+  const hideGlobalNav = ['/projects', '/materials'].includes(location.pathname);
   
   return (
     <div className="min-h-screen bg-brand-navy flex flex-col font-sans text-brand-offWhite selection:bg-brand-gold selection:text-brand-darkNavy">
-      {showNavbar && <Navbar />}
+      {!hideGlobalNav && <Navbar />}
       <main className="flex-grow">
         {children}
       </main>
-      {showNavbar && <Footer />}
+      {!hideGlobalNav && <Footer />}
     </div>
   );
 };
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           <Route path="/sourcing-hub" element={<Dashboard />} />
           <Route path="/network" element={<Network />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/materials" element={<Materials />} />
           <Route path="/:slug" element={<GenericPage />} />
         </Routes>
       </Layout>
