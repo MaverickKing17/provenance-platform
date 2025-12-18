@@ -1,235 +1,221 @@
-import React from 'react';
-import { ShieldCheck, BarChart3, Globe, Lock, Search, Scan, Database } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, Globe, Lock, Search, Scan, Database, Activity, CheckCircle2, Tablet, Cpu, Layers } from 'lucide-react';
 
 export const Hero: React.FC = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   return (
-    <section className="relative w-full min-h-screen flex items-center bg-brand-navy pt-20 pb-12 overflow-hidden">
+    <section className="relative w-full min-h-screen flex flex-col bg-brand-darkNavy pt-20 overflow-hidden">
       
-      {/* Background Dynamic Effects */}
+      {/* Background Ambience */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Technical Grid */}
-        <div className="absolute inset-0 opacity-[0.03]" 
+        <div className="absolute inset-0 opacity-[0.05]" 
              style={{
                backgroundImage: 'linear-gradient(#E2E8F0 1px, transparent 1px), linear-gradient(90deg, #E2E8F0 1px, transparent 1px)',
-               backgroundSize: '40px 40px',
-               maskImage: 'radial-gradient(circle at center, black 40%, transparent 100%)'
+               backgroundSize: '60px 60px',
+               maskImage: 'radial-gradient(circle at center, black 30%, transparent 100%)'
              }}>
         </div>
-
-        {/* Rotating Geometric Elements */}
-        <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] rounded-full border border-brand-gold/5 border-dashed animate-spin" style={{ animationDuration: '120s' }}></div>
-        <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] rounded-full border border-brand-offWhite/5 animate-spin" style={{ animationDuration: '90s', animationDirection: 'reverse' }}></div>
-        <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] rounded-full border border-brand-gold/5 border-dotted animate-spin" style={{ animationDuration: '150s' }}></div>
-        
-        {/* Ambient Glows */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-gold/5 blur-[120px] rounded-full mix-blend-screen opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-navy/80 blur-[100px] rounded-full z-10"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[1000px] h-[1000px] bg-brand-gold/5 blur-[150px] rounded-full"></div>
+        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-900/10 blur-[150px] rounded-full"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 relative z-10 py-12">
         
-        {/* Left Content */}
-        <div className="w-full lg:w-1/2 z-10 flex flex-col justify-center space-y-8">
-          <div className="space-y-4">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-darkNavy/50 border border-brand-gold/20 backdrop-blur-sm w-fit">
+        {/* Left Content: Executive Summary */}
+        <div className="w-full lg:w-2/5 z-10 flex flex-col justify-center space-y-8">
+          <div className="space-y-6">
+            <div className="inline-flex items-center space-x-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md w-fit">
               <span className="flex h-2 w-2 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
               </span>
-              <span className="text-xs font-medium text-brand-gold uppercase tracking-wider">Enterprise V 2.0 Live</span>
+              <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Verified Workspace Sync Active</span>
             </div>
             
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-serif text-white leading-[1.1]">
-              Verified Provenance. <br />
-              <span className="text-brand-offWhite/90">Digital Certainty.</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-serif text-white leading-[1.05]">
+              The Global <br />
+              <span className="text-brand-gold italic">Marketplace</span><br />
+              <span className="text-brand-offWhite/90">for Artisans.</span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-brand-offWhite/80 max-w-xl font-light leading-relaxed">
-              The first AI-driven sourcing platform for enterprise luxury construction. We connect verified global artisans with top-tier contractors through immutable Web3 provenance.
+            <p className="text-lg sm:text-xl text-brand-offWhite/70 max-w-md font-light leading-relaxed">
+              Consolidate your luxury supply chain into a single, high-fidelity procurement interface. De-risk material sourcing with institutional-grade provenance.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
-            <a href="https://apps.classichomesremodeling.com" className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-black rounded-md font-semibold text-base hover:bg-brand-goldHover transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transform hover:-translate-y-0.5 text-center">
-              Secure Executive Demo
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-4">
+            <a href="https://apps.classichomesremodeling.com" className="w-full sm:w-auto px-10 py-5 bg-brand-gold text-brand-darkNavy rounded-sm font-black text-[11px] uppercase tracking-[0.25em] hover:bg-brand-goldHover transition-all duration-500 shadow-[0_20px_40px_rgba(212,175,55,0.15)] transform hover:-translate-y-1 text-center">
+              Request Executive Access
             </a>
-            <div className="flex items-center space-x-4 text-sm text-brand-offWhite/60 px-2">
-              <span className="flex items-center">
-                <ShieldCheck className="w-4 h-4 mr-1.5 text-brand-gold" />
-                SOC2 Type II
-              </span>
-              <span className="flex items-center">
-                <Lock className="w-4 h-4 mr-1.5 text-brand-gold" />
-                Web3 Verified
-              </span>
-            </div>
-          </div>
-
-          {/* Trust Signals */}
-          <div className="pt-8 border-t border-white/10 mt-8">
-            <p className="text-xs text-brand-mutedGray uppercase tracking-widest mb-4 font-medium">Trusted by industry leaders</p>
-            <div className="flex flex-wrap gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-               <span className="text-lg font-serif italic font-bold">A&O</span>
-               <span className="text-lg font-sans font-black tracking-tighter">BUILD.CORP</span>
-               <span className="text-lg font-serif font-medium">LuxeSpace</span>
-               <span className="text-lg font-mono font-bold">K/D/A</span>
-            </div>
+            <button className="w-full sm:w-auto px-10 py-5 border border-white/20 text-white rounded-sm font-black text-[11px] uppercase tracking-[0.25em] hover:bg-white/5 transition-all text-center">
+              View Case Studies
+            </button>
           </div>
         </div>
 
-        {/* Right Visual (Photorealistic 3D Material Showcase) */}
-        <div className="w-full lg:w-1/2 relative z-0 mt-12 lg:mt-0 perspective-1000 group/scene">
-            <div className="relative w-full max-w-md mx-auto aspect-[3/4] sm:aspect-square md:aspect-[4/3] lg:aspect-square transform rotate-y-[-8deg] rotate-x-[8deg] group-hover/scene:rotate-y-0 group-hover/scene:rotate-x-0 transition-transform duration-1000 ease-out preserve-3d">
-                
-                {/* Backplate / Atmospheric Glow */}
-                <div className="absolute inset-0 bg-brand-gold/15 transform translate-z-[-60px] rounded-2xl blur-[120px] transition-opacity duration-700 opacity-40 group-hover/scene:opacity-70"></div>
-
-                {/* Main Interface Card */}
-                <div className="absolute inset-0 bg-brand-darkNavy/90 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col">
-                    
-                    {/* UI Header */}
-                    <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-white/[0.02]">
-                        <div className="flex items-center space-x-3">
-                             <div className="w-1.5 h-1.5 rounded-full bg-brand-success shadow-[0_0_12px_rgba(16,185,129,0.8)] animate-pulse"></div>
-                             <span className="text-[10px] font-mono text-brand-offWhite/60 tracking-[0.2em] uppercase">Auth_Session :: Active</span>
-                        </div>
-                        <div className="flex items-center space-x-4 opacity-40">
-                           <Database className="w-4 h-4" />
-                           <Search className="w-4 h-4" />
-                        </div>
-                    </div>
-
-                    {/* High-Fidelity Material Viewport */}
-                    <div className="relative flex-grow w-full bg-[#030712] overflow-hidden group/product">
-                         {/* Precision Grid */}
-                         <div className="absolute inset-0 opacity-10" 
-                              style={{
-                                  backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)',
-                                  backgroundSize: '20px 20px'
-                              }}>
-                         </div>
-                         
-                         {/* Cinematic Lighting Vignette */}
-                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_30%,_#030712_100%)] z-10"></div>
-
-                         {/* The Material Sample (Floating 3D Object) */}
-                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 transition-all duration-700 transform group-hover/product:scale-105">
-                            
-                            {/* PHOTOREALISTIC SHADOWS */}
-                            {/* Contact Occlusion Shadow (Sharp) */}
-                            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[60%] h-4 bg-black/90 blur-lg rounded-[100%] transform rotate-12 transition-transform duration-700 group-hover/product:scale-110"></div>
-                            {/* Soft Environmental Shadow */}
-                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[90%] h-12 bg-black/60 blur-[40px] rounded-[100%] transform rotate-12 transition-transform duration-700 opacity-60"></div>
-
-                            {/* Material Slab */}
-                            <div className="relative w-full h-full bg-slate-300 rounded-xl overflow-hidden transform rotate-12 group-hover/product:rotate-6 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/20">
-                                
-                                {/* Texture Layer (Marble) */}
-                                <div className="absolute inset-0 bg-white">
-                                  <img 
-                                    src="https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=1200&auto=format&fit=crop" 
-                                    alt="Marble Sample"
-                                    className="w-full h-full object-cover opacity-95 contrast-[1.2] brightness-[0.95]"
-                                  />
-                                </div>
-
-                                {/* LIGHTING MODEL LAYERS */}
-                                
-                                {/* 1. Key Light (Soft directional glow from top-left) */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-transparent z-10"></div>
-                                
-                                {/* 2. Fill Light (Subtle warmth from bottom-right) */}
-                                <div className="absolute inset-0 bg-gradient-to-tl from-brand-gold/[0.08] via-transparent to-transparent z-10"></div>
-
-                                {/* 3. Specular Highlight (The 'Shine' that responds to movement) */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover/product:opacity-100 transition-opacity duration-1000 z-20 pointer-events-none transform translate-x-[-50%] group-hover/product:translate-x-[50%] transition-transform"></div>
-
-                                {/* 4. Rim Lighting (Crisp edge highlight) */}
-                                <div className="absolute inset-0 border-t-2 border-l-2 border-white/40 z-30 rounded-xl"></div>
-                                <div className="absolute inset-0 border-b-2 border-r-2 border-black/20 z-30 rounded-xl"></div>
-
-                                {/* 5. Ambient Occlusion / Inner Shadow */}
-                                <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.15)] z-40"></div>
-
-                                {/* Procedural Noise/Grain for Realism */}
-                                <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay z-50" 
-                                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}>
-                                </div>
-
-                                {/* Technical Marker */}
-                                <div className="absolute bottom-4 right-4 z-[60]">
-                                  <div className="bg-brand-darkNavy/80 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-mono text-brand-gold/90 shadow-xl">
-                                    LOT_993-A_CERT
-                                  </div>
-                                </div>
-                            </div>
-                         </div>
-
-                         {/* AI Scanline Overlay */}
-                         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent shadow-[0_0_15px_rgba(212,175,55,0.4)] opacity-0 group-hover/scene:opacity-100 transition-opacity duration-500 animate-[scan_3s_linear_infinite] z-50"></div>
-                         
-                         {/* AR Viewport Targets */}
-                         <div className="absolute top-10 left-10 w-6 h-6 border-l border-t border-brand-gold/40 rounded-tl-sm"></div>
-                         <div className="absolute top-10 right-10 w-6 h-6 border-r border-t border-brand-gold/40 rounded-tr-sm"></div>
-                         <div className="absolute bottom-10 left-10 w-6 h-6 border-l border-b border-brand-gold/40 rounded-bl-sm"></div>
-                         <div className="absolute bottom-10 right-10 w-6 h-6 border-r border-b border-brand-gold/40 rounded-br-sm"></div>
-                    </div>
-
-                    {/* Metadata Analytics Footer */}
-                    <div className="h-28 bg-white/[0.03] backdrop-blur-3xl border-t border-white/5 p-6 grid grid-cols-3 gap-6">
-                        <div className="flex flex-col justify-center border-r border-white/5">
-                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Provenance</span>
-                            <span className="text-sm font-bold text-white tracking-tight">Carrara, IT</span>
-                        </div>
-                        <div className="flex flex-col justify-center border-r border-white/5">
-                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Density</span>
-                            <span className="text-sm font-bold text-brand-gold tracking-tight">2.71 g/cm³</span>
-                        </div>
-                         <div className="flex flex-col justify-center">
-                            <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.25em] mb-1.5 font-black">Audit</span>
-                            <div className="flex items-center space-x-2 text-brand-success">
-                              <ShieldCheck className="w-3.5 h-3.5" />
-                              <span className="text-sm font-bold tracking-tight">SECURE</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Floating HUD Elements */}
-                 <div className="absolute -right-8 top-1/4 bg-brand-navy border border-brand-gold/30 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transform translate-z-40 animate-pulse-slow hidden lg:flex items-center space-x-4 z-[100]">
-                     <div className="bg-brand-gold/10 p-2 rounded-xl">
-                         <Scan className="w-5 h-5 text-brand-gold" />
-                     </div>
-                     <div className="flex flex-col pr-2">
-                         <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none mb-1">AI Structural Sync</span>
-                         <span className="text-[9px] text-brand-gold font-mono uppercase">99.2% Accuracy</span>
-                     </div>
-                 </div>
-
-                 <div className="absolute -left-12 bottom-1/3 bg-brand-darkNavy/80 border border-white/10 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl transform translate-z-60 hidden lg:flex items-center space-x-4 z-[100]">
-                     <div className="bg-blue-500/10 p-2 rounded-xl">
-                         <Globe className="w-5 h-5 text-blue-400" />
-                     </div>
-                     <div className="flex flex-col pr-2">
-                         <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none mb-1">Logistics Core</span>
-                         <span className="text-[9px] text-brand-offWhite/50 font-mono uppercase">Emission Verified</span>
-                     </div>
-                 </div>
-            </div>
+        {/* Right Content: Boardroom Architectural Scene */}
+        <div className="w-full lg:w-3/5 relative flex items-center justify-center py-20">
           
-          {/* Chromatic Aberration / Lens Blur Effect Behind */}
-          <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.08)_0%,_transparent_70%)] blur-[120px] rounded-full pointer-events-none opacity-50"></div>
+          <div className="relative w-full max-w-[700px] perspective-1000">
+            <div className="relative transform rotate-x-[15deg] rotate-y-[-5deg] transition-all duration-1000 hover:rotate-x-[12deg] hover:rotate-y-[-2deg] preserve-3d">
+              
+              {/* Table Surface / Shadow Base */}
+              <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[120%] h-40 bg-black/60 blur-[100px] rounded-full -z-10"></div>
+              
+              {/* Architectural Model Pedestal */}
+              <div className="relative bg-[#111111] rounded-xl border-b-[16px] border-[#050505] p-1.5 shadow-[0_50px_100px_rgba(0,0,0,0.8)]">
+                 <div className="bg-[#1a1a1a] p-3 rounded-lg border border-white/5 relative overflow-hidden">
+                    
+                    {/* Pedestal Under-Lighting */}
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-gold shadow-[0_0_30px_#D4AF37] opacity-60 animate-pulse"></div>
+
+                    {/* MAIN IMAGE CONTAINER */}
+                    <div className="relative rounded-md overflow-hidden aspect-video bg-[#050505]">
+                      
+                      {/* Image Loading State / Placeholder */}
+                      <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}>
+                         <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center space-y-4">
+                            <div className="w-12 h-12 border-2 border-brand-gold/20 border-t-brand-gold rounded-full animate-spin"></div>
+                            <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.4em] animate-pulse">Initializing Visualization...</span>
+                         </div>
+                      </div>
+
+                      {/* Fallback Blueprint Pattern (Shows if image fails) */}
+                      {imageError && (
+                        <div className="absolute inset-0 opacity-40" 
+                             style={{
+                               backgroundImage: 'linear-gradient(rgba(212,175,55,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.1) 1px, transparent 1px)',
+                               backgroundSize: '20px 20px'
+                             }}>
+                        </div>
+                      )}
+
+                      <img 
+                        src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1600&auto=format&fit=crop" 
+                        className={`w-full h-full object-cover transition-opacity duration-1000 ${imageLoaded ? 'opacity-90 contrast-[1.2] grayscale-[0.1]' : 'opacity-0'}`}
+                        alt="Ultra-Luxury Modern Villa Rendering"
+                        onLoad={() => setImageLoaded(true)}
+                        onError={() => {
+                          setImageError(true);
+                          setImageLoaded(true);
+                        }}
+                      />
+                      
+                      {/* Technical Overlays */}
+                      <svg className="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-60" viewBox="0 0 800 450">
+                        {/* Improved points to match the more complex luxury home image */}
+                        <path d="M 320,180 L 150,80 H 50" fill="none" stroke="#D4AF37" strokeWidth="0.75" strokeDasharray="5 3" />
+                        <circle cx="320" cy="180" r="4" fill="#D4AF37" className="animate-pulse" />
+                        
+                        <path d="M 640,240 L 700,120 H 750" fill="none" stroke="#D4AF37" strokeWidth="0.75" strokeDasharray="5 3" />
+                        <circle cx="640" cy="240" r="4" fill="#D4AF37" className="animate-pulse" />
+
+                        <path d="M 450,300 L 500,380 H 600" fill="none" stroke="#D4AF37" strokeWidth="0.75" strokeDasharray="5 3" />
+                        <circle cx="450" cy="300" r="4" fill="#D4AF37" className="animate-pulse" />
+                      </svg>
+
+                      {/* CALLOUT CARDS */}
+                      <div className="absolute top-[30px] left-[15px] z-30 animate-in slide-in-from-left duration-1000">
+                         <div className="bg-brand-darkNavy/90 backdrop-blur-xl border-l-2 border-brand-gold p-3 px-4 shadow-2xl">
+                            <span className="text-[11px] font-serif font-bold text-white block">Carrara Marble (IT)</span>
+                            <span className="text-[9px] text-brand-gold font-black uppercase tracking-[0.2em] mt-0.5 block">Verified Provenance</span>
+                         </div>
+                      </div>
+
+                      <div className="absolute top-[80px] right-[20px] z-30 animate-in slide-in-from-right duration-1000 delay-300">
+                         <div className="bg-brand-darkNavy/90 backdrop-blur-xl border-r-2 border-brand-gold p-3 px-4 text-right shadow-2xl">
+                            <span className="text-[11px] font-serif font-bold text-white block">Sustainable Teak (Scomat)</span>
+                            <span className="text-[9px] text-brand-gold font-black uppercase tracking-[0.2em] mt-0.5 block">FSC Certified</span>
+                         </div>
+                      </div>
+
+                      <div className="absolute bottom-6 right-8 z-30">
+                         <div className="bg-black/80 border border-white/10 p-5 rounded-2xl backdrop-blur-2xl flex flex-col space-y-3 min-w-[200px] shadow-2xl">
+                            <div className="flex justify-between items-center text-[10px] font-black text-brand-gold uppercase tracking-[0.25em]">
+                               <span>Project Assets</span>
+                               <span>$12.4M</span>
+                            </div>
+                            <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                               <div className="h-full bg-brand-gold w-3/4 shadow-[0_0_10px_#D4AF37]"></div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                               <CheckCircle2 size={14} className="text-brand-success" />
+                               <span className="text-[10px] font-bold text-white uppercase tracking-widest">Compliance Active</span>
+                            </div>
+                         </div>
+                      </div>
+
+                      {/* Branding in Corner */}
+                      <div className="absolute top-8 right-10 text-right z-30 opacity-60">
+                         <div className="text-white font-serif font-bold text-base tracking-tight leading-none uppercase italic">Classic Homes</div>
+                         <div className="text-[9px] font-black text-brand-gold uppercase tracking-[0.4em] mt-1.5">Marketplace</div>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+
+              {/* FLOATING COMMAND TABLET */}
+              <div className="absolute -bottom-16 -left-16 z-50 transform -rotate-12 translate-z-[80px] group/tablet transition-all duration-700 hover:-rotate-6 hover:scale-105">
+                 <div className="bg-[#111827]/95 border border-white/10 rounded-[2rem] p-8 w-[320px] shadow-[0_50px_100px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
+                    <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                       <Tablet size={20} className="text-brand-gold" />
+                       <div className="flex space-x-2">
+                          <div className="w-2 h-2 rounded-full bg-red-500/40 animate-pulse"></div>
+                          <div className="w-2 h-2 rounded-full bg-brand-gold/40 animate-pulse delay-75"></div>
+                          <div className="w-2 h-2 rounded-full bg-brand-success shadow-[0_0_10px_#10B981]"></div>
+                       </div>
+                    </div>
+                    <div className="space-y-6">
+                       <div className="flex justify-between items-center">
+                          <span className="text-[10px] font-black text-brand-offWhite/30 uppercase tracking-[0.2em]">Procurement Stream</span>
+                          <span className="text-[10px] font-mono text-brand-gold">SECURE_SYNC</span>
+                       </div>
+                       <div className="space-y-2">
+                          <div className="h-1.5 bg-white/5 rounded-full"></div>
+                          <div className="h-1.5 bg-white/5 rounded-full w-2/3"></div>
+                       </div>
+                       <button className="w-full py-4 bg-brand-gold text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-xl shadow-brand-gold/10">
+                          Confirm Project Hash
+                       </button>
+                    </div>
+                 </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes scan {
-          0% { transform: translateY(-100%); opacity: 0; }
-          10% { opacity: 0.8; }
-          90% { opacity: 0.8; }
-          100% { transform: translateY(400%); opacity: 0; }
-        }
-      `}} />
+      {/* FOOTER SYSTEM STATUS BAR */}
+      <div className="w-full bg-black/80 border-t border-brand-gold/10 backdrop-blur-2xl py-8 relative z-50">
+         <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center space-x-10">
+               <div className="flex items-center space-x-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-brand-success shadow-[0_0_15px_#10B981] animate-pulse"></div>
+                  <span className="text-[11px] font-mono text-white font-bold tracking-[0.3em] uppercase">System Ready: Workspace Sync Active</span>
+               </div>
+               <div className="w-px h-6 bg-white/10 hidden md:block"></div>
+               <span className="text-[11px] font-mono text-brand-offWhite/20 uppercase tracking-[0.25em] truncate max-w-[400px]">
+                 Build Verified: 0x71e...trmt/api/v2.5
+               </span>
+            </div>
+            <div className="flex items-center space-x-10 text-[11px] font-black text-brand-gold uppercase tracking-[0.4em]">
+               <span className="flex items-center space-x-3 group cursor-pointer hover:text-white transition-colors">
+                  <Cpu size={16} />
+                  <span>AI Engine Core</span>
+               </span>
+               <span className="flex items-center space-x-3 group cursor-pointer hover:text-white transition-colors">
+                  <Layers size={16} />
+                  <span>Global Hub</span>
+               </span>
+               <div className="w-5 h-5 text-white/10 rotate-45 border-r-2 border-t-2 border-current"></div>
+            </div>
+         </div>
+      </div>
+
     </section>
   );
 };
