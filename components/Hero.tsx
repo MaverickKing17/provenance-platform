@@ -116,18 +116,44 @@ export const Hero: React.FC = () => {
                         <circle cx="450" cy="300" r="4" fill="#D4AF37" className="animate-pulse" />
                       </svg>
 
-                      {/* CALLOUT CARDS */}
-                      <div className="absolute top-[30px] left-[15px] z-30 animate-in slide-in-from-left duration-1000">
-                         <div className="bg-brand-darkNavy/90 backdrop-blur-xl border-l-2 border-brand-gold p-3 px-4 shadow-2xl">
-                            <span className="text-[11px] font-serif font-bold text-white block">Carrara Marble (IT)</span>
-                            <span className="text-[9px] text-brand-gold font-black uppercase tracking-[0.2em] mt-0.5 block">Verified Provenance</span>
+                      {/* CALLOUT CARDS: ENHANCED LUXURY SAMPLES */}
+                      {/* Carrara Marble Callout */}
+                      <div className="absolute top-[25px] left-[15px] z-30 animate-in slide-in-from-left duration-1000 group/sample">
+                         <div className="flex bg-brand-darkNavy/90 backdrop-blur-2xl border border-white/10 p-2 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] group-hover/sample:scale-105 transition-transform duration-500">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden border border-brand-gold/30 shrink-0 shadow-inner">
+                               <img 
+                                 src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=400&auto=format&fit=crop" 
+                                 className="w-full h-full object-cover scale-110 group-hover/sample:scale-125 transition-transform duration-1000"
+                                 alt="Carrara Sample"
+                               />
+                            </div>
+                            <div className="pl-4 pr-3 py-1 flex flex-col justify-center">
+                               <span className="text-[11px] font-serif font-bold text-white block">Carrara Marble (IT)</span>
+                               <span className="text-[8px] text-brand-gold font-black uppercase tracking-[0.2em] mt-1 block">Verified Provenance</span>
+                               <div className="mt-2 flex space-x-1">
+                                  {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-brand-gold/30"></div>)}
+                               </div>
+                            </div>
                          </div>
                       </div>
 
-                      <div className="absolute top-[80px] right-[20px] z-30 animate-in slide-in-from-right duration-1000 delay-300">
-                         <div className="bg-brand-darkNavy/90 backdrop-blur-xl border-r-2 border-brand-gold p-3 px-4 text-right shadow-2xl">
-                            <span className="text-[11px] font-serif font-bold text-white block">Sustainable Teak (Scomat)</span>
-                            <span className="text-[9px] text-brand-gold font-black uppercase tracking-[0.2em] mt-0.5 block">FSC Certified</span>
+                      {/* Sustainable Teak Callout */}
+                      <div className="absolute top-[70px] right-[20px] z-30 animate-in slide-in-from-right duration-1000 delay-300 group/sample">
+                         <div className="flex flex-row-reverse bg-brand-darkNavy/90 backdrop-blur-2xl border border-white/10 p-2 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] group-hover/sample:scale-105 transition-transform duration-500">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden border border-brand-gold/30 shrink-0 shadow-inner">
+                               <img 
+                                 src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=400&auto=format&fit=crop" 
+                                 className="w-full h-full object-cover scale-110 group-hover/sample:scale-125 transition-transform duration-1000"
+                                 alt="Teak Sample"
+                               />
+                            </div>
+                            <div className="pr-4 pl-3 py-1 flex flex-col justify-center text-right">
+                               <span className="text-[11px] font-serif font-bold text-white block">Sustainable Teak</span>
+                               <span className="text-[8px] text-brand-gold font-black uppercase tracking-[0.2em] mt-1 block">FSC Gold Certified</span>
+                               <div className="mt-2 flex space-x-1 justify-end">
+                                  {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-brand-gold/30"></div>)}
+                               </div>
+                            </div>
                          </div>
                       </div>
 
