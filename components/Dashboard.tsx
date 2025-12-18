@@ -100,7 +100,8 @@ export const Dashboard: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ledger Synchronization Failed');
     } finally {
-      setLoading(false);
+      // Simulate a slightly longer sync for visual smoothness of skeletons
+      setTimeout(() => setLoading(false), 800);
     }
   };
 
@@ -240,10 +241,34 @@ export const Dashboard: React.FC = () => {
 
           {/* Strategic Intelligence Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard title="Capital Deployed" value={valuations.length > 0 ? (valuations.length * 1.2).toFixed(1) + "M" : "$0"} icon={<DollarSign className="text-brand-gold" />} trend="+12.5%" />
-            <StatCard title="Sourcing Velocity" value={loading ? "..." : (valuations.length + 8).toString() + " Days"} icon={<Clock className="text-brand-gold" />} trend="-2 Days" />
-            <StatCard title="Risk Exposure" value={valuations.length > 0 ? "Low" : "N/A"} icon={<Scale className="text-brand-gold" />} trend="Stable" />
-            <StatCard title="Portfolio Governance" value={valuations.length > 0 ? "98%" : "100%"} icon={<ShieldCheck className="text-brand-success" />} trend="Verified" />
+            <StatCard 
+              title="Capital Deployed" 
+              value={valuations.length > 0 ? (valuations.length * 1.2).toFixed(1) + "M" : "$0"} 
+              icon={<DollarSign className="text-brand-gold" />} 
+              trend="+12.5%" 
+              loading={loading}
+            />
+            <StatCard 
+              title="Sourcing Velocity" 
+              value={(valuations.length + 8).toString() + " Days"} 
+              icon={<Clock className="text-brand-gold" />} 
+              trend="-2 Days" 
+              loading={loading}
+            />
+            <StatCard 
+              title="Risk Exposure" 
+              value={valuations.length > 0 ? "Low" : "Minimal"} 
+              icon={<Scale className="text-brand-gold" />} 
+              trend="Stable" 
+              loading={loading}
+            />
+            <StatCard 
+              title="Portfolio Governance" 
+              value={valuations.length > 0 ? "98%" : "100%"} 
+              icon={<ShieldCheck className="text-brand-success" />} 
+              trend="Verified" 
+              loading={loading}
+            />
           </div>
 
           {/* Operational Workspace */}
@@ -258,7 +283,9 @@ export const Dashboard: React.FC = () => {
                     <h2 className="font-serif font-bold text-2xl text-white">Immutable Procurement Ledger</h2>
                   </div>
                   <div className="flex items-center space-x-4">
-                     <span className="text-[9px] font-bold text-brand-gold/60 uppercase tracking-[0.2em] animate-pulse">Syncing Blockchain State</span>
+                     <span className={`text-[9px] font-bold text-brand-gold/60 uppercase tracking-[0.2em] ${loading ? 'animate-pulse' : ''}`}>
+                       {loading ? 'Syncing Blockchain State' : 'Ledger Verified'}
+                     </span>
                      <button onClick={() => fetchValuations(currentUser)} disabled={!config.baseUrl || loading} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all text-brand-gold disabled:opacity-20">
                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                      </button>
@@ -296,7 +323,7 @@ export const Dashboard: React.FC = () => {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                           {loading ? (
-                            <tr><td colSpan={3} className="px-8 py-40 text-center"><div className="w-12 h-12 border-2 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto shadow-[0_0_20px_rgba(212,175,55,0.2)]"></div></td></tr>
+                            <TableSkeleton />
                           ) : valuations.length === 0 ? (
                             <tr><td colSpan={3} className="px-8 py-40 text-center text-brand-offWhite/10 italic font-serif text-2xl">No capital allocated to {currentUser}'s division.</td></tr>
                           ) : (
@@ -437,19 +464,48 @@ const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
   </Link>
 );
 
-const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; trend: string }> = ({ title, value, icon, trend }) => (
+const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; trend: string; loading?: boolean }> = ({ title, value, icon, trend, loading }) => (
   <div className="bg-brand-navy/50 border border-white/5 rounded-[32px] p-7 flex items-center justify-between backdrop-blur-xl shadow-xl group hover:border-brand-gold/30 transition-all duration-500">
-    <div className="space-y-2">
+    <div className="space-y-2 flex-grow">
       <p className="text-[10px] font-bold text-brand-offWhite/30 uppercase tracking-[0.2em]">{title}</p>
-      <div className="flex flex-col">
-        <p className="text-4xl font-serif font-bold text-white group-hover:text-brand-gold transition-colors duration-500">{value}</p>
-        <span className={`text-[10px] font-bold mt-1 ${trend.startsWith('+') ? 'text-brand-success' : 'text-brand-gold/60'}`}>{trend} Target</span>
+      <div className="flex flex-col min-h-[60px] justify-center">
+        {loading ? (
+          <div className="h-9 w-32 bg-white/5 rounded-lg animate-pulse mb-3"></div>
+        ) : (
+          <p className="text-4xl font-serif font-bold text-white group-hover:text-brand-gold transition-colors duration-500">{value}</p>
+        )}
+        {loading ? (
+          <div className="h-3 w-16 bg-white/5 rounded animate-pulse"></div>
+        ) : (
+          <span className={`text-[10px] font-bold mt-1 ${trend.startsWith('+') ? 'text-brand-success' : 'text-brand-gold/60'}`}>{trend} Target</span>
+        )}
       </div>
     </div>
-    <div className="p-5 bg-white/5 rounded-[22px] group-hover:bg-brand-gold/10 group-hover:rotate-12 transition-all duration-500">
+    <div className="p-5 bg-white/5 rounded-[22px] group-hover:bg-brand-gold/10 group-hover:rotate-12 transition-all duration-500 shrink-0 ml-4">
       {icon}
     </div>
   </div>
+);
+
+const TableSkeleton = () => (
+  <>
+    {[...Array(6)].map((_, i) => (
+      <tr key={i} className="animate-pulse">
+        <td className="px-8 py-7">
+          <div className="space-y-3">
+            <div className="h-5 bg-white/5 rounded w-48"></div>
+            <div className="h-2 bg-white/5 rounded w-32"></div>
+          </div>
+        </td>
+        <td className="px-8 py-7">
+          <div className="h-5 bg-white/5 rounded w-24 ml-auto"></div>
+        </td>
+        <td className="px-8 py-7 text-right">
+          <div className="inline-block h-6 bg-white/5 rounded w-28"></div>
+        </td>
+      </tr>
+    ))}
+  </>
 );
 
 interface Valuation {
