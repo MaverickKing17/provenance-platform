@@ -11,18 +11,23 @@ import {
   DollarSign, 
   ShieldAlert, 
   Link2,
-  Terminal,
-  Activity
+  Activity,
+  ServerCrash,
+  Terminal
 } from 'lucide-react';
 
 /** 
- * VERIFICATION LOGS
- * These help confirm injection status in the browser console.
+ * SAFETY SHIM: Handle cases where process.env might not be globally available in all browser runtimes.
  */
-const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
-const ALEX_TOKEN = process.env.NEXT_PUBLIC_ALEX_TOKEN;
-const LARRY_TOKEN = process.env.NEXT_PUBLIC_LARRY_TOKEN;
+const safeEnv = (typeof process !== 'undefined' && process.env) ? process.env : (window as any)._env_ || {};
 
+const BASE_URL = safeEnv.NEXT_PUBLIC_XANO_BASE_URL;
+const ALEX_TOKEN = safeEnv.NEXT_PUBLIC_ALEX_TOKEN;
+const LARRY_TOKEN = safeEnv.NEXT_PUBLIC_LARRY_TOKEN;
+
+/** 
+ * VERIFICATION LOGS
+ */
 console.log('--- Environment Sync Status ---');
 console.log('Xano Base URL:', BASE_URL ? '✅ Detected' : '❌ Undefined');
 console.log('Alex Token:', ALEX_TOKEN ? '✅ Detected' : '❌ Undefined');
@@ -55,20 +60,19 @@ export const Dashboard: React.FC = () => {
   });
 
   const fetchValuations = async (user: UserKey) => {
-    // Reset state for new fetch
     setValuations([]);
     setLoading(true);
     setError(null);
 
     if (!BASE_URL) {
-      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL is missing.");
+      setError("Endpoint Not Configured");
       setLoading(false);
       return;
     }
 
     const token = TOKENS[user];
     if (!token) {
-      setError(`Configuration Error: NEXT_PUBLIC_${user}_TOKEN is missing.`);
+      setError(`Auth Token Missing for ${user}`);
       setLoading(false);
       return;
     }
@@ -97,7 +101,7 @@ export const Dashboard: React.FC = () => {
 
   const createValuation = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!BASE_URL) return;
+    if (!BASE_URL || !TOKENS[currentUser]) return;
 
     setLoading(true);
     try {
@@ -124,63 +128,14 @@ export const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (BASE_URL) {
-      fetchValuations(currentUser);
-    } else {
-      setLoading(false);
-    }
+    fetchValuations(currentUser);
   }, [currentUser]);
-
-  // If environment variables are totally missing, show the setup guide
-  if (!BASE_URL && !loading) {
-    return (
-      <div className="min-h-screen bg-brand-darkNavy pt-32 pb-12 px-4 flex items-center justify-center">
-        <div className="max-w-xl w-full space-y-8 p-8 bg-brand-navy/40 border border-brand-gold/20 rounded-3xl backdrop-blur-xl shadow-2xl">
-          <div className="text-center space-y-4">
-            <div className="inline-flex p-4 bg-brand-gold/10 rounded-full mb-2">
-              <Terminal className="w-12 h-12 text-brand-gold animate-pulse" />
-            </div>
-            <h2 className="text-3xl font-serif font-bold text-white">Action Required: Redeploy Needed</h2>
-            <p className="text-brand-offWhite/60 text-sm leading-relaxed">
-              Environment variables were detected as <code className="text-brand-gold font-mono">undefined</code>. 
-              Vercel requires a <strong>Redeploy</strong> to inject new variables into your browser bundle.
-            </p>
-          </div>
-
-          <div className="bg-black/40 rounded-xl p-5 border border-white/5 space-y-3">
-             <div className="flex items-center justify-between text-[10px] font-mono tracking-widest uppercase">
-               <span className="text-brand-offWhite/40">Requirement Check</span>
-               <span className="text-brand-gold">Status</span>
-             </div>
-             <div className="space-y-2">
-                <StatusRow label="NEXT_PUBLIC_XANO_BASE_URL" status={!!BASE_URL} />
-                <StatusRow label="NEXT_PUBLIC_ALEX_TOKEN" status={!!ALEX_TOKEN} />
-                <StatusRow label="NEXT_PUBLIC_LARRY_TOKEN" status={!!LARRY_TOKEN} />
-             </div>
-          </div>
-
-          <div className="space-y-4">
-             <button 
-                onClick={() => window.location.reload()}
-                className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-xl hover:bg-brand-goldHover transition-all flex items-center justify-center space-x-2"
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span>Refresh & Re-Verify</span>
-             </button>
-             <p className="text-[10px] text-center text-brand-offWhite/30 italic">
-               Note: If you just added these to Vercel, please trigger a new manual deployment.
-             </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-brand-darkNavy pt-28 pb-12 px-4 sm:px-6 lg:px-8 flex flex-col">
       <div className="max-w-7xl mx-auto space-y-8 flex-grow w-full">
         
-        {/* Testing Toggle & Header */}
+        {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-brand-navy/50 rounded-2xl border border-white/5 backdrop-blur-md">
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
@@ -231,7 +186,7 @@ export const Dashboard: React.FC = () => {
           <StatCard 
             title="Tenant Verification" 
             value={currentUser === 'ALEX' ? 'Alex' : 'Larry'} 
-            icon={<CheckCircle2 className="text-brand-success" />} 
+            icon={<CheckCircle2 className={currentUser === 'ALEX' && !!ALEX_TOKEN ? 'text-brand-success' : 'text-brand-mutedGray'} />} 
           />
         </div>
 
@@ -248,20 +203,40 @@ export const Dashboard: React.FC = () => {
                    <button 
                     onClick={() => fetchValuations(currentUser)}
                     className="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offWhite/40 hover:text-brand-gold"
-                    title="Manual Refresh"
                   >
                     <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-brand-gold' : ''}`} />
                   </button>
                 </div>
               </div>
 
-              <div className="min-h-[400px]">
-                {error ? (
+              <div className="min-h-[400px] relative">
+                {!BASE_URL ? (
+                  /* INLINE REDEPLOY WARNING */
+                  <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
+                    <div className="space-y-6 max-w-md">
+                      <div className="inline-flex p-4 bg-brand-gold/10 rounded-full">
+                        <Terminal className="w-10 h-10 text-brand-gold animate-pulse" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-serif font-bold text-white">Connection Logic Pending</h3>
+                        <p className="text-brand-offWhite/50 text-xs leading-relaxed">
+                          Your environment variables are currently <code className="text-brand-gold">undefined</code>. 
+                          Redeploy your Vercel project to finalize the sync.
+                        </p>
+                      </div>
+                      <div className="bg-black/40 rounded-lg p-4 border border-white/5 space-y-2">
+                         <StatusRowSmall label="BASE_URL" status={!!BASE_URL} />
+                         <StatusRowSmall label="ALEX_TOKEN" status={!!ALEX_TOKEN} />
+                         <StatusRowSmall label="LARRY_TOKEN" status={!!LARRY_TOKEN} />
+                      </div>
+                    </div>
+                  </div>
+                ) : error ? (
                   <div className="p-12 text-center space-y-4">
                     <div className="inline-flex p-4 bg-red-500/10 rounded-full">
-                      <AlertCircle className="w-12 h-12 text-red-400" />
+                      <ServerCrash className="w-12 h-12 text-red-400" />
                     </div>
-                    <p className="text-red-400 font-medium px-8 whitespace-pre-wrap text-sm">{error}</p>
+                    <p className="text-red-400 font-medium text-sm">{error}</p>
                     <button 
                       onClick={() => fetchValuations(currentUser)}
                       className="px-6 py-2 bg-white/5 border border-red-400/30 text-red-400 rounded-lg hover:bg-red-400/10 transition-colors"
@@ -333,11 +308,12 @@ export const Dashboard: React.FC = () => {
                   <label className="text-[10px] font-bold text-brand-offWhite/50 uppercase tracking-widest">Project Descriptor</label>
                   <input 
                     required
+                    disabled={!BASE_URL}
                     type="text" 
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="e.g. Carrara Marble Import"
-                    className="w-full bg-brand-darkNavy border border-white/10 rounded-lg px-4 py-3 text-white placeholder-brand-offWhite/10 focus:outline-none focus:border-brand-gold transition-colors text-sm"
+                    placeholder={BASE_URL ? "e.g. Carrara Marble Import" : "API Connection Required"}
+                    className="w-full bg-brand-darkNavy border border-white/10 rounded-lg px-4 py-3 text-white placeholder-brand-offWhite/10 focus:outline-none focus:border-brand-gold transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
                 <div className="space-y-2">
@@ -346,20 +322,21 @@ export const Dashboard: React.FC = () => {
                     <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-gold/40" />
                     <input 
                       required
+                      disabled={!BASE_URL}
                       type="text" 
                       value={formData.valuation}
                       onChange={(e) => setFormData({...formData, valuation: e.target.value})}
                       placeholder="1,250,000"
-                      className="w-full bg-brand-darkNavy border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-brand-offWhite/10 focus:outline-none focus:border-brand-gold transition-colors text-sm font-mono"
+                      className="w-full bg-brand-darkNavy border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder-brand-offWhite/10 focus:outline-none focus:border-brand-gold transition-colors text-sm font-mono disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
                 </div>
                 <button 
-                  disabled={loading}
+                  disabled={loading || !BASE_URL}
                   type="submit" 
-                  className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-lg hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                  className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-lg hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 disabled:opacity-30 disabled:grayscale mt-2"
                 >
-                  {loading ? 'Processing...' : 'Commit to Tenant Ledger'}
+                  {!BASE_URL ? 'Awaiting Configuration' : loading ? 'Processing...' : 'Commit to Tenant Ledger'}
                 </button>
               </form>
             </div>
@@ -383,7 +360,7 @@ export const Dashboard: React.FC = () => {
               <span className="text-[10px] font-bold text-brand-success uppercase tracking-widest">Status: Connected to Xano</span>
             </div>
           ) : (
-            <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm">
+            <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm animate-pulse">
               <AlertCircle className="w-3.5 h-3.5 text-red-400" />
               <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected</span>
             </div>
@@ -395,9 +372,9 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
         
-        {/* Specific Build Verification Footer requested by user */}
-        <div className="text-[10px] font-mono text-brand-offWhite/20 tracking-wider flex items-center space-x-2">
-          <Activity className="w-3 h-3 text-brand-gold/40" />
+        {/* Specific Build Verification Footer */}
+        <div className="text-[10px] font-mono text-brand-offWhite/20 tracking-wider flex items-center space-x-2 group hover:text-brand-offWhite/40 transition-colors">
+          <Activity className="w-3 h-3 text-brand-gold/40 group-hover:animate-spin" />
           <span>Build Verified: {BASE_URL || 'PENDING_ENVIRONMENT_SYNC'}</span>
         </div>
       </div>
@@ -405,16 +382,11 @@ export const Dashboard: React.FC = () => {
   );
 };
 
-interface StatusRowProps {
-  label: string;
-  status: boolean;
-}
-
-const StatusRow: React.FC<StatusRowProps> = ({ label, status }) => (
+const StatusRowSmall: React.FC<{ label: string, status: boolean }> = ({ label, status }) => (
   <div className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
-    <span className="text-[11px] font-mono text-brand-offWhite/60">{label}</span>
-    <span className={`text-[11px] font-bold ${status ? 'text-brand-success' : 'text-red-500'}`}>
-      {status ? 'DETECTED' : 'UNDEFINED'}
+    <span className="text-[10px] font-mono text-brand-offWhite/40">{label}</span>
+    <span className={`text-[10px] font-bold ${status ? 'text-brand-success' : 'text-red-500'}`}>
+      {status ? 'OK' : 'MISSING'}
     </span>
   </div>
 );
