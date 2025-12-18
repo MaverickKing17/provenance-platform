@@ -7,8 +7,6 @@ import {
   BarChart3, 
   Users, 
   Settings, 
-  Bell, 
-  LogOut, 
   CheckCircle2, 
   ShieldCheck, 
   ArrowLeft,
@@ -19,7 +17,8 @@ import {
   History,
   MessageSquare,
   Zap,
-  Box
+  Box,
+  Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -32,7 +31,8 @@ const MATCHED_MATERIALS = [
     matchScore: 94,
     price: 395,
     leadTime: 8,
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
+    // High-fidelity white marble with gold/warm veining
+    image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=1200&auto=format&fit=crop',
     tags: ['±0.02mm Tol', 'FSC Certified']
   },
   {
@@ -43,7 +43,8 @@ const MATCHED_MATERIALS = [
     matchScore: 91,
     price: 420,
     leadTime: 12,
-    image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1200&auto=format&fit=crop',
+    // Striking white marble with thick grey veins
+    image: 'https://images.unsplash.com/photo-1596434300655-e48d3ff3dd5e?q=80&w=1200&auto=format&fit=crop',
     tags: ['LEED Platinum', 'Hand-Picked']
   },
   {
@@ -54,12 +55,19 @@ const MATCHED_MATERIALS = [
     matchScore: 86,
     price: 310,
     leadTime: 6,
-    image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=1200&auto=format&fit=crop',
+    // Complex, dark brecciated marble pattern
+    image: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=1200&auto=format&fit=crop',
     tags: ['Net Zero Log', 'High Gloss']
   }
 ];
 
 export const Materials: React.FC = () => {
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+
+  const handleImageLoad = (id: number) => {
+    setLoadedImages(prev => ({ ...prev, [id]: true }));
+  };
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
       
@@ -78,11 +86,11 @@ export const Materials: React.FC = () => {
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" to="/sourcing-hub" />
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" active />
-          <NavItem icon={<Box size={18} />} label="Orders" />
-          <NavItem icon={<Wallet size={18} />} label="Wallet" />
-          <NavItem icon={<BarChart3 size={18} />} label="Analytics" />
+          <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
+          <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
+          <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
           <NavItem icon={<Users size={18} />} label="Suppliers" to="/network" />
-          <NavItem icon={<Settings size={18} />} label="Settings" />
+          <NavItem icon={<Settings size={18} />} label="Settings" to="/settings" />
         </nav>
 
         <div className="p-6 border-t border-white/5">
@@ -108,7 +116,7 @@ export const Materials: React.FC = () => {
                 <span>Back to Specs</span>
               </Link>
               <h1 className="text-4xl font-serif font-bold text-brand-darkNavy">AI-Matched Materials</h1>
-              <p className="text-brand-mutedGray text-sm">3 matches found based on technical specifications.</p>
+              <p className="text-brand-mutedGray text-sm">{MATCHED_MATERIALS.length} matches found based on technical specifications.</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -138,8 +146,19 @@ export const Materials: React.FC = () => {
               <div key={material.id} className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full">
                 
                 {/* Visual Preview */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                  <img src={material.image} alt={material.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]" />
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex items-center justify-center">
+                  {!loadedImages[material.id] && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 z-10 bg-slate-50">
+                      <Loader2 size={24} className="text-brand-gold animate-spin" />
+                      <span className="text-[9px] font-black text-brand-gold uppercase tracking-[0.2em]">Authenticating Sample...</span>
+                    </div>
+                  )}
+                  <img 
+                    src={material.image} 
+                    alt={material.name} 
+                    onLoad={() => handleImageLoad(material.id)}
+                    className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ${loadedImages[material.id] ? 'opacity-100' : 'opacity-0'}`} 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-darkNavy/80 via-transparent to-transparent opacity-40"></div>
                   
                   {/* AI Overlays */}
