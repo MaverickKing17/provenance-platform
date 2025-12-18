@@ -10,11 +10,13 @@ import { Projects } from './components/Projects';
 import { Materials } from './components/Materials';
 import { Orders } from './components/Orders';
 import { Analytics } from './components/Analytics';
+import { WalletPage } from './components/Wallet';
+import { SettingsPage } from './components/Settings';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   // Hide global navbar on specialized internal workspace views for C-Suite consistency
-  const internalRoutes = ['/projects', '/materials', '/orders', '/network', '/analytics', '/sourcing-hub'];
+  const internalRoutes = ['/projects', '/materials', '/orders', '/network', '/analytics', '/sourcing-hub', '/wallet', '/settings'];
   const hideGlobalNav = internalRoutes.includes(location.pathname);
   
   return (
@@ -40,6 +42,8 @@ const App: React.FC = () => {
           <Route path="/materials" element={<Materials />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/wallet" element={<WalletPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/:slug" element={<GenericPage />} />
         </Routes>
       </Layout>
