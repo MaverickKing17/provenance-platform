@@ -12,7 +12,16 @@ import {
   ShieldAlert
 } from 'lucide-react';
 
-// Token mapping strictly using all-caps environment variables
+/** 
+ * STRICT RULE 1: API URL definition
+ * Using the browser-accessible environment variable from Vercel.
+ */
+const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
+
+/**
+ * STRICT RULE 2: Tokens (All Uppercase)
+ * Accessing the private tenant tokens via environment variables.
+ */
 const TOKENS = {
   ALEX: process.env.ALEX_TOKEN || '',
   LARRY: process.env.LARRY_TOKEN || ''
@@ -39,9 +48,12 @@ export const Dashboard: React.FC = () => {
     valuation: ''
   });
 
-  // Check for Base URL availability on mount
+  /**
+   * STRICT RULE 3: Client-Side Check
+   * Ensuring we handle missing variables gracefully in the browser.
+   */
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
+    if (!BASE_URL) {
       console.log('Xano Base URL is missing from environment variables');
     }
   }, []);
@@ -51,10 +63,8 @@ export const Dashboard: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // Rule: Fallback Check - console log if missing
-    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
-      console.log('Xano Base URL is missing from environment variables');
-      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL environment variable is missing.");
+    if (!BASE_URL) {
+      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL is not defined.");
       setLoading(false);
       return;
     }
@@ -62,30 +72,29 @@ export const Dashboard: React.FC = () => {
     const token = TOKENS[user];
     if (!token) {
       const envVarName = user === 'ALEX' ? 'ALEX_TOKEN' : 'LARRY_TOKEN';
-      setError(`Configuration Error: ${envVarName} environment variable is missing.`);
+      setError(`Configuration Error: ${envVarName} is not defined.`);
       setLoading(false);
       return;
     }
 
     try {
-      // Rule: Strictly refer to NEXT_PUBLIC_XANO_BASE_URL in the fetch request
-      const response = await fetch(`${process.env.NEXT_PUBLIC_XANO_BASE_URL}/valuation`, {
+      // Header Check: Verifying Bearer ${token} format with uppercase tokens
+      const response = await fetch(`${BASE_URL}/valuation`, {
         headers: {
-          // Rule: Verify Authorization header is correctly formatted
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
       
       if (!response.ok) {
-        if (response.status === 401) throw new Error('Unauthorized: Invalid Token');
-        throw new Error('Failed to fetch data from backend');
+        if (response.status === 401) throw new Error('Unauthorized: Invalid Tenant Token');
+        throw new Error('Backend connectivity issue detected');
       }
       
       const data = await response.json();
       setValuations(Array.isArray(data) ? data : []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }
@@ -94,19 +103,16 @@ export const Dashboard: React.FC = () => {
   const createValuation = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
-      console.log('Xano Base URL is missing from environment variables');
-      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL environment variable is missing.");
+    if (!BASE_URL) {
+      setError("Cannot proceed: API Base URL missing.");
       return;
     }
 
     setLoading(true);
     try {
-      // Rule: Strictly refer to NEXT_PUBLIC_XANO_BASE_URL in the fetch request
-      const response = await fetch(`${process.env.NEXT_PUBLIC_XANO_BASE_URL}/create_valuation`, {
+      const response = await fetch(`${BASE_URL}/create_valuation`, {
         method: 'POST',
         headers: {
-          // Rule: Verify Authorization header is correctly formatted
           'Authorization': `Bearer ${TOKENS[currentUser]}`,
           'Content-Type': 'application/json'
         },
@@ -116,12 +122,12 @@ export const Dashboard: React.FC = () => {
         })
       });
       
-      if (!response.ok) throw new Error('Failed to create valuation');
+      if (!response.ok) throw new Error('Failed to commit valuation to ledger');
       
       setFormData({ name: '', valuation: '' });
       fetchValuations(currentUser);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create');
+      setError(err instanceof Error ? err.message : 'Write operation failed');
       setLoading(false);
     }
   };
