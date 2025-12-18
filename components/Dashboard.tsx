@@ -12,7 +12,7 @@ import {
   ShieldAlert
 } from 'lucide-react';
 
-// Use exact uppercase key from environment variables as requested
+// Exact uppercase keys from environment variables as requested
 const API_BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL || '';
 
 const TOKENS = {
@@ -47,17 +47,19 @@ export const Dashboard: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // Verify Base URL configuration
-    if (!API_BASE_URL) {
+    // Explicit check for Base URL configuration
+    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
       setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL environment variable is missing.");
       setLoading(false);
       return;
     }
 
-    // Verify Token configuration
+    // Explicit check for Token configuration using the specific UserKey
     const token = TOKENS[user];
     if (!token) {
-      setError(`Configuration Error: ${user}_TOKEN environment variable is missing.`);
+      // Logic looking for exact all-caps strings as requested
+      const envVarName = user === 'ALEX' ? 'ALEX_TOKEN' : 'LARRY_TOKEN';
+      setError(`Configuration Error: ${envVarName} environment variable is missing.`);
       setLoading(false);
       return;
     }
@@ -202,7 +204,7 @@ export const Dashboard: React.FC = () => {
                     <div className="inline-flex p-4 bg-red-500/10 rounded-full">
                       <AlertCircle className="w-12 h-12 text-red-400" />
                     </div>
-                    <p className="text-red-400 font-medium px-8">{error}</p>
+                    <p className="text-red-400 font-medium px-8 whitespace-pre-wrap">{error}</p>
                     <button 
                       onClick={() => fetchValuations(currentUser)}
                       className="px-6 py-2 bg-white/5 border border-red-400/30 text-red-400 rounded-lg hover:bg-red-400/10 transition-colors"
