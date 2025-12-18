@@ -14,10 +14,10 @@ import {
 
 const API_BASE_URL = 'https://x8ki-letl-twmt.n7.xano.io/api:iW53U8Nn';
 
-// Accessing tokens from environment variables as requested
+// Accessing tokens using exact uppercase variable names as requested
 const TOKENS = {
-  Alex: process.env.ALEX_TOKEN || '',
-  Larry: process.env.LARRY_TOKEN || ''
+  ALEX: process.env.ALEX_TOKEN || '',
+  LARRY: process.env.LARRY_TOKEN || ''
 };
 
 type UserKey = keyof typeof TOKENS;
@@ -31,7 +31,7 @@ interface Valuation {
 }
 
 export const Dashboard: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<UserKey>('Alex');
+  const [currentUser, setCurrentUser] = useState<UserKey>('ALEX');
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +49,7 @@ export const Dashboard: React.FC = () => {
 
     const token = TOKENS[user];
     if (!token) {
+      // Corrected to show the exact uppercase environment variable name in error message
       setError(`Configuration Error: ${user}_TOKEN environment variable is missing.`);
       setLoading(false);
       return;
@@ -131,7 +132,7 @@ export const Dashboard: React.FC = () => {
                   }`}
                 >
                   <Users className="w-4 h-4" />
-                  <span>{user}</span>
+                  <span>{user === 'ALEX' ? 'Alex' : 'Larry'}</span>
                 </button>
               ))}
             </div>
@@ -157,7 +158,7 @@ export const Dashboard: React.FC = () => {
           />
           <StatCard 
             title="Tenant Verification" 
-            value={currentUser} 
+            value={currentUser === 'ALEX' ? 'Alex' : 'Larry'} 
             icon={<CheckCircle2 className="text-brand-success" />} 
           />
         </div>
@@ -171,7 +172,7 @@ export const Dashboard: React.FC = () => {
               <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-white/5">
                 <h2 className="font-serif font-bold text-xl text-white">Active Procurement Cycles</h2>
                 <div className="flex items-center space-x-3">
-                   <span className="text-[10px] font-mono text-brand-offWhite/30">Tenant: {currentUser}</span>
+                   <span className="text-[10px] font-mono text-brand-offWhite/30">Tenant: {currentUser === 'ALEX' ? 'Alex' : 'Larry'}</span>
                    <button 
                     onClick={() => fetchValuations(currentUser)}
                     className="p-2 hover:bg-white/10 rounded-full transition-colors text-brand-offWhite/40 hover:text-brand-gold"
@@ -212,14 +213,14 @@ export const Dashboard: React.FC = () => {
                             <td colSpan={3} className="px-6 py-20 text-center">
                               <div className="flex flex-col items-center space-y-3">
                                 <div className="w-8 h-8 border-2 border-brand-gold border-t-transparent rounded-full animate-spin"></div>
-                                <span className="text-xs text-brand-offWhite/40">Synchronizing {currentUser}'s Secure Ledger...</span>
+                                <span className="text-xs text-brand-offWhite/40">Synchronizing secure ledger...</span>
                               </div>
                             </td>
                           </tr>
                         ) : valuations.length === 0 ? (
                           <tr>
                             <td colSpan={3} className="px-6 py-20 text-center text-brand-offWhite/20 italic font-light">
-                              No records detected for tenant {currentUser}.
+                              No records detected for tenant {currentUser === 'ALEX' ? 'Alex' : 'Larry'}.
                             </td>
                           </tr>
                         ) : (
@@ -294,7 +295,7 @@ export const Dashboard: React.FC = () => {
             <div className="p-5 border border-brand-gold/10 rounded-xl bg-brand-gold/5 flex items-start space-x-3">
                 <ShieldAlert className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
                 <p className="text-[10px] text-brand-offWhite/60 leading-relaxed italic">
-                  Isolated Sourcing Hub: Actions are contextually bound to <strong>{currentUser}'s</strong> private data partition. Verified via OAuth2 Bearer standards.
+                  Isolated Sourcing Hub: Actions are contextually bound to <strong>{currentUser === 'ALEX' ? 'Alex' : 'Larry'}'s</strong> private data partition. Verified via OAuth2 Bearer standards.
                 </p>
             </div>
           </div>
