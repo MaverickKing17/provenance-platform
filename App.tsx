@@ -9,11 +9,13 @@ import { Network } from './components/Network';
 import { Projects } from './components/Projects';
 import { Materials } from './components/Materials';
 import { Orders } from './components/Orders';
+import { Analytics } from './components/Analytics';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   // Hide global navbar on specialized internal workspace views for C-Suite consistency
-  const hideGlobalNav = ['/projects', '/materials', '/orders', '/network'].includes(location.pathname);
+  const internalRoutes = ['/projects', '/materials', '/orders', '/network', '/analytics', '/sourcing-hub'];
+  const hideGlobalNav = internalRoutes.includes(location.pathname);
   
   return (
     <div className="min-h-screen bg-brand-navy flex flex-col font-sans text-brand-offWhite selection:bg-brand-gold selection:text-brand-darkNavy">
@@ -37,6 +39,7 @@ const App: React.FC = () => {
           <Route path="/projects" element={<Projects />} />
           <Route path="/materials" element={<Materials />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/:slug" element={<GenericPage />} />
         </Routes>
       </Layout>
