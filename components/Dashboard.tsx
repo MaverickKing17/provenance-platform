@@ -9,7 +9,8 @@ import {
   CheckCircle2,
   Building,
   DollarSign,
-  ShieldAlert
+  ShieldAlert,
+  Link2
 } from 'lucide-react';
 
 /** 
@@ -25,7 +26,7 @@ console.log('NEXT_PUBLIC_LARRY_TOKEN:', process.env.NEXT_PUBLIC_LARRY_TOKEN);
 const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
 
 /**
- * STRICT RULE: Tokens (Now using NEXT_PUBLIC_ prefix for client-side visibility)
+ * STRICT RULE: Tokens (Using NEXT_PUBLIC_ prefix as renamed in Vercel)
  */
 const TOKENS = {
   ALEX: process.env.NEXT_PUBLIC_ALEX_TOKEN || '',
@@ -137,8 +138,8 @@ export const Dashboard: React.FC = () => {
   }, [currentUser]);
 
   return (
-    <div className="min-h-screen bg-brand-darkNavy pt-28 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-brand-darkNavy pt-28 pb-12 px-4 sm:px-6 lg:px-8 flex flex-col">
+      <div className="max-w-7xl mx-auto space-y-8 flex-grow">
         
         {/* Testing Toggle & Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-brand-navy/50 rounded-2xl border border-white/5 backdrop-blur-md">
@@ -331,6 +332,26 @@ export const Dashboard: React.FC = () => {
                 </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Connection Status Indicator */}
+      <div className="mt-12 py-6 border-t border-white/5 text-center flex items-center justify-center space-x-3">
+        {BASE_URL ? (
+          <div className="flex items-center space-x-2 px-4 py-1.5 bg-brand-success/10 rounded-full border border-brand-success/20">
+            <CheckCircle2 className="w-3.5 h-3.5 text-brand-success" />
+            <span className="text-[10px] font-bold text-brand-success uppercase tracking-widest">Status: Connected to Xano</span>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20">
+            <AlertCircle className="w-3.5 h-3.5 text-red-400" />
+            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected (Missing Base URL)</span>
+          </div>
+        )}
+        <div className="h-4 w-px bg-white/10"></div>
+        <div className="flex items-center space-x-2 text-brand-offWhite/30">
+          <Link2 className="w-3 h-3" />
+          <span className="text-[9px] font-mono">{BASE_URL || 'No Endpoint Detected'}</span>
         </div>
       </div>
     </div>
