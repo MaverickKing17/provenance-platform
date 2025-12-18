@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Menu, LayoutDashboard, Globe } from 'lucide-react';
+import { Home, Menu, LayoutDashboard, Globe, Layers } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   return (
@@ -12,23 +12,26 @@ export const Navbar: React.FC = () => {
         </Link>
         
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-brand-offWhite/80">
-          <Link to="/sourcing-hub" className="flex items-center space-x-2 text-brand-gold hover:text-white transition-colors duration-200">
+          <Link to="/sourcing-hub" className="flex items-center space-x-2 hover:text-brand-gold transition-colors duration-200">
             <LayoutDashboard className="w-4 h-4" />
             <span>Sourcing Hub</span>
+          </Link>
+          <Link to="/projects" className="flex items-center space-x-2 text-brand-gold hover:text-white transition-colors duration-200">
+            <Layers className="w-4 h-4" />
+            <span>Projects</span>
           </Link>
           <Link to="/network" className="flex items-center space-x-2 hover:text-brand-gold transition-colors duration-200">
             <Globe className="w-4 h-4" />
             <span>Vetted Network</span>
           </Link>
-          <Link to="/solutions" className="hover:text-brand-gold transition-colors duration-200">Strategic Solutions</Link>
-          <Link to="/provenance" className="hover:text-brand-gold transition-colors duration-200">Provenance Registry</Link>
+          <Link to="/solutions" className="hover:text-brand-gold transition-colors duration-200">Solutions</Link>
         </div>
 
         <div className="flex items-center space-x-4">
           <Link to="/sourcing-hub" className="hidden sm:block text-brand-offWhite/60 hover:text-white text-[11px] font-bold uppercase tracking-widest transition-colors">
             Identity Portal
           </Link>
-          <Link to="/sourcing-hub" className="bg-brand-gold text-brand-darkNavy px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all duration-300 shadow-lg shadow-brand-gold/20">
+          <Link to="/projects" className="bg-brand-gold text-brand-darkNavy px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all duration-300 shadow-lg shadow-brand-gold/20">
             Request Access
           </Link>
           <button className="md:hidden text-white">
