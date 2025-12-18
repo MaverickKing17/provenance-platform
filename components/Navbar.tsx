@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Menu, LayoutDashboard, Globe, Layers } from 'lucide-react';
+import { Home, Menu, LayoutDashboard, Globe, Layers, Box } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-3 text-white group">
           <Home className="w-6 h-6 sm:w-8 sm:h-8 stroke-1 group-hover:text-brand-gold transition-colors" />
-          <span className="text-lg sm:text-xl font-bold font-serif tracking-tight text-white">Classic Homes</span>
+          <span className="text-lg sm:text-xl font-bold font-serif tracking-tight text-white uppercase">Classic Homes</span>
         </Link>
         
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-brand-offWhite/80">
@@ -16,15 +16,18 @@ export const Navbar: React.FC = () => {
             <LayoutDashboard className="w-4 h-4" />
             <span>Sourcing Hub</span>
           </Link>
-          <Link to="/projects" className="flex items-center space-x-2 text-brand-gold hover:text-white transition-colors duration-200">
+          <Link to="/projects" className="flex items-center space-x-2 hover:text-brand-gold transition-colors duration-200">
             <Layers className="w-4 h-4" />
             <span>Projects</span>
+          </Link>
+          <Link to="/orders" className="flex items-center space-x-2 text-brand-gold hover:text-white transition-colors duration-200">
+            <Box className="w-4 h-4" />
+            <span>Orders</span>
           </Link>
           <Link to="/network" className="flex items-center space-x-2 hover:text-brand-gold transition-colors duration-200">
             <Globe className="w-4 h-4" />
             <span>Vetted Network</span>
           </Link>
-          <Link to="/solutions" className="hover:text-brand-gold transition-colors duration-200">Solutions</Link>
         </div>
 
         <div className="flex items-center space-x-4">
