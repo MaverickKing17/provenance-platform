@@ -24,7 +24,10 @@ import {
   X,
   Send,
   Loader2,
-  ChevronDown
+  ChevronDown,
+  ShieldAlert,
+  MapPin,
+  Maximize2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
@@ -39,6 +42,7 @@ interface Supplier {
   capacity: number;
   tags: string[];
   image: string;
+  coords: { x: number; y: number }; // Percentage coords for abstract map
 }
 
 const SUPPLIERS: Supplier[] = [
@@ -51,7 +55,8 @@ const SUPPLIERS: Supplier[] = [
     risk: 'Low Risk',
     capacity: 85,
     tags: ['ISO 9001', 'Fair Trade'],
-    image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=400&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=400&auto=format&fit=crop',
+    coords: { x: 52, y: 35 }
   },
   {
     id: 2,
@@ -62,7 +67,8 @@ const SUPPLIERS: Supplier[] = [
     risk: 'Low Risk',
     capacity: 40,
     tags: ['LEED Gold', 'Made in USA'],
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop',
+    coords: { x: 25, y: 38 }
   },
   {
     id: 3,
@@ -73,7 +79,8 @@ const SUPPLIERS: Supplier[] = [
     risk: 'Medium Risk',
     capacity: 92,
     tags: ['FSC Certified', 'Carb Compliant'],
-    image: 'https://images.unsplash.com/photo-1582234373447-28023367f16d?q=80&w=400&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1582234373447-28023367f16d?q=80&w=400&auto=format&fit=crop',
+    coords: { x: 85, y: 42 }
   },
   {
     id: 4,
@@ -81,10 +88,11 @@ const SUPPLIERS: Supplier[] = [
     location: 'Oslo, Norway',
     specialty: 'Roofing Slate',
     rating: 4.7,
-    risk: 'Low Risk',
+    risk: 'High Risk',
     capacity: 60,
     tags: ['Nordic Swan', 'ISO 14001'],
-    image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=400&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=400&auto=format&fit=crop',
+    coords: { x: 50, y: 18 }
   }
 ];
 
@@ -96,10 +104,12 @@ const MOCK_PROJECTS = [
 ];
 
 export const Network: React.FC = () => {
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [quoteSuccess, setQuoteSuccess] = useState(false);
+  const [hoveredSupplier, setHoveredSupplier] = useState<Supplier | null>(null);
 
   const handleRequestQuote = (supplier: Supplier) => {
     setSelectedSupplier(supplier);
@@ -110,7 +120,6 @@ export const Network: React.FC = () => {
   const submitQuoteRequest = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
-    // Simulate institutional workflow dispatch
     setTimeout(() => {
       setIsSending(false);
       setQuoteSuccess(true);
@@ -121,9 +130,34 @@ export const Network: React.FC = () => {
     }, 1500);
   };
 
+  const getRiskStyles = (risk: string) => {
+    switch (risk) {
+      case 'High Risk':
+        return {
+          border: 'border-red-500/40 shadow-[0_0_20px_rgba(239,68,68,0.1)]',
+          text: 'text-red-500',
+          bg: 'bg-red-500',
+          icon: <ShieldAlert className="w-4 h-4 text-red-500 animate-pulse" />
+        };
+      case 'Medium Risk':
+        return {
+          border: 'border-brand-amber/40 shadow-[0_0_20px_rgba(245,158,11,0.1)]',
+          text: 'text-brand-amber',
+          bg: 'bg-brand-amber',
+          icon: <AlertTriangle className="w-4 h-4 text-brand-amber animate-bounce-slow" />
+        };
+      default:
+        return {
+          border: 'border-slate-100',
+          text: 'text-brand-success',
+          bg: 'bg-brand-success',
+          icon: <CheckCircle2 size={16} className="text-brand-success" />
+        };
+    }
+  };
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
-      
       {/* EXECUTIVE SIDEBAR */}
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
         <div className="p-8">
@@ -134,7 +168,6 @@ export const Network: React.FC = () => {
             <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter text-nowrap">Classic Homes</span>
           </Link>
         </div>
-
         <nav className="flex-grow px-4 space-y-1">
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" to="/sourcing-hub" />
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
@@ -145,7 +178,6 @@ export const Network: React.FC = () => {
           <NavItem icon={<Users size={18} />} label="Vetted Suppliers" active />
           <NavItem icon={<Settings2 size={18} />} label="Settings" to="/settings" />
         </nav>
-
         <div className="p-6 border-t border-white/5">
           <div className="flex items-center space-x-3 p-2 rounded-xl">
             <img 
@@ -162,10 +194,9 @@ export const Network: React.FC = () => {
       </aside>
 
       {/* MAIN WORKSPACE */}
-      <main className="flex-grow flex flex-col overflow-y-auto">
-        
+      <main className="flex-grow flex flex-col overflow-y-auto relative">
         {/* TOP BAR SEARCH & ACTIONS */}
-        <div className="bg-white border-b border-slate-200 px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6 sticky top-0 z-10 shadow-sm">
+        <div className="bg-white border-b border-slate-200 px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6 sticky top-0 z-30 shadow-sm">
           <div className="space-y-1">
             <h1 className="text-3xl font-serif font-bold text-brand-darkNavy tracking-tight">Vetted Global Network</h1>
             <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">
@@ -177,9 +208,16 @@ export const Network: React.FC = () => {
 
           <div className="flex items-center space-x-4 w-full md:w-auto">
             <GlobalSearch />
-            <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm">
+            <button 
+              onClick={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
+              className={`flex items-center space-x-2 px-5 py-2.5 border rounded-lg text-xs font-bold transition-all shadow-sm ${
+                viewMode === 'map' 
+                  ? 'bg-brand-gold text-brand-darkNavy border-brand-gold shadow-brand-gold/20' 
+                  : 'bg-white text-brand-darkNavy border-slate-200 hover:bg-slate-50'
+              }`}
+            >
               <MapIcon className="w-4 h-4" />
-              <span>Toggle Risk Map</span>
+              <span>{viewMode === 'map' ? 'Grid View' : 'Toggle Risk Map'}</span>
             </button>
             <button className="flex items-center justify-center p-2.5 bg-brand-navy text-white rounded-lg hover:bg-brand-darkNavy transition-all">
               <Filter className="w-4 h-4" />
@@ -187,125 +225,191 @@ export const Network: React.FC = () => {
           </div>
         </div>
 
-        <div className="px-12 py-12 space-y-12">
-          
-          {/* NETWORK INTELLIGENCE STATS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
-                <div>
-                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Verified Artisans</p>
-                   <p className="text-3xl font-serif font-bold text-brand-darkNavy">1,248</p>
-                </div>
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
-                   <Users size={24} />
-                </div>
-             </div>
-             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
-                <div>
-                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Avg. Trust Score</p>
-                   <p className="text-3xl font-serif font-bold text-brand-darkNavy">98.4%</p>
-                </div>
-                <div className="w-12 h-12 bg-brand-success/10 rounded-xl flex items-center justify-center text-brand-success">
-                   <ShieldCheck size={24} />
-                </div>
-             </div>
-             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
-                <div>
-                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Aggregated Risk</p>
-                   <p className="text-3xl font-serif font-bold text-brand-success">MINIMAL</p>
-                </div>
-                <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
-                   <TrendingUp size={24} />
-                </div>
-             </div>
-          </div>
+        {/* CONTENT AREA */}
+        <div className="flex-grow flex flex-col min-h-0">
+          {viewMode === 'grid' ? (
+            <div className="px-12 py-12 space-y-12 animate-in fade-in duration-500">
+              {/* NETWORK INTELLIGENCE STATS */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                    <div><p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Verified Artisans</p><p className="text-3xl font-serif font-bold text-brand-darkNavy">1,248</p></div>
+                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500"><Users size={24} /></div>
+                 </div>
+                 <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                    <div><p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Avg. Trust Score</p><p className="text-3xl font-serif font-bold text-brand-darkNavy">98.4%</p></div>
+                    <div className="w-12 h-12 bg-brand-success/10 rounded-xl flex items-center justify-center text-brand-success"><ShieldCheck size={24} /></div>
+                 </div>
+                 <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                    <div><p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Aggregated Risk</p><p className="text-3xl font-serif font-bold text-brand-success">MINIMAL</p></div>
+                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400"><TrendingUp size={24} /></div>
+                 </div>
+              </div>
 
-          {/* SUPPLIER MARKETPLACE GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {SUPPLIERS.map((supplier) => (
-              <div key={supplier.id} className="bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full">
-                <div className="p-8 space-y-6 flex-grow flex flex-col">
-                  
-                  {/* Branding */}
-                  <div className="flex items-start justify-between">
-                    <div className="flex flex-col items-center space-y-4 w-full">
-                      <div className="relative">
-                        <img src={supplier.image} alt={supplier.name} className="w-20 h-20 rounded-full object-cover border-2 border-brand-gold/10 group-hover:border-brand-gold transition-colors duration-500" />
-                        <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md">
-                          <CheckCircle2 size={16} className="text-brand-success" />
+              {/* SUPPLIER MARKETPLACE GRID */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {SUPPLIERS.map((supplier) => {
+                  const riskStyles = getRiskStyles(supplier.risk);
+                  return (
+                    <div key={supplier.id} className={`bg-white border ${riskStyles.border} rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group flex flex-col h-full relative`}>
+                      {(supplier.risk === 'Medium Risk' || supplier.risk === 'High Risk') && (
+                        <div className="absolute top-4 left-4 z-10"><div className={`p-1.5 rounded-full ${supplier.risk === 'High Risk' ? 'bg-red-50' : 'bg-brand-amber/10'} border border-current`}>{riskStyles.icon}</div></div>
+                      )}
+                      <div className="p-8 space-y-6 flex-grow flex flex-col">
+                        <div className="flex items-start justify-between">
+                          <div className="flex flex-col items-center space-y-4 w-full">
+                            <div className="relative">
+                              <img src={supplier.image} alt={supplier.name} className="w-20 h-20 rounded-full object-cover border-2 border-brand-gold/10 group-hover:border-brand-gold transition-colors duration-500" />
+                              <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md">{riskStyles.icon}</div>
+                            </div>
+                            <div className="text-center">
+                              <h3 className="text-xl font-serif font-bold text-brand-darkNavy tracking-tight leading-tight">{supplier.name}</h3>
+                              <p className="text-[10px] text-brand-mutedGray font-black uppercase tracking-[0.2em] mt-1">{supplier.location}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between py-4 border-y border-slate-50">
+                          <span className="text-[11px] font-bold text-brand-darkNavy uppercase tracking-wider">{supplier.specialty}</span>
+                          <div className="flex items-center space-x-1.5"><Star size={12} className="text-brand-gold fill-brand-gold" /><span className="text-xs font-black text-brand-darkNavy">{supplier.rating}</span></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 py-2">
+                          <div className="space-y-2 border-r border-slate-100 pr-2">
+                            <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Risk Index</span>
+                            <div className="flex items-center space-x-1.5"><div className={`w-1.5 h-1.5 rounded-full ${riskStyles.bg}`}></div><span className={`text-[10px] font-black uppercase tracking-tight ${riskStyles.text}`}>{supplier.risk.split(' ')[0]}</span></div>
+                          </div>
+                          <div className="space-y-2 pl-2">
+                            <div className="flex justify-between items-center"><span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Capacity</span><span className="text-[10px] font-bold text-brand-darkNavy">{supplier.capacity}%</span></div>
+                            <div className="h-1 bg-slate-50 rounded-full overflow-hidden mt-1"><div className={`h-full transition-all duration-1000 ${supplier.capacity > 80 ? 'bg-brand-amber' : 'bg-brand-navy'}`} style={{ width: `${supplier.capacity}%` }}></div></div>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-2">{supplier.tags.map((tag) => (<span key={tag} className="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">{tag}</span>))}</div>
+                        <div className="pt-6 mt-auto space-y-3">
+                          <button onClick={() => handleRequestQuote(supplier)} className="w-full py-4 bg-brand-gold text-brand-darkNavy text-[10px] font-black uppercase tracking-[0.2em] rounded-md hover:bg-brand-goldHover transition-all duration-300 shadow-lg shadow-brand-gold/10 flex items-center justify-center space-x-2 transform active:scale-95"><MessageSquare size={14} className="fill-brand-darkNavy" /><span>Request Quote</span></button>
+                          <button className="w-full py-3.5 border border-slate-200 text-brand-mutedGray text-[9px] font-black uppercase tracking-[0.2em] rounded-md hover:bg-slate-50 hover:text-brand-darkNavy transition-all duration-300 flex items-center justify-center space-x-2 group/btn"><span>View Audit History</span><ExternalLink size={12} className="opacity-40 group-hover/btn:opacity-100" /></button>
                         </div>
                       </div>
-                      <div className="text-center">
-                        <h3 className="text-xl font-serif font-bold text-brand-darkNavy tracking-tight leading-tight">{supplier.name}</h3>
-                        <p className="text-[10px] text-brand-mutedGray font-black uppercase tracking-[0.2em] mt-1">{supplier.location}</p>
-                      </div>
                     </div>
-                  </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* RISK MAP VIEW */
+            <div className="flex-grow relative bg-brand-darkNavy overflow-hidden animate-in zoom-in-95 duration-700 flex flex-col">
+              {/* Abstract Map Background */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none">
+                 <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+                 {/* Stylized Map SVG */}
+                 <svg className="w-full h-full text-brand-offWhite/10 fill-current" viewBox="0 0 1000 500">
+                    <path d="M150,150 Q200,100 250,150 T350,150 M600,100 Q650,50 700,100 T800,100 M200,300 Q250,250 300,300 T400,300 M700,350 Q750,300 800,350 T900,350" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <circle cx="200" cy="180" r="100" fill="currentColor" opacity="0.1" />
+                    <circle cx="750" cy="250" r="150" fill="currentColor" opacity="0.1" />
+                    <circle cx="450" cy="350" r="80" fill="currentColor" opacity="0.1" />
+                 </svg>
+              </div>
 
-                  {/* Expertise & Rating */}
-                  <div className="flex items-center justify-between py-4 border-y border-slate-50">
-                    <span className="text-[11px] font-bold text-brand-darkNavy uppercase tracking-wider">{supplier.specialty}</span>
-                    <div className="flex items-center space-x-1.5">
-                      <Star size={12} className="text-brand-gold fill-brand-gold" />
-                      <span className="text-xs font-black text-brand-darkNavy">{supplier.rating}</span>
+              {/* Map Controls Overlay */}
+              <div className="absolute top-8 left-8 z-20 flex flex-col space-y-4">
+                 <div className="bg-brand-navy/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl space-y-4 shadow-2xl">
+                    <div className="flex items-center space-x-3 border-b border-white/5 pb-4">
+                       <Globe className="text-brand-gold w-5 h-5" />
+                       <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Live Supply Chain Map</span>
                     </div>
-                  </div>
-
-                  {/* Deep Metrics */}
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-1.5 h-1.5 rounded-full ${supplier.risk === 'Low Risk' ? 'bg-brand-success' : 'bg-brand-amber'}`}></div>
-                        <span className="text-[10px] font-black text-brand-darkNavy uppercase tracking-widest">{supplier.risk} Profile</span>
-                      </div>
+                    <div className="space-y-3">
+                       <LegendItem color="bg-brand-success" label="Low Risk Zone" />
+                       <LegendItem color="bg-brand-amber" label="Monitor / Alert" />
+                       <LegendItem color="bg-red-500" label="Critical Disruption" />
                     </div>
+                 </div>
+              </div>
 
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">
-                        <span>Capacity Load</span>
-                        <span className="text-brand-darkNavy">{supplier.capacity}%</span>
+              {/* Map Interaction Layer */}
+              <div className="relative w-full h-[calc(100vh-140px)]">
+                 {SUPPLIERS.map((supplier) => {
+                   const riskStyles = getRiskStyles(supplier.risk);
+                   const isHovered = hoveredSupplier?.id === supplier.id;
+                   
+                   return (
+                     <div 
+                       key={supplier.id}
+                       className="absolute transition-all duration-500 z-10"
+                       style={{ left: `${supplier.coords.x}%`, top: `${supplier.coords.y}%` }}
+                       onMouseEnter={() => setHoveredSupplier(supplier)}
+                       onMouseLeave={() => setHoveredSupplier(null)}
+                     >
+                        {/* Pulse Effect */}
+                        <div className={`absolute -inset-4 rounded-full opacity-20 animate-ping ${riskStyles.bg}`}></div>
+                        
+                        {/* Marker Pin */}
+                        <div className={`relative p-2.5 rounded-full cursor-pointer border-2 transition-transform hover:scale-125 shadow-xl ${riskStyles.bg} ${riskStyles.border}`}>
+                           {supplier.risk === 'Low Risk' ? <ShieldCheck className="w-5 h-5 text-white" /> : 
+                            supplier.risk === 'Medium Risk' ? <AlertTriangle className="w-5 h-5 text-white" /> : 
+                            <ShieldAlert className="w-5 h-5 text-white" />}
+                        </div>
+
+                        {/* Supplier Info Pop-up (on hover) */}
+                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-4 transition-all duration-300 transform pointer-events-none ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                           <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-100 w-64 overflow-hidden pointer-events-auto">
+                              <div className="p-4 space-y-4">
+                                 <div className="flex items-center space-x-3">
+                                    <img src={supplier.image} className="w-10 h-10 rounded-full object-cover border border-slate-100" alt={supplier.name} />
+                                    <div>
+                                       <h4 className="text-xs font-black text-brand-darkNavy leading-none mb-1">{supplier.name}</h4>
+                                       <p className="text-[10px] text-brand-mutedGray uppercase tracking-widest">{supplier.location}</p>
+                                    </div>
+                                 </div>
+                                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-50">
+                                    <div className="flex flex-col">
+                                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">Capacity</span>
+                                       <span className="text-xs font-bold text-brand-darkNavy">{supplier.capacity}%</span>
+                                    </div>
+                                    <div className="flex flex-col">
+                                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">Rating</span>
+                                       <span className="text-xs font-bold text-brand-darkNavy">{supplier.rating} / 5</span>
+                                    </div>
+                                 </div>
+                                 <button 
+                                   onClick={(e) => { e.stopPropagation(); handleRequestQuote(supplier); }}
+                                   className="w-full py-2.5 bg-brand-darkNavy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-black transition-all flex items-center justify-center space-x-2"
+                                 >
+                                    <MessageSquare size={12} />
+                                    <span>Initiate RFP</span>
+                                 </button>
+                              </div>
+                           </div>
+                           <div className="w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45 mx-auto -mt-1.5"></div>
+                        </div>
+                     </div>
+                   );
+                 })}
+              </div>
+
+              {/* Data Overlay Bottom Bar */}
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-8">
+                <div className="bg-brand-navy/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
+                   <div className="flex items-center space-x-8">
+                      <div className="space-y-1">
+                         <span className="text-[9px] font-black text-brand-offWhite/40 uppercase tracking-[0.2em]">Active Logistics</span>
+                         <p className="text-sm font-bold text-white">12 Shipments In-Transit</p>
                       </div>
-                      <div className="h-1.5 bg-slate-50 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full transition-all duration-1000 ${supplier.capacity > 80 ? 'bg-brand-amber' : 'bg-brand-navy'}`} 
-                          style={{ width: `${supplier.capacity}%` }}
-                        ></div>
+                      <div className="w-px h-8 bg-white/10"></div>
+                      <div className="space-y-1">
+                         <span className="text-[9px] font-black text-brand-offWhite/40 uppercase tracking-[0.2em]">Critical Flags</span>
+                         <p className="text-sm font-bold text-red-400">1 Disruption Alert (Nordic)</p>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {supplier.tags.map((tag) => (
-                      <span key={tag} className="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Actions Area */}
-                  <div className="pt-6 mt-auto space-y-3">
-                    <button 
-                      onClick={() => handleRequestQuote(supplier)}
-                      className="w-full py-4 bg-brand-gold text-brand-darkNavy text-[10px] font-black uppercase tracking-[0.2em] rounded-md hover:bg-brand-goldHover transition-all duration-300 shadow-lg shadow-brand-gold/10 flex items-center justify-center space-x-2 transform active:scale-95"
-                    >
-                      <MessageSquare size={14} className="fill-brand-darkNavy" />
-                      <span>Request Quote</span>
-                    </button>
-                    <button className="w-full py-3.5 border border-slate-200 text-brand-mutedGray text-[9px] font-black uppercase tracking-[0.2em] rounded-md hover:bg-slate-50 hover:text-brand-darkNavy transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
-                      <span>View Audit History</span>
-                      <ExternalLink size={12} className="opacity-40 group-hover/btn:opacity-100" />
-                    </button>
-                  </div>
+                   </div>
+                   <button className="flex items-center space-x-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black text-brand-gold uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
+                      <Maximize2 size={14} />
+                      <span>Expand Intelligence</span>
+                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* SETTLEMENT FOOTER */}
-        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 opacity-40 hover:opacity-100 transition-opacity duration-500">
+        <div className="bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
              <div className="flex items-center space-x-3">
                 <Lock size={14} className="text-brand-gold" />
                 <span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span>
@@ -324,30 +428,21 @@ export const Network: React.FC = () => {
       {isQuoteModalOpen && selectedSupplier && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-darkNavy/80 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="w-full max-w-xl bg-white rounded-3xl overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border border-slate-100 transform animate-in slide-in-from-bottom-8 duration-500">
-            
-            {/* Header */}
             <div className="px-8 py-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-brand-darkNavy flex items-center justify-center text-brand-gold">
-                   <Lock size={20} />
-                </div>
+                <div className="w-12 h-12 rounded-xl bg-brand-darkNavy flex items-center justify-center text-brand-gold"><Lock size={20} /></div>
                 <div>
                    <h3 className="text-lg font-serif font-bold text-brand-darkNavy">Institutional Quote Dispatch</h3>
                    <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Supplier: {selectedSupplier.name}</p>
                 </div>
               </div>
-              <button onClick={() => setIsQuoteModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                <X size={20} className="text-brand-mutedGray" />
-              </button>
+              <button onClick={() => setIsQuoteModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={20} className="text-brand-mutedGray" /></button>
             </div>
 
-            {/* Form */}
             <form onSubmit={submitQuoteRequest} className="p-8 space-y-6">
               {quoteSuccess ? (
                 <div className="py-12 flex flex-col items-center text-center space-y-4 animate-in zoom-in duration-300">
-                  <div className="w-16 h-16 bg-brand-success/10 rounded-full flex items-center justify-center text-brand-success">
-                    <CheckCircle2 size={32} />
-                  </div>
+                  <div className="w-16 h-16 bg-brand-success/10 rounded-full flex items-center justify-center text-brand-success"><CheckCircle2 size={32} /></div>
                   <div className="space-y-1">
                     <h4 className="text-xl font-serif font-bold text-brand-darkNavy">Dispatch Successful</h4>
                     <p className="text-sm text-brand-mutedGray">RFP-2025-Q1 sequence has been initiated with {selectedSupplier.name}.</p>
@@ -365,38 +460,16 @@ export const Network: React.FC = () => {
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray pointer-events-none" />
                     </div>
                   </div>
-
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Scope Specifications</label>
-                    <textarea 
-                      placeholder="Detail the materials, quantities, and delivery milestones required..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm font-medium text-brand-darkNavy outline-none focus:ring-1 focus:ring-brand-gold transition-all min-h-[120px] resize-none"
-                    ></textarea>
+                    <textarea placeholder="Detail the materials, quantities, and delivery milestones required..." className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm font-medium text-brand-darkNavy outline-none focus:ring-1 focus:ring-brand-gold transition-all min-h-[120px] resize-none"></textarea>
                   </div>
-
                   <div className="p-4 bg-brand-gold/5 rounded-xl border border-brand-gold/20 flex items-start space-x-3">
                     <AlertTriangle className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
-                    <p className="text-[10px] text-brand-darkNavy font-medium leading-relaxed uppercase tracking-tight">
-                      By dispatching this request, you initiate a secure communication channel through the Classic Homes Enterprise Bridge. Preliminary compliance checks will be automatically performed on both parties.
-                    </p>
+                    <p className="text-[10px] text-brand-darkNavy font-medium leading-relaxed uppercase tracking-tight">By dispatching this request, you initiate a secure communication channel through the Classic Homes Enterprise Bridge.</p>
                   </div>
-
-                  <button 
-                    disabled={isSending}
-                    type="submit" 
-                    className="w-full py-5 bg-brand-darkNavy text-white text-xs font-black uppercase tracking-[0.25em] rounded-xl hover:bg-black transition-all shadow-2xl flex items-center justify-center space-x-3 disabled:opacity-50"
-                  >
-                    {isSending ? (
-                      <>
-                        <Loader2 size={16} className="animate-spin text-brand-gold" />
-                        <span>Encrypting Message...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send size={16} className="text-brand-gold" />
-                        <span>Dispatch RFP Sequence</span>
-                      </>
-                    )}
+                  <button disabled={isSending} type="submit" className="w-full py-5 bg-brand-darkNavy text-white text-xs font-black uppercase tracking-[0.25em] rounded-xl hover:bg-black transition-all shadow-2xl flex items-center justify-center space-x-3 disabled:opacity-50">
+                    {isSending ? (<><Loader2 size={16} className="animate-spin text-brand-gold" /><span>Encrypting Message...</span></>) : (<><Send size={16} className="text-brand-gold" /><span>Dispatch RFP Sequence</span></>)}
                   </button>
                 </>
               )}
@@ -407,7 +480,7 @@ export const Network: React.FC = () => {
 
       {/* CONCIERGE */}
       <div className="fixed bottom-10 right-10 z-50">
-         <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all">
+         <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all group">
             <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center">
                <MessageSquare size={20} className="text-brand-gold fill-brand-gold" />
             </div>
@@ -417,6 +490,16 @@ export const Network: React.FC = () => {
             </div>
          </div>
       </div>
+      
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 2s infinite ease-in-out;
+        }
+      `}} />
     </div>
   );
 };
@@ -435,4 +518,11 @@ const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
     </div>
     <span className="text-xs font-bold tracking-wider">{label}</span>
   </Link>
+);
+
+const LegendItem: React.FC<{ color: string; label: string }> = ({ color, label }) => (
+  <div className="flex items-center space-x-3">
+    <div className={`w-2.5 h-2.5 rounded-full ${color}`}></div>
+    <span className="text-[10px] font-bold text-brand-offWhite/60 uppercase tracking-widest">{label}</span>
+  </div>
 );
