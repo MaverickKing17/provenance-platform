@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { GenericPage } from './components/GenericPage';
 import { Dashboard } from './components/Dashboard';
+import { Network } from './components/Network';
 
 const App: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Hero />} />
             <Route path="/sourcing-hub" element={<Dashboard />} />
-            {/* Catch-all route for footer pages */}
+            <Route path="/network" element={<Network />} />
             <Route path="/:slug" element={<GenericPage />} />
           </Routes>
         </main>
