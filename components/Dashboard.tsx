@@ -10,29 +10,27 @@ import {
   Building, 
   DollarSign, 
   ShieldAlert, 
-  Link2 
+  Link2,
+  Terminal,
+  Activity
 } from 'lucide-react';
 
 /** 
- * Debugging logs to verify environment variable injection in the browser.
- */
-console.log('NEXT_PUBLIC_XANO_BASE_URL:', process.env.NEXT_PUBLIC_XANO_BASE_URL);
-console.log('NEXT_PUBLIC_ALEX_TOKEN:', process.env.NEXT_PUBLIC_ALEX_TOKEN);
-console.log('NEXT_PUBLIC_LARRY_TOKEN:', process.env.NEXT_PUBLIC_LARRY_TOKEN);
-
-/** 
- * STRICT RULE: API URL definition
- * Now strictly using the client-side exposed NEXT_PUBLIC variable.
+ * VERIFICATION LOGS
+ * These help confirm injection status in the browser console.
  */
 const BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL;
+const ALEX_TOKEN = process.env.NEXT_PUBLIC_ALEX_TOKEN;
+const LARRY_TOKEN = process.env.NEXT_PUBLIC_LARRY_TOKEN;
 
-/**
- * STRICT RULE: Tokens
- * Updated to match the new unique NEXT_PUBLIC_ naming convention in Vercel.
- */
+console.log('--- Environment Sync Status ---');
+console.log('Xano Base URL:', BASE_URL ? '✅ Detected' : '❌ Undefined');
+console.log('Alex Token:', ALEX_TOKEN ? '✅ Detected' : '❌ Undefined');
+console.log('Larry Token:', LARRY_TOKEN ? '✅ Detected' : '❌ Undefined');
+
 const TOKENS = {
-  ALEX: process.env.NEXT_PUBLIC_ALEX_TOKEN || '',
-  LARRY: process.env.NEXT_PUBLIC_LARRY_TOKEN || ''
+  ALEX: ALEX_TOKEN || '',
+  LARRY: LARRY_TOKEN || ''
 };
 
 type UserKey = keyof typeof TOKENS;
@@ -57,20 +55,20 @@ export const Dashboard: React.FC = () => {
   });
 
   const fetchValuations = async (user: UserKey) => {
+    // Reset state for new fetch
     setValuations([]);
     setLoading(true);
     setError(null);
 
     if (!BASE_URL) {
-      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL is not defined.");
+      setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL is missing.");
       setLoading(false);
       return;
     }
 
     const token = TOKENS[user];
     if (!token) {
-      const envVarName = user === 'ALEX' ? 'NEXT_PUBLIC_ALEX_TOKEN' : 'NEXT_PUBLIC_LARRY_TOKEN';
-      setError(`Configuration Error: ${envVarName} is not defined.`);
+      setError(`Configuration Error: NEXT_PUBLIC_${user}_TOKEN is missing.`);
       setLoading(false);
       return;
     }
@@ -99,11 +97,7 @@ export const Dashboard: React.FC = () => {
 
   const createValuation = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!BASE_URL) {
-      setError("Cannot proceed: API Base URL missing.");
-      return;
-    }
+    if (!BASE_URL) return;
 
     setLoading(true);
     try {
@@ -130,12 +124,61 @@ export const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchValuations(currentUser);
+    if (BASE_URL) {
+      fetchValuations(currentUser);
+    } else {
+      setLoading(false);
+    }
   }, [currentUser]);
+
+  // If environment variables are totally missing, show the setup guide
+  if (!BASE_URL && !loading) {
+    return (
+      <div className="min-h-screen bg-brand-darkNavy pt-32 pb-12 px-4 flex items-center justify-center">
+        <div className="max-w-xl w-full space-y-8 p-8 bg-brand-navy/40 border border-brand-gold/20 rounded-3xl backdrop-blur-xl shadow-2xl">
+          <div className="text-center space-y-4">
+            <div className="inline-flex p-4 bg-brand-gold/10 rounded-full mb-2">
+              <Terminal className="w-12 h-12 text-brand-gold animate-pulse" />
+            </div>
+            <h2 className="text-3xl font-serif font-bold text-white">Action Required: Redeploy Needed</h2>
+            <p className="text-brand-offWhite/60 text-sm leading-relaxed">
+              Environment variables were detected as <code className="text-brand-gold font-mono">undefined</code>. 
+              Vercel requires a <strong>Redeploy</strong> to inject new variables into your browser bundle.
+            </p>
+          </div>
+
+          <div className="bg-black/40 rounded-xl p-5 border border-white/5 space-y-3">
+             <div className="flex items-center justify-between text-[10px] font-mono tracking-widest uppercase">
+               <span className="text-brand-offWhite/40">Requirement Check</span>
+               <span className="text-brand-gold">Status</span>
+             </div>
+             <div className="space-y-2">
+                <StatusRow label="NEXT_PUBLIC_XANO_BASE_URL" status={!!BASE_URL} />
+                <StatusRow label="NEXT_PUBLIC_ALEX_TOKEN" status={!!ALEX_TOKEN} />
+                <StatusRow label="NEXT_PUBLIC_LARRY_TOKEN" status={!!LARRY_TOKEN} />
+             </div>
+          </div>
+
+          <div className="space-y-4">
+             <button 
+                onClick={() => window.location.reload()}
+                className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-xl hover:bg-brand-goldHover transition-all flex items-center justify-center space-x-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                <span>Refresh & Re-Verify</span>
+             </button>
+             <p className="text-[10px] text-center text-brand-offWhite/30 italic">
+               Note: If you just added these to Vercel, please trigger a new manual deployment.
+             </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-brand-darkNavy pt-28 pb-12 px-4 sm:px-6 lg:px-8 flex flex-col">
-      <div className="max-w-7xl mx-auto space-y-8 flex-grow">
+      <div className="max-w-7xl mx-auto space-y-8 flex-grow w-full">
         
         {/* Testing Toggle & Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-brand-navy/50 rounded-2xl border border-white/5 backdrop-blur-md">
@@ -177,7 +220,7 @@ export const Dashboard: React.FC = () => {
           />
           <StatCard 
             title="Active Procurement Cycles" 
-            value={loading ? "..." : valuations.length > 0 ? (valuations.length * 2).toString() : "12"} 
+            value={loading ? "..." : valuations.length > 0 ? (valuations.length * 2).toString() : "0"} 
             icon={<Building className="text-brand-gold" />} 
           />
           <StatCard 
@@ -342,7 +385,7 @@ export const Dashboard: React.FC = () => {
           ) : (
             <div className="flex items-center space-x-2 px-4 py-1.5 bg-red-500/10 rounded-full border border-red-500/20 shadow-sm">
               <AlertCircle className="w-3.5 h-3.5 text-red-400" />
-              <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected (Missing Base URL)</span>
+              <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Status: Disconnected</span>
             </div>
           )}
           <div className="h-4 w-px bg-white/10"></div>
@@ -353,13 +396,28 @@ export const Dashboard: React.FC = () => {
         </div>
         
         {/* Specific Build Verification Footer requested by user */}
-        <div className="text-[10px] font-mono text-brand-offWhite/20 tracking-wider">
-          Build Verified: {BASE_URL || 'PENDING_ENVIRONMENT_SYNC'}
+        <div className="text-[10px] font-mono text-brand-offWhite/20 tracking-wider flex items-center space-x-2">
+          <Activity className="w-3 h-3 text-brand-gold/40" />
+          <span>Build Verified: {BASE_URL || 'PENDING_ENVIRONMENT_SYNC'}</span>
         </div>
       </div>
     </div>
   );
 };
+
+interface StatusRowProps {
+  label: string;
+  status: boolean;
+}
+
+const StatusRow: React.FC<StatusRowProps> = ({ label, status }) => (
+  <div className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
+    <span className="text-[11px] font-mono text-brand-offWhite/60">{label}</span>
+    <span className={`text-[11px] font-bold ${status ? 'text-brand-success' : 'text-red-500'}`}>
+      {status ? 'DETECTED' : 'UNDEFINED'}
+    </span>
+  </div>
+);
 
 interface StatCardProps {
   title: string;
