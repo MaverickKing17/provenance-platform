@@ -12,9 +12,7 @@ import {
   ShieldAlert
 } from 'lucide-react';
 
-// Exact uppercase keys from environment variables as requested
-const API_BASE_URL = process.env.NEXT_PUBLIC_XANO_BASE_URL || '';
-
+// Token mapping strictly using all-caps environment variables
 const TOKENS = {
   ALEX: process.env.ALEX_TOKEN || '',
   LARRY: process.env.LARRY_TOKEN || ''
@@ -41,23 +39,28 @@ export const Dashboard: React.FC = () => {
     valuation: ''
   });
 
+  // Check for Base URL availability on mount
+  useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
+      console.log('Xano Base URL is missing from environment variables');
+    }
+  }, []);
+
   const fetchValuations = async (user: UserKey) => {
-    // Clear existing data to ensure visual separation during re-fetch
     setValuations([]);
     setLoading(true);
     setError(null);
 
-    // Explicit check for Base URL configuration
+    // Rule: Fallback Check - console log if missing
     if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
+      console.log('Xano Base URL is missing from environment variables');
       setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL environment variable is missing.");
       setLoading(false);
       return;
     }
 
-    // Explicit check for Token configuration using the specific UserKey
     const token = TOKENS[user];
     if (!token) {
-      // Logic looking for exact all-caps strings as requested
       const envVarName = user === 'ALEX' ? 'ALEX_TOKEN' : 'LARRY_TOKEN';
       setError(`Configuration Error: ${envVarName} environment variable is missing.`);
       setLoading(false);
@@ -65,16 +68,20 @@ export const Dashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/valuation`, {
+      // Rule: Strictly refer to NEXT_PUBLIC_XANO_BASE_URL in the fetch request
+      const response = await fetch(`${process.env.NEXT_PUBLIC_XANO_BASE_URL}/valuation`, {
         headers: {
+          // Rule: Verify Authorization header is correctly formatted
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
+      
       if (!response.ok) {
         if (response.status === 401) throw new Error('Unauthorized: Invalid Token');
         throw new Error('Failed to fetch data from backend');
       }
+      
       const data = await response.json();
       setValuations(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -87,16 +94,19 @@ export const Dashboard: React.FC = () => {
   const createValuation = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!API_BASE_URL) {
+    if (!process.env.NEXT_PUBLIC_XANO_BASE_URL) {
+      console.log('Xano Base URL is missing from environment variables');
       setError("Configuration Error: NEXT_PUBLIC_XANO_BASE_URL environment variable is missing.");
       return;
     }
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/create_valuation`, {
+      // Rule: Strictly refer to NEXT_PUBLIC_XANO_BASE_URL in the fetch request
+      const response = await fetch(`${process.env.NEXT_PUBLIC_XANO_BASE_URL}/create_valuation`, {
         method: 'POST',
         headers: {
+          // Rule: Verify Authorization header is correctly formatted
           'Authorization': `Bearer ${TOKENS[currentUser]}`,
           'Content-Type': 'application/json'
         },
@@ -105,6 +115,7 @@ export const Dashboard: React.FC = () => {
           valuation: formData.valuation
         })
       });
+      
       if (!response.ok) throw new Error('Failed to create valuation');
       
       setFormData({ name: '', valuation: '' });
@@ -204,7 +215,7 @@ export const Dashboard: React.FC = () => {
                     <div className="inline-flex p-4 bg-red-500/10 rounded-full">
                       <AlertCircle className="w-12 h-12 text-red-400" />
                     </div>
-                    <p className="text-red-400 font-medium px-8 whitespace-pre-wrap">{error}</p>
+                    <p className="text-red-400 font-medium px-8 whitespace-pre-wrap text-sm">{error}</p>
                     <button 
                       onClick={() => fetchValuations(currentUser)}
                       className="px-6 py-2 bg-white/5 border border-red-400/30 text-red-400 rounded-lg hover:bg-red-400/10 transition-colors"
