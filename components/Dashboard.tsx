@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
+import { SourcingInsights } from './SourcingInsights';
 
 const getEnv = (key: string): string => {
   if (typeof window !== 'undefined') {
@@ -167,7 +168,7 @@ export const Dashboard: React.FC = () => {
             <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
               <div className="w-4 h-4 bg-brand-gold"></div>
             </div>
-            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter">Classic Homes</span>
+            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter text-nowrap">Classic Homes</span>
           </Link>
         </div>
 
@@ -178,7 +179,7 @@ export const Dashboard: React.FC = () => {
           <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
           <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
           <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
-          <NavItem icon={<Users size={18} />} label="Vetted Suppliers" to="/network" />
+          <NavItem icon={<Users size={18} />} label="Suppliers" to="/network" />
           <NavItem icon={<Settings2 size={18} />} label="Settings" to="/settings" />
         </nav>
 
@@ -269,6 +270,11 @@ export const Dashboard: React.FC = () => {
               trend="Verified" 
               loading={loading}
             />
+          </div>
+
+          {/* NEW MODULE: Predictive Sourcing Insights */}
+          <div className="p-1">
+             <SourcingInsights />
           </div>
 
           {/* Operational Workspace */}

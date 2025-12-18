@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   Layers, 
@@ -7,8 +8,8 @@ import {
   BarChart3, 
   Users, 
   Settings2, 
-  Search, 
   Map as MapIcon, 
+  Grid,
   Filter, 
   Star, 
   ExternalLink, 
@@ -26,8 +27,11 @@ import {
   Loader2,
   ChevronDown,
   ShieldAlert,
-  MapPin,
-  Maximize2
+  Maximize2,
+  Activity,
+  Zap,
+  // Fix: Added missing MapPin import
+  MapPin
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
@@ -206,20 +210,36 @@ export const Network: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4 w-full md:w-auto">
+          <div className="flex items-center space-x-6 w-full md:w-auto">
             <GlobalSearch />
-            <button 
-              onClick={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
-              className={`flex items-center space-x-2 px-5 py-2.5 border rounded-lg text-xs font-bold transition-all shadow-sm ${
-                viewMode === 'map' 
-                  ? 'bg-brand-gold text-brand-darkNavy border-brand-gold shadow-brand-gold/20' 
-                  : 'bg-white text-brand-darkNavy border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              <MapIcon className="w-4 h-4" />
-              <span>{viewMode === 'map' ? 'Grid View' : 'Toggle Risk Map'}</span>
-            </button>
-            <button className="flex items-center justify-center p-2.5 bg-brand-navy text-white rounded-lg hover:bg-brand-darkNavy transition-all">
+            
+            {/* VIEW TOGGLE CONTROL - Segmented HUD Style */}
+            <div className="bg-slate-100 p-1 rounded-xl flex items-center shadow-inner border border-slate-200">
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                  viewMode === 'grid' 
+                    ? 'bg-white text-brand-darkNavy shadow-md scale-[1.02]' 
+                    : 'text-brand-mutedGray hover:text-brand-darkNavy'
+                }`}
+              >
+                <Grid size={14} />
+                <span>Grid</span>
+              </button>
+              <button 
+                onClick={() => setViewMode('map')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                  viewMode === 'map' 
+                    ? 'bg-brand-gold text-brand-darkNavy shadow-lg shadow-brand-gold/20 scale-[1.02]' 
+                    : 'text-brand-mutedGray hover:text-brand-darkNavy'
+                }`}
+              >
+                <MapIcon size={14} />
+                <span>Risk Map</span>
+              </button>
+            </div>
+
+            <button className="flex items-center justify-center p-2.5 bg-brand-navy text-white rounded-lg hover:bg-brand-darkNavy transition-all shadow-lg shadow-brand-navy/10">
               <Filter className="w-4 h-4" />
             </button>
           </div>
@@ -293,37 +313,63 @@ export const Network: React.FC = () => {
               </div>
             </div>
           ) : (
-            /* RISK MAP VIEW */
-            <div className="flex-grow relative bg-brand-darkNavy overflow-hidden animate-in zoom-in-95 duration-700 flex flex-col">
-              {/* Abstract Map Background */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                 <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-                 {/* Stylized Map SVG */}
-                 <svg className="w-full h-full text-brand-offWhite/10 fill-current" viewBox="0 0 1000 500">
-                    <path d="M150,150 Q200,100 250,150 T350,150 M600,100 Q650,50 700,100 T800,100 M200,300 Q250,250 300,300 T400,300 M700,350 Q750,300 800,350 T900,350" stroke="currentColor" strokeWidth="0.5" fill="none" />
-                    <circle cx="200" cy="180" r="100" fill="currentColor" opacity="0.1" />
-                    <circle cx="750" cy="250" r="150" fill="currentColor" opacity="0.1" />
-                    <circle cx="450" cy="350" r="80" fill="currentColor" opacity="0.1" />
+            /* ENHANCED RISK MAP VIEW - Dark HUD Theme */
+            <div className="flex-grow relative bg-[#050B15] overflow-hidden animate-in zoom-in-95 duration-700 flex flex-col">
+              
+              {/* Abstract High-Tech Map Background */}
+              <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+                 <div className="absolute inset-0" style={{ 
+                   backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(212,175,55,0.05) 1px, transparent 0)', 
+                   backgroundSize: '30px 30px' 
+                 }}></div>
+                 <svg className="w-full h-full text-brand-gold/10 fill-none" viewBox="0 0 1000 500">
+                    <path d="M50,150 Q200,80 350,180 T650,150 T950,250" stroke="currentColor" strokeWidth="0.5" strokeDasharray="10 5" />
+                    <path d="M100,350 Q300,300 500,400 T900,350" stroke="currentColor" strokeWidth="0.5" strokeDasharray="10 5" />
+                    <circle cx="200" cy="180" r="120" stroke="currentColor" strokeWidth="0.25" opacity="0.5" />
+                    <circle cx="750" cy="250" r="180" stroke="currentColor" strokeWidth="0.25" opacity="0.5" />
+                    <circle cx="450" cy="350" r="100" stroke="currentColor" strokeWidth="0.25" opacity="0.5" />
                  </svg>
               </div>
 
-              {/* Map Controls Overlay */}
-              <div className="absolute top-8 left-8 z-20 flex flex-col space-y-4">
-                 <div className="bg-brand-navy/60 backdrop-blur-md border border-white/10 p-6 rounded-2xl space-y-4 shadow-2xl">
-                    <div className="flex items-center space-x-3 border-b border-white/5 pb-4">
-                       <Globe className="text-brand-gold w-5 h-5" />
-                       <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Live Supply Chain Map</span>
+              {/* Institutional HUD HUD Indicators */}
+              <div className="absolute top-12 left-12 z-20 space-y-6">
+                 <div className="bg-[#0A1628]/90 backdrop-blur-2xl border border-white/10 p-6 rounded-2xl space-y-5 shadow-2xl min-w-[280px]">
+                    <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                       <div className="flex items-center space-x-3">
+                          <Globe className="text-brand-gold w-5 h-5 animate-pulse" />
+                          <span className="text-[11px] font-black text-white uppercase tracking-[0.25em]">Chain Resilience</span>
+                       </div>
+                       <div className="w-2 h-2 rounded-full bg-brand-success shadow-[0_0_10px_#10B981]"></div>
                     </div>
-                    <div className="space-y-3">
-                       <LegendItem color="bg-brand-success" label="Low Risk Zone" />
-                       <LegendItem color="bg-brand-amber" label="Monitor / Alert" />
-                       <LegendItem color="bg-red-500" label="Critical Disruption" />
+                    <div className="space-y-4">
+                       <div className="flex justify-between items-end">
+                          <span className="text-[9px] font-black text-brand-offWhite/30 uppercase tracking-widest">Global Stability Index</span>
+                          <span className="text-lg font-serif font-bold text-white">92.4</span>
+                       </div>
+                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-brand-gold w-[92.4%] shadow-[0_0_10px_#D4AF37]"></div>
+                       </div>
+                       <div className="grid grid-cols-2 gap-4 pt-2">
+                          <LegendItem color="bg-brand-success" label="Secure Nodes" />
+                          <LegendItem color="bg-brand-amber" label="Critical Watch" />
+                       </div>
+                    </div>
+                 </div>
+
+                 <div className="flex items-center space-x-4">
+                    <div className="bg-brand-navy/80 backdrop-blur-md px-4 py-2.5 rounded-xl border border-brand-gold/20 flex items-center space-x-3">
+                       <Activity size={14} className="text-brand-gold" />
+                       <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Scan Rate: 1.2Hz</span>
+                    </div>
+                    <div className="bg-brand-navy/80 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 flex items-center space-x-3">
+                       <Zap size={14} className="text-brand-success" />
+                       <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">AI Forecast On</span>
                     </div>
                  </div>
               </div>
 
-              {/* Map Interaction Layer */}
-              <div className="relative w-full h-[calc(100vh-140px)]">
+              {/* Supply Chain Node Markers */}
+              <div className="relative w-full h-[calc(100vh-140px)] cursor-crosshair">
                  {SUPPLIERS.map((supplier) => {
                    const riskStyles = getRiskStyles(supplier.risk);
                    const isHovered = hoveredSupplier?.id === supplier.id;
@@ -331,83 +377,115 @@ export const Network: React.FC = () => {
                    return (
                      <div 
                        key={supplier.id}
-                       className="absolute transition-all duration-500 z-10"
+                       className="absolute transition-all duration-700 z-10"
                        style={{ left: `${supplier.coords.x}%`, top: `${supplier.coords.y}%` }}
                        onMouseEnter={() => setHoveredSupplier(supplier)}
                        onMouseLeave={() => setHoveredSupplier(null)}
                      >
-                        {/* Pulse Effect */}
-                        <div className={`absolute -inset-4 rounded-full opacity-20 animate-ping ${riskStyles.bg}`}></div>
+                        {/* Interactive Range Rings */}
+                        <div className={`absolute -inset-10 border border-current opacity-[0.05] rounded-full scale-150 animate-pulse transition-all ${riskStyles.text} ${isHovered ? 'scale-[2] opacity-10' : ''}`}></div>
+                        <div className={`absolute -inset-6 rounded-full opacity-20 animate-ping ${riskStyles.bg}`}></div>
                         
-                        {/* Marker Pin */}
-                        <div className={`relative p-2.5 rounded-full cursor-pointer border-2 transition-transform hover:scale-125 shadow-xl ${riskStyles.bg} ${riskStyles.border}`}>
+                        {/* High-Fidelity HUD Marker */}
+                        <div className={`relative p-3 rounded-full cursor-pointer border-2 transition-all duration-500 hover:scale-125 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center ${riskStyles.bg} ${riskStyles.border} ${isHovered ? 'ring-4 ring-white/10' : ''}`}>
                            {supplier.risk === 'Low Risk' ? <ShieldCheck className="w-5 h-5 text-white" /> : 
                             supplier.risk === 'Medium Risk' ? <AlertTriangle className="w-5 h-5 text-white" /> : 
                             <ShieldAlert className="w-5 h-5 text-white" />}
+                           
+                           {/* Pulse Dot */}
+                           <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg"></div>
                         </div>
 
-                        {/* Supplier Info Pop-up (on hover) */}
-                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-4 transition-all duration-300 transform pointer-events-none ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                           <div className="bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-100 w-64 overflow-hidden pointer-events-auto">
-                              <div className="p-4 space-y-4">
-                                 <div className="flex items-center space-x-3">
-                                    <img src={supplier.image} className="w-10 h-10 rounded-full object-cover border border-slate-100" alt={supplier.name} />
+                        {/* Interactive Data Terminal (on hover) */}
+                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-6 transition-all duration-500 transform ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}>
+                           <div className="bg-brand-darkNavy/95 backdrop-blur-3xl rounded-[2rem] border border-white/10 w-[300px] shadow-[0_40px_80px_rgba(0,0,0,0.8)] overflow-hidden">
+                              <div className="p-7 space-y-6">
+                                 <div className="flex items-center space-x-4">
+                                    <div className="relative">
+                                       <img src={supplier.image} className="w-14 h-14 rounded-2xl object-cover border border-white/10" alt={supplier.name} />
+                                       <div className={`absolute -bottom-1 -right-1 p-1 rounded-full bg-white shadow-xl scale-75`}>{riskStyles.icon}</div>
+                                    </div>
                                     <div>
-                                       <h4 className="text-xs font-black text-brand-darkNavy leading-none mb-1">{supplier.name}</h4>
-                                       <p className="text-[10px] text-brand-mutedGray uppercase tracking-widest">{supplier.location}</p>
+                                       <h4 className="text-sm font-black text-white leading-none mb-1.5">{supplier.name}</h4>
+                                       <div className="flex items-center space-x-2">
+                                          <MapPin size={10} className="text-brand-gold" />
+                                          <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.2em] font-bold">{supplier.location}</span>
+                                       </div>
                                     </div>
                                  </div>
-                                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-50">
-                                    <div className="flex flex-col">
-                                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">Capacity</span>
-                                       <span className="text-xs font-bold text-brand-darkNavy">{supplier.capacity}%</span>
+
+                                 <div className="grid grid-cols-2 gap-6 pt-5 border-t border-white/5">
+                                    <div className="space-y-1">
+                                       <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-widest">Throughput</span>
+                                       <div className="flex items-center space-x-2">
+                                          <TrendingUp size={12} className="text-brand-success" />
+                                          <span className="text-sm font-bold text-white">{supplier.capacity}%</span>
+                                       </div>
                                     </div>
-                                    <div className="flex flex-col">
-                                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">Rating</span>
-                                       <span className="text-xs font-bold text-brand-darkNavy">{supplier.rating} / 5</span>
+                                    <div className="space-y-1">
+                                       <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-widest">Asset Rating</span>
+                                       <div className="flex items-center space-x-2">
+                                          <Star size={12} className="text-brand-gold fill-brand-gold" />
+                                          <span className="text-sm font-bold text-white">{supplier.rating} / 5.0</span>
+                                       </div>
                                     </div>
                                  </div>
+
                                  <button 
                                    onClick={(e) => { e.stopPropagation(); handleRequestQuote(supplier); }}
-                                   className="w-full py-2.5 bg-brand-darkNavy text-brand-gold text-[9px] font-black uppercase tracking-[0.2em] rounded-lg hover:bg-black transition-all flex items-center justify-center space-x-2"
+                                   className="w-full py-4 bg-brand-gold text-brand-darkNavy text-[10px] font-black uppercase tracking-[0.25em] rounded-xl hover:bg-white transition-all flex items-center justify-center space-x-3 shadow-xl shadow-brand-gold/5"
                                  >
-                                    <MessageSquare size={12} />
-                                    <span>Initiate RFP</span>
+                                    <MessageSquare size={14} className="fill-brand-darkNavy" />
+                                    <span>Execute RFP Sequence</span>
                                  </button>
                               </div>
                            </div>
-                           <div className="w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45 mx-auto -mt-1.5"></div>
+                           {/* Stem decoration */}
+                           <div className="w-4 h-4 bg-brand-darkNavy border-r border-b border-white/10 rotate-45 mx-auto -mt-2"></div>
                         </div>
                      </div>
                    );
                  })}
               </div>
 
-              {/* Data Overlay Bottom Bar */}
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-8">
-                <div className="bg-brand-navy/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl flex items-center justify-between">
-                   <div className="flex items-center space-x-8">
-                      <div className="space-y-1">
-                         <span className="text-[9px] font-black text-brand-offWhite/40 uppercase tracking-[0.2em]">Active Logistics</span>
-                         <p className="text-sm font-bold text-white">12 Shipments In-Transit</p>
+              {/* Map Information Footer - HUD Style */}
+              <div className="absolute bottom-12 left-12 right-12 z-20">
+                <div className="bg-[#0A1628]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 shadow-[0_40px_80px_rgba(0,0,0,0.6)] flex flex-col md:flex-row items-center justify-between gap-10">
+                   <div className="flex items-center space-x-12">
+                      <div className="flex flex-col space-y-2">
+                         <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-[0.3em]">Institutional Feed</span>
+                         <div className="flex items-center space-x-4">
+                            <div className="w-3 h-3 rounded-full bg-brand-success shadow-[0_0_10px_#10B981]"></div>
+                            <span className="text-sm font-bold text-white">Supply Chain Verified: 1,248 Nodes Active</span>
+                         </div>
                       </div>
-                      <div className="w-px h-8 bg-white/10"></div>
-                      <div className="space-y-1">
-                         <span className="text-[9px] font-black text-brand-offWhite/40 uppercase tracking-[0.2em]">Critical Flags</span>
-                         <p className="text-sm font-bold text-red-400">1 Disruption Alert (Nordic)</p>
+                      <div className="hidden lg:block w-px h-12 bg-white/10"></div>
+                      <div className="hidden lg:flex flex-col space-y-2">
+                         <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-[0.3em]">Critical Anomalies</span>
+                         <div className="flex items-center space-x-4">
+                            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                            <span className="text-sm font-bold text-red-400">1 Logistical Hold (Nordic-Hub)</span>
+                         </div>
                       </div>
                    </div>
-                   <button className="flex items-center space-x-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black text-brand-gold uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
-                      <Maximize2 size={14} />
-                      <span>Expand Intelligence</span>
-                   </button>
+                   
+                   <div className="flex items-center space-x-6">
+                      <div className="text-right hidden sm:block">
+                         <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Risk Analysis API v4</p>
+                         <p className="text-[9px] text-brand-offWhite/30 uppercase tracking-widest mt-1">Last Update: 04:12 GMT</p>
+                      </div>
+                      <button className="flex items-center space-x-3 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-white uppercase tracking-[0.25em] hover:bg-white/10 hover:border-brand-gold transition-all group shadow-xl">
+                         <Maximize2 size={16} className="text-brand-gold group-hover:scale-110 transition-transform" />
+                         <span>Full Spatial Intelligence</span>
+                      </button>
+                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* SETTLEMENT FOOTER */}
+        {/* SETTLEMENT FOOTER - Luxury Persistence */}
         <div className="bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
              <div className="flex items-center space-x-3">
@@ -480,13 +558,13 @@ export const Network: React.FC = () => {
 
       {/* CONCIERGE */}
       <div className="fixed bottom-10 right-10 z-50">
-         <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all group">
-            <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center">
-               <MessageSquare size={20} className="text-brand-gold fill-brand-gold" />
+         <div className="bg-brand-darkNavy p-3 rounded-2xl border border-brand-gold/30 shadow-2xl flex items-center space-x-4 cursor-pointer hover:scale-105 transition-all group">
+            <div className="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+               <MessageSquare size={20} className="fill-brand-darkNavy text-brand-darkNavy" />
             </div>
-            <div className="pr-2">
-               <span className="block text-[10px] text-brand-darkNavy font-black uppercase tracking-widest leading-none mb-1 text-nowrap">Live Concierge</span>
-               <span className="block text-xs text-brand-darkNavy/70 font-bold text-nowrap">24/7 Priority Support</span>
+            <div className="pr-4">
+               <span className="block text-[10px] text-brand-gold font-black uppercase tracking-widest leading-none mb-1 text-nowrap">Concierge</span>
+               <span className="block text-xs text-white/60 font-medium text-nowrap">Priority Support</span>
             </div>
          </div>
       </div>
@@ -523,6 +601,6 @@ const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
 const LegendItem: React.FC<{ color: string; label: string }> = ({ color, label }) => (
   <div className="flex items-center space-x-3">
     <div className={`w-2.5 h-2.5 rounded-full ${color}`}></div>
-    <span className="text-[10px] font-bold text-brand-offWhite/60 uppercase tracking-widest">{label}</span>
+    <span className="text-[10px] font-black text-brand-offWhite/40 uppercase tracking-widest">{label}</span>
   </div>
 );
