@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import { 
+  LayoutDashboard, 
+  Layers, 
+  ShoppingBag, 
+  Wallet, 
+  BarChart3, 
+  Users, 
+  Settings, 
   Search, 
   Map as MapIcon, 
   Filter, 
@@ -9,8 +16,13 @@ import {
   Globe, 
   ArrowRight,
   TrendingUp,
-  AlertTriangle
+  AlertTriangle,
+  Box,
+  MessageSquare,
+  Lock,
+  CheckCircle2
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const SUPPLIERS = [
   {
@@ -22,7 +34,7 @@ const SUPPLIERS = [
     risk: 'Low Risk',
     capacity: 85,
     tags: ['ISO 9001', 'Fair Trade'],
-    image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=200&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=400&auto=format&fit=crop'
   },
   {
     id: 2,
@@ -33,7 +45,7 @@ const SUPPLIERS = [
     risk: 'Low Risk',
     capacity: 40,
     tags: ['LEED Gold', 'Made in USA'],
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=200&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop'
   },
   {
     id: 3,
@@ -44,7 +56,7 @@ const SUPPLIERS = [
     risk: 'Medium Risk',
     capacity: 92,
     tags: ['FSC Certified', 'Carb Compliant'],
-    image: 'https://images.unsplash.com/photo-1582234373447-28023367f16d?q=80&w=200&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1582234373447-28023367f16d?q=80&w=400&auto=format&fit=crop'
   },
   {
     id: 4,
@@ -55,7 +67,7 @@ const SUPPLIERS = [
     risk: 'Low Risk',
     capacity: 60,
     tags: ['Nordic Swan', 'ISO 14001'],
-    image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=200&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=400&auto=format&fit=crop'
   }
 ];
 
@@ -63,120 +75,232 @@ export const Network: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="min-h-screen bg-brand-offWhite pt-28 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
+      
+      {/* EXECUTIVE SIDEBAR */}
+      <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
+        <div className="p-8">
+          <Link to="/" className="flex flex-col space-y-1">
+            <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
+              <div className="w-4 h-4 bg-brand-gold"></div>
+            </div>
+            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter">Classic Homes</span>
+          </Link>
+        </div>
+
+        <nav className="flex-grow px-4 space-y-1">
+          <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" to="/sourcing-hub" />
+          <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
+          <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
+          <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
+          <NavItem icon={<Wallet size={18} />} label="Wallet" />
+          <NavItem icon={<BarChart3 size={18} />} label="Analytics" />
+          <NavItem icon={<Users size={18} />} label="Vetted Suppliers" active />
+          <NavItem icon={<Settings size={18} />} label="Settings" />
+        </nav>
+
+        <div className="p-6 border-t border-white/5">
+          <div className="flex items-center space-x-3 p-2 rounded-xl">
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" 
+              className="w-10 h-10 rounded-full border border-brand-gold/50 shadow-lg" 
+              alt="V. Sterling" 
+            />
+            <div className="flex flex-col min-w-0">
+              <span className="text-white text-xs font-bold truncate">V. Sterling</span>
+              <span className="text-[10px] text-brand-offWhite/40 uppercase tracking-widest">Chief Procurement</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN WORKSPACE */}
+      <main className="flex-grow flex flex-col overflow-y-auto">
         
-        {/* Executive Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-serif font-bold text-brand-darkNavy tracking-tight">Vetted Global Network</h1>
-            <div className="flex items-center space-x-3 text-brand-gold font-bold text-[10px] uppercase tracking-[0.2em]">
-              <span>Strategic Partners</span>
-              <span className="w-1 h-1 bg-brand-gold rounded-full"></span>
-              <span>Risk-Adjusted Portfolio</span>
+        {/* TOP BAR SEARCH & ACTIONS */}
+        <div className="bg-white border-b border-slate-200 px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6 sticky top-0 z-10 shadow-sm">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-serif font-bold text-brand-darkNavy tracking-tight">Vetted Global Network</h1>
+            <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">
+               <span>Verified Partnerships</span>
+               <span className="w-1 h-1 bg-brand-gold rounded-full"></span>
+               <span className="text-brand-mutedGray">Risk-Adjusted Portfolio</span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-brand-navy/10 rounded-md text-sm font-medium text-brand-navy hover:bg-brand-navy hover:text-white transition-all shadow-sm">
+          <div className="flex items-center space-x-4 w-full md:w-auto">
+            <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm">
               <MapIcon className="w-4 h-4" />
-              <span>Risk Map</span>
+              <span>Toggle Risk Map</span>
             </button>
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray group-focus-within:text-brand-gold transition-colors" />
+            <div className="relative group flex-grow md:flex-grow-0">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray" />
               <input 
                 type="text" 
                 placeholder="Search institutional suppliers..." 
-                className="pl-11 pr-4 py-2.5 bg-white border border-brand-navy/10 rounded-md text-sm w-full lg:w-80 focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all"
+                className="pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm w-full md:w-80 focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <button className="flex items-center justify-center p-2.5 bg-brand-navy text-white rounded-lg hover:bg-brand-darkNavy transition-all">
+              <Filter className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        {/* Global Marketplace Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SUPPLIERS.map((supplier) => (
-            <div key={supplier.id} className="bg-white border border-brand-navy/5 rounded-xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="p-6 space-y-6">
-                
-                {/* Supplier Identity */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-4">
-                    <img src={supplier.image} alt={supplier.name} className="w-12 h-12 rounded-full object-cover border-2 border-brand-gold/20" />
-                    <div className="flex flex-col">
-                      <h3 className="font-serif font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{supplier.name}</h3>
-                      <p className="text-[10px] text-brand-mutedGray uppercase tracking-widest">{supplier.location}</p>
+        <div className="px-12 py-12 space-y-12">
+          
+          {/* NETWORK INTELLIGENCE STATS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                <div>
+                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Verified Artisans</p>
+                   <p className="text-3xl font-serif font-bold text-brand-darkNavy">1,248</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
+                   <Users size={24} />
+                </div>
+             </div>
+             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                <div>
+                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Avg. Trust Score</p>
+                   <p className="text-3xl font-serif font-bold text-brand-darkNavy">98.4%</p>
+                </div>
+                <div className="w-12 h-12 bg-brand-success/10 rounded-xl flex items-center justify-center text-brand-success">
+                   <ShieldCheck size={24} />
+                </div>
+             </div>
+             <div className="bg-white p-6 border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between">
+                <div>
+                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Aggregated Risk</p>
+                   <p className="text-3xl font-serif font-bold text-brand-success">MINIMAL</p>
+                </div>
+                <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+                   <TrendingUp size={24} />
+                </div>
+             </div>
+          </div>
+
+          {/* SUPPLIER MARKETPLACE GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {SUPPLIERS.map((supplier) => (
+              <div key={supplier.id} className="bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group">
+                <div className="p-8 space-y-8">
+                  
+                  {/* Branding */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col items-center space-y-4 w-full">
+                      <div className="relative">
+                        <img src={supplier.image} alt={supplier.name} className="w-20 h-20 rounded-full object-cover border-2 border-brand-gold/10 group-hover:border-brand-gold transition-colors duration-500" />
+                        <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md">
+                          <CheckCircle2 size={16} className="text-brand-success" />
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-xl font-serif font-bold text-brand-darkNavy tracking-tight">{supplier.name}</h3>
+                        <p className="text-[10px] text-brand-mutedGray font-black uppercase tracking-[0.2em] mt-1">{supplier.location}</p>
+                      </div>
                     </div>
                   </div>
-                  <button className="text-brand-gold/40 hover:text-brand-gold transition-colors">
-                    <ExternalLink className="w-4 h-4" />
+
+                  {/* Expertise & Rating */}
+                  <div className="flex items-center justify-between py-4 border-y border-slate-50">
+                    <span className="text-[11px] font-bold text-brand-darkNavy uppercase tracking-wider">{supplier.specialty}</span>
+                    <div className="flex items-center space-x-1.5">
+                      <Star size={12} className="text-brand-gold fill-brand-gold" />
+                      <span className="text-xs font-black text-brand-darkNavy">{supplier.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* Deep Metrics */}
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-1.5 h-1.5 rounded-full ${supplier.risk === 'Low Risk' ? 'bg-brand-success' : 'bg-brand-amber'}`}></div>
+                        <span className="text-[10px] font-black text-brand-darkNavy uppercase tracking-widest">{supplier.risk} Profile</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">
+                        <span>Capacity Load</span>
+                        <span className="text-brand-darkNavy">{supplier.capacity}%</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-50 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-1000 ${supplier.capacity > 80 ? 'bg-brand-amber' : 'bg-brand-navy'}`} 
+                          style={{ width: `${supplier.capacity}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="flex flex-wrap gap-2">
+                    {supplier.tags.map((tag) => (
+                      <span key={tag} className="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Actions */}
+                  <button className="w-full py-4 border border-brand-darkNavy text-brand-darkNavy text-[10px] font-black uppercase tracking-[0.2em] rounded-md hover:bg-brand-darkNavy hover:text-white transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
+                    <span>View Audit History</span>
+                    <ExternalLink size={14} className="opacity-40 group-hover/btn:opacity-100" />
                   </button>
                 </div>
-
-                {/* Core Metrics */}
-                <div className="flex items-center justify-between py-3 border-y border-brand-navy/5">
-                  <span className="text-xs font-medium text-brand-navy/60">{supplier.specialty}</span>
-                  <div className="flex items-center space-x-1">
-                    <Star className="w-3 h-3 text-brand-gold fill-brand-gold" />
-                    <span className="text-xs font-bold text-brand-navy">{supplier.rating}</span>
-                  </div>
-                </div>
-
-                {/* Risk & Capacity (Executive View) */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <span className="text-[9px] font-bold text-brand-mutedGray uppercase tracking-widest">Risk Profile</span>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${supplier.risk === 'Low Risk' ? 'bg-brand-success' : 'bg-brand-amber'}`}></div>
-                      <span className="text-[11px] font-bold text-brand-navy">{supplier.risk}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[9px] font-bold text-brand-mutedGray uppercase tracking-widest">Capacity Load</span>
-                      <span className="text-[9px] font-mono text-brand-navy">{supplier.capacity}%</span>
-                    </div>
-                    <div className="h-1 bg-brand-navy/5 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full rounded-full ${supplier.capacity > 80 ? 'bg-brand-amber' : 'bg-brand-success'}`}
-                        style={{ width: `${supplier.capacity}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Certifications */}
-                <div className="flex flex-wrap gap-2">
-                  {supplier.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-1 bg-brand-navy/5 rounded text-[8px] font-bold text-brand-navy/60 uppercase tracking-widest">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Institutional Settlement Footer */}
-        <div className="mt-20 pt-12 border-t border-brand-navy/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4 text-brand-navy" />
-              <span className="text-[10px] font-bold text-brand-navy uppercase tracking-[0.2em]">Institutional Settlement Channels</span>
-            </div>
-            <div className="flex flex-wrap justify-center gap-8 text-[11px] font-bold text-brand-navy uppercase tracking-widest">
-               <span className="flex items-center space-x-2"><Globe className="w-3 h-3" /> <span>SWIFT / SEPA</span></span>
-               <span className="flex items-center space-x-2"><TrendingUp className="w-3 h-3" /> <span>Corporate Treasury</span></span>
-               <span className="flex items-center space-x-2"><ShieldCheck className="w-3 h-3" /> <span>Letter of Credit</span></span>
-               <span className="flex items-center space-x-2"><ArrowRight className="w-3 h-3" /> <span>Escrow & Smart Contract</span></span>
-            </div>
+            ))}
           </div>
         </div>
 
+        {/* SETTLEMENT FOOTER */}
+        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 opacity-40 hover:opacity-100 transition-opacity duration-500">
+             <div className="flex items-center space-x-3">
+                <Lock size={14} className="text-brand-gold" />
+                <span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span>
+             </div>
+             <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]">
+                <span className="flex items-center space-x-2"><Globe size={14} /> <span>SWIFT / SEPA</span></span>
+                <span className="flex items-center space-x-2"><TrendingUp size={14} /> <span>Corporate Treasury</span></span>
+                <span className="flex items-center space-x-2"><ShieldCheck size={14} /> <span>Letter of Credit</span></span>
+                <span className="flex items-center space-x-2"><ArrowRight size={14} /> <span>Smart Contract</span></span>
+             </div>
+          </div>
+        </div>
+      </main>
+
+      {/* CONCIERGE */}
+      <div className="fixed bottom-10 right-10 z-50">
+         <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all">
+            <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center">
+               <MessageSquare size={20} className="text-brand-gold fill-brand-gold" />
+            </div>
+            <div className="pr-2">
+               <span className="block text-[10px] text-brand-darkNavy font-black uppercase tracking-widest leading-none mb-1">Live Concierge</span>
+               <span className="block text-xs text-brand-darkNavy/70 font-bold">24/7 Priority Support</span>
+            </div>
+         </div>
       </div>
     </div>
   );
 };
+
+const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string }> = ({ icon, label, active, to }) => (
+  <Link 
+    to={to || '#'} 
+    className={`flex items-center space-x-4 px-5 py-3.5 rounded-xl transition-all duration-300 group ${
+      active 
+        ? 'bg-brand-gold text-brand-darkNavy shadow-lg shadow-brand-gold/10' 
+        : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'
+    }`}
+  >
+    <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'} transition-colors`}>
+      {icon}
+    </div>
+    <span className="text-xs font-bold tracking-wider">{label}</span>
+  </Link>
+);
