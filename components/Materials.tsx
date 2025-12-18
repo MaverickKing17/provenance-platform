@@ -32,7 +32,7 @@ const MATCHED_MATERIALS = [
     matchScore: 94,
     price: 395,
     leadTime: 8,
-    image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
     tags: ['±0.02mm Tol', 'FSC Certified']
   },
   {
@@ -43,7 +43,7 @@ const MATCHED_MATERIALS = [
     matchScore: 91,
     price: 420,
     leadTime: 12,
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1200&auto=format&fit=crop',
     tags: ['LEED Platinum', 'Hand-Picked']
   },
   {
@@ -54,7 +54,7 @@ const MATCHED_MATERIALS = [
     matchScore: 86,
     price: 310,
     leadTime: 6,
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=1200&auto=format&fit=crop',
     tags: ['Net Zero Log', 'High Gloss']
   }
 ];
@@ -108,12 +108,12 @@ export const Materials: React.FC = () => {
                 <span>Back to Specs</span>
               </Link>
               <h1 className="text-4xl font-serif font-bold text-brand-darkNavy">AI-Matched Materials</h1>
-              <p className="text-brand-mutedGray text-sm">3 high-fidelity matches found based on your technical specifications.</p>
+              <p className="text-brand-mutedGray text-sm">3 matches found based on technical specifications.</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
               <div className="relative group">
-                <select className="bg-white border border-brand-navy/10 rounded-md pl-10 pr-10 py-2.5 text-xs font-bold text-brand-darkNavy appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all">
+                <select className="bg-white border border-brand-navy/10 rounded-md pl-10 pr-10 py-2.5 text-xs font-bold text-brand-darkNavy appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all shadow-sm">
                   <option>Best Match</option>
                   <option>Lowest Risk</option>
                   <option>Soonest Delivery</option>
@@ -125,7 +125,7 @@ export const Materials: React.FC = () => {
                 <Sparkles size={14} />
                 <span>Generate Custom</span>
               </button>
-              <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-brand-navy/10 rounded-md text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all">
+              <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-brand-navy/10 rounded-md text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm">
                 <Filter size={14} />
                 <span>Filter Results</span>
               </button>
@@ -135,62 +135,64 @@ export const Materials: React.FC = () => {
           {/* Results Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {MATCHED_MATERIALS.map((material) => (
-              <div key={material.id} className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 group">
+              <div key={material.id} className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full">
                 
                 {/* Visual Preview */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={material.image} alt={material.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-darkNavy/80 via-transparent to-transparent opacity-60"></div>
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                  <img src={material.image} alt={material.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-darkNavy/80 via-transparent to-transparent opacity-40"></div>
                   
                   {/* AI Overlays */}
-                  <div className="absolute top-4 right-4 bg-brand-darkNavy/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-brand-gold/30">
-                     <span className="text-[10px] font-black text-white uppercase tracking-widest">{material.matchScore}% Match</span>
+                  <div className="absolute top-4 right-4 bg-brand-darkNavy/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-brand-gold/30 shadow-xl">
+                     <span className="text-[10px] font-black text-white uppercase tracking-widest">{material.matchScore}% MATCH</span>
                   </div>
                   
-                  <button className="absolute top-4 left-4 flex items-center space-x-2 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 px-4 py-2 rounded-md transition-all group/btn">
+                  <button className="absolute top-4 left-4 flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-xl border border-white/20 px-4 py-2 rounded-md transition-all group/btn shadow-lg">
                     <Sparkles size={12} className="text-brand-gold group-hover/btn:rotate-12 transition-transform" />
-                    <span className="text-[9px] font-bold text-white uppercase tracking-widest">Generate Texture</span>
+                    <span className="text-[9px] font-black text-brand-darkNavy uppercase tracking-widest">GENERATE TEXTURE</span>
                   </button>
 
-                  <div className="absolute bottom-4 left-6 flex items-center space-x-2">
+                  <div className="absolute bottom-4 left-6 flex items-center space-x-2 drop-shadow-md">
                     <ShieldCheck size={14} className="text-brand-gold" />
-                    <span className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.2em]">Provenance Verified</span>
+                    <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">PROVENANCE VERIFIED</span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-8 space-y-8">
+                <div className="p-8 space-y-8 flex-grow flex flex-col">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-serif font-bold text-brand-darkNavy">{material.name}</h3>
-                      <span className="text-[10px] text-brand-mutedGray font-medium uppercase tracking-widest">{material.location}</span>
+                      <h3 className="text-xl font-serif font-bold text-brand-darkNavy leading-tight">{material.name}</h3>
+                      <span className="text-[10px] text-brand-mutedGray font-black uppercase tracking-widest">{material.location}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                       <span className="text-[11px] text-brand-mutedGray">{material.supplier}</span>
-                       <CheckCircle2 size={12} className="text-brand-success" />
-                       <span className="text-[9px] font-bold text-brand-success uppercase tracking-widest">Verified</span>
+                       <span className="text-[11px] font-medium text-brand-mutedGray">{material.supplier}</span>
+                       <div className="flex items-center space-x-1.5 px-1.5 py-0.5 bg-brand-success/5 border border-brand-success/10 rounded">
+                          <CheckCircle2 size={10} className="text-brand-success" />
+                          <span className="text-[8px] font-black text-brand-success uppercase tracking-widest">VERIFIED</span>
+                       </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-8 py-6 border-y border-slate-100">
                     <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-brand-mutedGray uppercase tracking-widest">Price</span>
+                      <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Price Point</span>
                       <p className="text-lg font-bold text-brand-darkNavy">${material.price}<span className="text-xs text-brand-mutedGray font-normal"> /sq ft</span></p>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-brand-mutedGray uppercase tracking-widest">Lead Time</span>
+                      <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Lead Period</span>
                       <p className="text-lg font-bold text-brand-darkNavy">{material.leadTime}<span className="text-xs text-brand-mutedGray font-normal"> weeks</span></p>
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <button className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-xs uppercase tracking-[0.15em] py-4 rounded-md transition-all flex items-center justify-center space-x-3">
+                  <div className="space-y-4 mt-auto">
+                    <button className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md transition-all flex items-center justify-center space-x-3 shadow-lg shadow-brand-gold/10">
                       <span>Proceed to Visualization</span>
                       <Eye size={16} />
                     </button>
-                    <button className="w-full bg-white border border-brand-darkNavy text-brand-darkNavy font-black text-xs uppercase tracking-[0.15em] py-4 rounded-md hover:bg-slate-50 transition-all flex items-center justify-center space-x-3">
-                      <History size={16} />
-                      <span>View Details & Chain</span>
+                    <button className="w-full bg-white border border-brand-darkNavy/10 text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md hover:bg-slate-50 transition-all flex items-center justify-center space-x-3">
+                      <History size={16} className="text-brand-mutedGray" />
+                      <span>View Audit Chain</span>
                     </button>
                   </div>
                 </div>
@@ -202,14 +204,14 @@ export const Materials: React.FC = () => {
       </main>
 
       {/* FLOATING ACTION */}
-      <div className="fixed bottom-10 right-10">
+      <div className="fixed bottom-10 right-10 z-50">
          <div className="bg-brand-darkNavy p-3 rounded-2xl border border-brand-gold/30 shadow-2xl flex items-center space-x-4 cursor-pointer hover:scale-105 transition-all group">
-            <div className="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
                <MessageSquare size={20} className="fill-brand-darkNavy text-brand-darkNavy" />
             </div>
             <div className="pr-4">
                <span className="block text-[10px] text-brand-gold font-black uppercase tracking-widest">Concierge</span>
-               <span className="block text-xs text-white/60">Live Assistance</span>
+               <span className="block text-xs text-white/60 font-medium">Priority Support</span>
             </div>
          </div>
       </div>
@@ -218,8 +220,8 @@ export const Materials: React.FC = () => {
 };
 
 const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string }> = ({ icon, label, active, to }) => (
-  <Link to={to || '#'} className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group ${active ? 'bg-brand-gold text-brand-darkNavy' : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'}`}>
-    <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'}`}>{icon}</div>
+  <Link to={to || '#'} className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group ${active ? 'bg-brand-gold text-brand-darkNavy shadow-md' : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'}`}>
+    <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'} transition-colors`}>{icon}</div>
     <span className="text-xs font-bold tracking-wide">{label}</span>
   </Link>
 );
