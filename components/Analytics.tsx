@@ -1,11 +1,14 @@
+
 import React from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, Download, 
-  ChevronDown, TrendingUp, Leaf, ArrowUpRight, Info, MessageSquare, Globe, ShieldCheck, Lock, Target
+  ChevronDown, TrendingUp, Leaf, ArrowUpRight, Info, MessageSquare, Globe, ShieldCheck, Lock, Target, FileText
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Analytics: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
@@ -42,8 +45,12 @@ export const Analytics: React.FC = () => {
             <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]"><span>Sourcing Intelligence</span><span className="w-1 h-1 bg-brand-gold rounded-full"></span><span className="text-brand-success">Optimized Yield</span></div>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-brand-navy/10 rounded-lg text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm group">
-              <Download className="w-4 h-4 text-brand-mutedGray group-hover:text-brand-darkNavy" /><span>Export Report</span>
+            <button 
+              onClick={() => navigate('/executive-report')}
+              className="flex items-center space-x-3 px-6 py-3 bg-brand-gold text-brand-darkNavy rounded-lg text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 group"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Generate QPR Report</span>
             </button>
             <div className="flex items-center space-x-3 px-5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-brand-darkNavy cursor-pointer">
               <span className="text-brand-mutedGray uppercase tracking-widest text-[9px]">View:</span><span>FY 2025 Consolidated</span><ChevronDown className="w-4 h-4 text-brand-mutedGray" />

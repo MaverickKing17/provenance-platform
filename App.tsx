@@ -17,6 +17,7 @@ import { Unauthorized } from './components/Unauthorized';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExecutiveAlertBanner } from './components/ExecutiveAlertBanner';
 import { ExecutiveCommandCenter } from './components/ExecutiveCommandCenter';
+import { ExecutiveReport } from './components/ExecutiveReport';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -31,7 +32,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     '/wallet', 
     '/settings', 
     '/unauthorized',
-    '/executive-command'
+    '/executive-command',
+    '/executive-report'
   ];
   const hideGlobalNav = internalRoutes.includes(location.pathname);
   
@@ -67,6 +69,7 @@ const App: React.FC = () => {
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/executive-command" element={<ExecutiveCommandCenter />} />
+            <Route path="/executive-report" element={<ExecutiveReport />} />
             <Route path="/:slug" element={<GenericPage />} />
           </Routes>
         </Layout>
