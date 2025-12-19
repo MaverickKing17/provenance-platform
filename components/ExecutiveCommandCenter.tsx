@@ -58,7 +58,7 @@ export const ExecutiveCommandCenter: React.FC = () => {
       </main>
 
       {/* FOOTER: GOD MODE PERSISTENCE */}
-      <footer className="px-12 py-10 border-t border-white/10 bg-black/60 flex items-center justify-between backdrop-blur-3xl">
+      <footer className="px-12 py-10 border-t border-white/10 bg-black/80 flex items-center justify-between backdrop-blur-3xl">
          <div className="flex items-center space-x-10">
             <div className="flex items-center space-x-4">
                <Globe size={18} className="text-brand-gold" />
@@ -75,7 +75,14 @@ export const ExecutiveCommandCenter: React.FC = () => {
             </div>
          </div>
          <div className="flex items-center space-x-8">
-            <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">BUILD_REF: 0x71e...api/v2.5</span>
+            <div className="flex items-center space-x-4">
+              <span className="text-[11px] font-sans font-bold text-white/70 uppercase tracking-[0.15em]">
+                Institutional Reference
+              </span>
+              <span className="px-3 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-md text-[10px] font-sans font-black text-brand-gold uppercase tracking-widest shadow-inner">
+                0x71e...api/v2.5
+              </span>
+            </div>
             <button className="flex items-center space-x-4 group bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-4 rounded-2xl transition-all shadow-xl">
                <span className="text-[10px] font-black text-white/80 group-hover:text-white uppercase tracking-[0.25em] transition-colors">Generate Executive Report</span>
                <ArrowRight size={20} className="text-brand-gold group-hover:translate-x-2 transition-transform" />

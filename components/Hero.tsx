@@ -248,17 +248,22 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* FOOTER SYSTEM STATUS BAR */}
-      <div className="w-full bg-black/80 border-t border-brand-gold/10 backdrop-blur-2xl py-8 relative z-50">
+      <div className="w-full bg-black/90 border-t border-brand-gold/20 backdrop-blur-2xl py-8 relative z-50">
          <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center space-x-10">
                <div className="flex items-center space-x-4">
                   <div className="w-3 h-3 rounded-full bg-brand-success shadow-[0_0_20px_#10B981] animate-pulse"></div>
-                  <span className="text-sm font-sans text-white font-medium tracking-normal uppercase">System Ready: Workspace Sync Active</span>
+                  <span className="text-sm font-sans text-white font-semibold tracking-normal uppercase">System Ready: Workspace Sync Active</span>
                </div>
-               <div className="w-px h-6 bg-white/10 hidden md:block"></div>
-               <span className="text-xs font-mono text-brand-offWhite/30 uppercase tracking-widest truncate max-w-[400px]">
-                 Build Verified: 0x71e...trmt/api/v2.5
-               </span>
+               <div className="w-px h-6 bg-white/20 hidden md:block"></div>
+               <div className="flex items-center space-x-4">
+                  <span className="text-[11px] font-sans font-bold text-white/70 uppercase tracking-[0.15em] whitespace-nowrap">
+                    Build Verified
+                  </span>
+                  <span className="px-3 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-md text-[10px] font-sans font-black text-brand-gold uppercase tracking-widest shadow-inner">
+                    0x71e...trmt/api/v2.5
+                  </span>
+               </div>
             </div>
             <div className="flex items-center space-x-12 text-sm font-semibold text-brand-gold uppercase tracking-wider">
                <span className="flex items-center space-x-3 group cursor-pointer hover:text-white transition-colors">
