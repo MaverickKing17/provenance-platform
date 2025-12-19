@@ -2,12 +2,12 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
-// Fix: Made children optional to satisfy JSX type checking when used as a wrapper
+// Fix: Defined Props interface for strict type checking
 interface Props {
   children?: ReactNode;
 }
 
-// Fix: Refined error type to match the expected signature in GlobalError (Error with optional digest)
+// Fix: Refined State interface to match the signature expected by the fallback UI and React's error boundary requirements
 interface State {
   hasError: boolean;
   error: (Error & { digest?: string }) | null;
@@ -15,50 +15,49 @@ interface State {
 
 /**
  * ErrorBoundary component that catches runtime errors in the component tree.
- * Explicitly using Component base class to ensure inherited properties like props and setState are correctly recognized.
+ * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Inherited from Component directly to ensure TypeScript correctly identifies the class as a React component
+// Fix: Directly extending Component to ensure props and setState are correctly inherited.
 export class ErrorBoundary extends Component<Props, State> {
-  // Fix: Explicitly declare state property to resolve "Property 'state' does not exist" errors in some strict environments
+  // Fix: State initialization as a class property ensures it is correctly recognized as part of the component's state.
   public state: State = {
     hasError: false,
     error: null
   };
 
-  // Use constructor for state initialization to assist some TypeScript environments with inheritance tracking
-  constructor(props: Props) {
-    super(props);
-  }
-
   /**
    * Static lifecycle method used to update state after an error has been caught.
+   * Required for class-based Error Boundaries in React.
    */
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
+  /**
+   * Lifecycle method called after an error is thrown by a descendant component.
+   */
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log the error for observability
+    // Log the error for executive observability and debugging
     console.error("Uncaught institutional error:", error, errorInfo);
   }
 
   /**
    * Resets the error boundary state to allow re-rendering of children.
-   * This method is provided as a callback to the fallback error UI.
+   * This is passed as a callback to the GlobalError component.
    */
+  // Fix: Defined as an arrow function to preserve 'this' context for calling setState.
   public reset = () => {
-    // Fix: Using setState inherited from Component to resolve "Property 'setState' does not exist" error
     this.setState({ hasError: false, error: null });
   };
 
   public render() {
-    // Fix: Using state inherited from Component to resolve "Property 'state' does not exist" error
+    // Fix: Accessing state from the instance to check for errors.
     if (this.state.hasError && this.state.error) {
-      // If an error is caught, render the specialized fallback UI
+      // If an error is caught, render the specialized fallback UI (GlobalError)
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
-    // Fix: Correctly access children through props inherited from Component to resolve "Property 'props' does not exist" error
+    // Fix: Accessing children from props to render the component tree.
     return this.props.children;
   }
 }

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ShieldCheck, Globe, Lock, Search, Scan, Database, Activity, CheckCircle2, Tablet, Cpu, Layers } from 'lucide-react';
 
@@ -34,13 +35,15 @@ export const Hero: React.FC = () => {
               <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Verified Workspace Sync Active</span>
             </div>
             
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-serif text-white leading-[1.05]">
-              The Global <br />
-              <span className="text-brand-gold italic">Marketplace</span><br />
-              <span className="text-brand-offWhite/90">for Artisans.</span>
-            </h1>
+            <div className="space-y-2">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-semibold text-white leading-[1.1] tracking-tight">
+                The Global <br />
+                <span className="text-brand-gold italic">Marketplace</span><br />
+                <span className="text-white/90">for Artisans.</span>
+              </h1>
+            </div>
             
-            <p className="text-lg sm:text-xl text-brand-offWhite/70 max-w-md font-light leading-relaxed">
+            <p className="text-lg sm:text-xl text-brand-offWhite/70 max-w-md font-normal leading-relaxed">
               Consolidate your luxury supply chain into a single, high-fidelity procurement interface. De-risk material sourcing with institutional-grade provenance.
             </p>
           </div>
@@ -128,7 +131,7 @@ export const Hero: React.FC = () => {
                                />
                             </div>
                             <div className="pl-4 pr-3 py-1 flex flex-col justify-center">
-                               <span className="text-[11px] font-serif font-bold text-white block">Carrara Marble (IT)</span>
+                               <span className="text-[11px] font-sans font-bold text-white block">Carrara Marble (IT)</span>
                                <span className="text-[8px] text-brand-gold font-black uppercase tracking-[0.2em] mt-1 block">Verified Provenance</span>
                                <div className="mt-2 flex space-x-1">
                                   {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-brand-gold/30"></div>)}
@@ -148,7 +151,7 @@ export const Hero: React.FC = () => {
                                />
                             </div>
                             <div className="pr-4 pl-3 py-1 flex flex-col justify-center text-right">
-                               <span className="text-[11px] font-serif font-bold text-white block">Sustainable Teak</span>
+                               <span className="text-[11px] font-sans font-bold text-white block">Sustainable Teak</span>
                                <span className="text-[8px] text-brand-gold font-black uppercase tracking-[0.2em] mt-1 block">FSC Gold Certified</span>
                                <div className="mt-2 flex space-x-1 justify-end">
                                   {[1,2,3].map(i => <div key={i} className="w-1 h-1 rounded-full bg-brand-gold/30"></div>)}
@@ -175,7 +178,7 @@ export const Hero: React.FC = () => {
 
                       {/* Branding in Corner */}
                       <div className="absolute top-8 right-10 text-right z-30 opacity-60">
-                         <div className="text-white font-serif font-bold text-base tracking-tight leading-none uppercase italic">Classic Homes</div>
+                         <div className="text-white font-sans font-bold text-base tracking-tight leading-none uppercase">Classic Homes</div>
                          <div className="text-[9px] font-black text-brand-gold uppercase tracking-[0.4em] mt-1.5">Marketplace</div>
                       </div>
                     </div>
@@ -221,7 +224,7 @@ export const Hero: React.FC = () => {
             <div className="flex items-center space-x-10">
                <div className="flex items-center space-x-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-brand-success shadow-[0_0_15px_#10B981] animate-pulse"></div>
-                  <span className="text-[11px] font-mono text-white font-bold tracking-[0.3em] uppercase">System Ready: Workspace Sync Active</span>
+                  <span className="text-[11px] font-sans text-white font-semibold tracking-[0.3em] uppercase">System Ready: Workspace Sync Active</span>
                </div>
                <div className="w-px h-6 bg-white/10 hidden md:block"></div>
                <span className="text-[11px] font-mono text-brand-offWhite/20 uppercase tracking-[0.25em] truncate max-w-[400px]">

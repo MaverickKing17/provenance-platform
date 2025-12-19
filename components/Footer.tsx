@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -15,25 +16,25 @@ export const Footer: React.FC = () => {
       
       {/* Pre-Footer Section (Conversion) */}
       <div className="border-b border-white/10 bg-brand-navy">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
           <div className="space-y-2">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold tracking-tight text-white">
+            <h2 className="text-4xl md:text-5xl font-sans font-semibold tracking-tight text-white leading-tight">
               De-Risk Your Next Project.
             </h2>
-            <p className="text-2xl md:text-3xl font-serif text-brand-offWhite/80">
+            <p className="text-2xl md:text-3xl font-sans font-medium text-white/80 tracking-tight">
               Achieve Digital Certainty.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+          <div className="flex flex-col sm:flex-row items-center gap-5 w-full md:w-auto">
             <a 
               href="https://apps.classichomesremodeling.com" 
-              className="w-full sm:w-auto px-8 py-4 bg-brand-gold text-brand-darkNavy font-semibold rounded hover:bg-brand-goldHover transition-colors text-center whitespace-nowrap shadow-lg shadow-brand-gold/10"
+              className="w-full sm:w-auto px-10 py-5 bg-brand-gold text-brand-darkNavy font-bold rounded-lg hover:bg-brand-goldHover transition-all text-center whitespace-nowrap shadow-xl shadow-brand-gold/20 transform hover:-translate-y-1"
             >
               Request a Custom Demo
             </a>
             <Link 
               to="/contact" 
-              className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white text-white font-semibold rounded hover:bg-white/5 transition-colors text-center whitespace-nowrap"
+              className="w-full sm:w-auto px-10 py-5 bg-transparent border border-white/30 text-white font-bold rounded-lg hover:bg-white/10 hover:border-white transition-all text-center whitespace-nowrap"
             >
               Contact Sales
             </Link>
