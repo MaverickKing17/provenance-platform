@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import * as Sentry from "@sentry/react";
 import { 
@@ -28,7 +29,8 @@ import {
   ShoppingBag,
   Box,
   Wallet,
-  BarChart3
+  BarChart3,
+  Cpu
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
@@ -174,6 +176,15 @@ export const Dashboard: React.FC = () => {
 
         <nav className="flex-grow px-4 space-y-1">
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active />
+          
+          {/* God-Mode Hook for Enterprise Command Center */}
+          <NavItem 
+            icon={<Cpu size={18} className="text-brand-gold" />} 
+            label="Command Center" 
+            to="/executive-command" 
+            special
+          />
+
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
           <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
@@ -454,19 +465,21 @@ export const Dashboard: React.FC = () => {
   );
 };
 
-const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string }> = ({ icon, label, active, to }) => (
+const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string; special?: boolean }> = ({ icon, label, active, to, special }) => (
   <Link 
     to={to || '#'} 
     className={`flex items-center space-x-4 px-5 py-3.5 rounded-xl transition-all duration-300 group ${
       active 
         ? 'bg-brand-gold text-brand-darkNavy shadow-lg shadow-brand-gold/10' 
-        : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'
+        : special 
+          ? 'bg-brand-gold/5 border border-brand-gold/20 text-brand-offWhite hover:bg-brand-gold/10'
+          : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'
     }`}
   >
     <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'} transition-colors`}>
       {icon}
     </div>
-    <span className="text-xs font-bold tracking-wider">{label}</span>
+    <span className={`text-xs font-bold tracking-wider ${special ? 'text-brand-gold' : ''}`}>{label}</span>
   </Link>
 );
 

@@ -1,5 +1,5 @@
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 // Fix: Made children optional to satisfy JSX type checking when used as a wrapper
@@ -15,14 +15,14 @@ interface State {
 
 /**
  * ErrorBoundary component that catches runtime errors in the component tree.
- * Explicitly using Component base class to ensure inherited properties like props and setState are correctly recognized.
+ * Explicitly using React.Component base class to ensure inherited properties like props and setState are correctly recognized.
  */
-// Fix: Inherited from Component directly to ensure TypeScript correctly identifies the class as a React component
-export class ErrorBoundary extends Component<Props, State> {
+// Fix: Inherited from React.Component directly to ensure TypeScript correctly identifies the class as a React component
+export class ErrorBoundary extends React.Component<Props, State> {
   // Use constructor for state initialization to assist some TypeScript environments with inheritance tracking
   constructor(props: Props) {
     super(props);
-    // Fix: Initialized state property inherited from Component
+    // Fix: Initialized state property inherited from React.Component
     this.state = {
       hasError: false,
       error: null
@@ -46,18 +46,18 @@ export class ErrorBoundary extends Component<Props, State> {
    * This method is provided as a callback to the fallback error UI.
    */
   public reset = () => {
-    // Fix: Using setState inherited from Component
+    // Fix: Using setState inherited from React.Component
     this.setState({ hasError: false, error: null });
   };
 
   public render() {
-    // Fix: Using state inherited from Component
+    // Fix: Using state inherited from React.Component
     if (this.state.hasError && this.state.error) {
       // If an error is caught, render the specialized fallback UI
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
-    // Fix: Correctly access children through props inherited from Component
+    // Fix: Correctly access children through props inherited from React.Component
     return this.props.children;
   }
 }
