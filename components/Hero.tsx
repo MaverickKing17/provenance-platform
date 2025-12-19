@@ -1,10 +1,15 @@
 
 import React, { useState } from 'react';
-import { ShieldCheck, Globe, Lock, Search, Scan, Database, Activity, CheckCircle2, Tablet, Cpu, Layers, Fingerprint, ShieldAlert, Zap } from 'lucide-react';
+import { 
+  ShieldCheck, Globe, Search, Scan, Database, Activity, 
+  CheckCircle2, Cpu, Layers, Fingerprint, Zap, X, 
+  Server, HardDrive, Share2, Network, Radio
+} from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [activeModal, setActiveModal] = useState<'AI' | 'HUB' | null>(null);
 
   return (
     <section className="relative w-full min-h-screen flex flex-col bg-brand-darkNavy pt-24 overflow-hidden">
@@ -60,24 +65,16 @@ export const Hero: React.FC = () => {
 
         {/* Right Content: Boardroom Architectural Scene */}
         <div className="w-full lg:w-3/5 relative flex items-center justify-center py-24">
-          
           <div className="relative w-full max-w-[800px] perspective-1000">
             <div className="relative transform rotate-x-[15deg] rotate-y-[-5deg] transition-all duration-1000 hover:rotate-x-[12deg] hover:rotate-y-[-2deg] preserve-3d">
               
-              {/* Table Surface / Shadow Base */}
               <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[130%] h-48 bg-black/60 blur-[120px] rounded-full -z-10"></div>
               
-              {/* Architectural Model Pedestal */}
               <div className="relative bg-[#111111] rounded-2xl border-b-[20px] border-[#050505] p-2 shadow-[0_60px_120px_rgba(0,0,0,0.9)]">
                  <div className="bg-[#1a1a1a] p-4 rounded-xl border border-white/5 relative overflow-hidden">
-                    
-                    {/* Pedestal Under-Lighting */}
                     <div className="absolute bottom-0 left-0 w-full h-1.5 bg-brand-gold shadow-[0_0_40px_#D4AF37] opacity-60 animate-pulse"></div>
 
-                    {/* MAIN IMAGE CONTAINER */}
                     <div className="relative rounded-lg overflow-hidden aspect-video bg-[#050505]">
-                      
-                      {/* Image Loading State / Placeholder */}
                       <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${imageLoaded ? 'opacity-0' : 'opacity-100'}`}>
                          <div className="w-full h-full bg-[#0a0a0a] flex flex-col items-center justify-center space-y-6">
                             <div className="w-14 h-14 border-4 border-brand-gold/20 border-t-brand-gold rounded-full animate-spin"></div>
@@ -85,7 +82,6 @@ export const Hero: React.FC = () => {
                          </div>
                       </div>
 
-                      {/* Fallback Blueprint Pattern (Shows if image fails) */}
                       {imageError && (
                         <div className="absolute inset-0 opacity-40" 
                              style={{
@@ -106,7 +102,6 @@ export const Hero: React.FC = () => {
                         }}
                       />
                       
-                      {/* Technical Overlays */}
                       <svg className="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-60" viewBox="0 0 800 450">
                         <path d="M 320,180 L 150,80 H 50" fill="none" stroke="#D4AF37" strokeWidth="1" strokeDasharray="6 4" />
                         <circle cx="320" cy="180" r="5" fill="#D4AF37" className="animate-pulse" />
@@ -118,7 +113,6 @@ export const Hero: React.FC = () => {
                         <circle cx="450" cy="300" r="5" fill="#D4AF37" className="animate-pulse" />
                       </svg>
 
-                      {/* CALLOUT CARDS: ENHANCED LUXURY SAMPLES */}
                       <div className="absolute top-[30px] left-[20px] z-30 animate-in slide-in-from-left duration-1000 group/sample">
                          <div className="flex bg-brand-darkNavy/95 backdrop-blur-2xl border border-white/10 p-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] group-hover/sample:scale-105 transition-transform duration-500">
                             <div className="w-20 h-20 rounded-xl overflow-hidden border border-brand-gold/30 shrink-0 shadow-inner">
@@ -170,7 +164,6 @@ export const Hero: React.FC = () => {
                  </div>
               </div>
 
-              {/* COMMAND TABLET */}
               <div className="absolute -bottom-20 -left-20 z-50 transform -rotate-12 translate-z-[120px] group/tablet transition-all duration-700 hover:-rotate-6 hover:scale-110 hover:translate-z-[160px]">
                  <div className="bg-[#0A1628]/98 border border-brand-gold/40 rounded-[3rem] p-12 w-[400px] shadow-[0_60px_150px_rgba(0,0,0,1)] backdrop-blur-3xl overflow-hidden relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-50 animate-[scan_3s_linear_infinite] blur-sm"></div>
@@ -206,10 +199,8 @@ export const Hero: React.FC = () => {
                     </div>
                  </div>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
 
@@ -232,17 +223,129 @@ export const Hero: React.FC = () => {
                </div>
             </div>
             <div className="flex items-center space-x-14 text-sm font-bold text-brand-gold uppercase tracking-wider">
-               <span className="flex items-center space-x-4 group cursor-pointer hover:text-white transition-colors">
+               <button 
+                 onClick={() => setActiveModal('AI')}
+                 className="flex items-center space-x-4 group cursor-pointer hover:text-white transition-colors"
+               >
                   <Cpu size={20} />
                   <span>AI Engine Core</span>
-               </span>
-               <span className="flex items-center space-x-4 group cursor-pointer hover:text-white transition-colors">
+               </button>
+               <button 
+                 onClick={() => setActiveModal('HUB')}
+                 className="flex items-center space-x-4 group cursor-pointer hover:text-white transition-colors"
+               >
                   <Layers size={20} />
                   <span>Global Hub</span>
-               </span>
+               </button>
             </div>
          </div>
       </div>
+
+      {/* AI ENGINE CORE MODAL */}
+      {activeModal === 'AI' && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-3xl animate-in fade-in duration-300">
+           <div className="w-full max-w-2xl bg-brand-navy border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_50px_100px_rgba(0,0,0,1)] relative overflow-hidden">
+              <button 
+                onClick={() => setActiveModal(null)}
+                className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors"
+              >
+                 <X size={32} />
+              </button>
+              
+              <div className="flex items-center space-x-6 mb-10">
+                 <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
+                    <Cpu size={32} className="text-brand-gold" />
+                 </div>
+                 <div>
+                    <h3 className="text-2xl font-serif font-bold text-white uppercase tracking-tight">AI Diagnostic Core</h3>
+                    <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">Institutional Reasoning Engine v2.5</p>
+                 </div>
+              </div>
+
+              <div className="space-y-8">
+                 <div className="grid grid-cols-2 gap-6">
+                    <div className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-3">
+                       <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">Model Latency</span>
+                       <p className="text-xl font-mono text-white">42ms <span className="text-brand-success text-xs font-bold">Stable</span></p>
+                    </div>
+                    <div className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-3">
+                       <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">Uptime S.L.A</span>
+                       <p className="text-xl font-mono text-white">99.999%</p>
+                    </div>
+                 </div>
+
+                 <div className="space-y-4">
+                    <h4 className="text-xs font-bold text-white/70 uppercase tracking-widest border-b border-white/10 pb-2 flex items-center space-x-2">
+                       <Server size={14} className="text-brand-gold" />
+                       <span>Active Logical Layers</span>
+                    </h4>
+                    <div className="space-y-3">
+                       <DiagnosticRow label="Spatial Intelligence API" status="NOMINAL" />
+                       <DiagnosticRow label="Agentic Sourcing Module" status="SYNCED" />
+                       <DiagnosticRow label="Blockchain Provenance Auditor" status="ACTIVE" />
+                       <DiagnosticRow label="Multimodal Vision Core" status="HEALTHY" />
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* GLOBAL HUB MODAL */}
+      {activeModal === 'HUB' && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-3xl animate-in fade-in duration-300">
+           <div className="w-full max-w-3xl bg-brand-navy border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_50px_100px_rgba(0,0,0,1)] relative overflow-hidden">
+              <button 
+                onClick={() => setActiveModal(null)}
+                className="absolute top-8 right-8 text-white/20 hover:text-white transition-colors"
+              >
+                 <X size={32} />
+              </button>
+              
+              <div className="flex items-center space-x-6 mb-12">
+                 <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
+                    <Globe size={32} className="text-brand-gold" />
+                 </div>
+                 <div>
+                    <h3 className="text-2xl font-serif font-bold text-white uppercase tracking-tight">Global Connectivity Hub</h3>
+                    <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">Validated Sourcing Perimeter</p>
+                 </div>
+              </div>
+
+              <div className="grid grid-cols-12 gap-10">
+                 <div className="col-span-12 md:col-span-5 space-y-8">
+                    <div className="space-y-6">
+                       <h4 className="text-xs font-bold text-white/70 uppercase tracking-widest border-b border-white/10 pb-2">Institutional Regions</h4>
+                       <div className="space-y-4">
+                          <HubRegion label="EMEA (Europe)" nodes={421} status="ACTIVE" />
+                          <HubRegion label="AMER (North Am)" nodes={285} status="ACTIVE" />
+                          <HubRegion label="APAC (Asia Pac)" nodes={312} status="STANDBY" />
+                       </div>
+                    </div>
+                    
+                    <div className="p-6 bg-brand-gold/5 border border-brand-gold/20 rounded-2xl space-y-3">
+                       <div className="flex items-center space-x-3 text-brand-gold">
+                          <Network size={18} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Chain Reliability</span>
+                       </div>
+                       <p className="text-sm text-white/60 leading-relaxed font-sans">99.2% of provenance chains verified via sovereign node infrastructure.</p>
+                    </div>
+                 </div>
+
+                 <div className="col-span-12 md:col-span-7 bg-black/40 border border-white/5 rounded-3xl p-8 relative overflow-hidden flex items-center justify-center min-h-[300px]">
+                    <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #D4AF37 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                    <div className="relative text-center space-y-6">
+                       <Radio className="w-16 h-16 text-brand-gold mx-auto animate-pulse" />
+                       <div className="space-y-1">
+                          <p className="text-lg font-bold text-white uppercase tracking-widest">Global Node Sync</p>
+                          <p className="text-[10px] text-brand-gold font-black uppercase tracking-[0.4em] animate-pulse">Scanning 1,248 Nodes...</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes scan {
@@ -257,3 +360,20 @@ export const Hero: React.FC = () => {
     </section>
   );
 };
+
+const DiagnosticRow: React.FC<{ label: string; status: string }> = ({ label, status }) => (
+  <div className="flex items-center justify-between p-4 bg-white/[0.03] border border-white/5 rounded-xl group hover:bg-white/[0.08] transition-colors">
+     <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{label}</span>
+     <span className="text-[9px] font-black text-brand-success uppercase tracking-widest border border-brand-success/30 px-2 py-0.5 rounded">{status}</span>
+  </div>
+);
+
+const HubRegion: React.FC<{ label: string; nodes: number; status: string }> = ({ label, nodes, status }) => (
+  <div className="flex items-center justify-between group">
+     <div className="space-y-1">
+        <p className="text-sm font-bold text-white group-hover:text-brand-gold transition-colors">{label}</p>
+        <p className="text-[10px] text-white/30 uppercase font-bold tracking-widest">{nodes} Active Nodes</p>
+     </div>
+     <div className={`w-2 h-2 rounded-full ${status === 'ACTIVE' ? 'bg-brand-success shadow-[0_0_10px_#10B981]' : 'bg-brand-gold animate-pulse shadow-[0_0_10px_#D4AF37]'}`}></div>
+  </div>
+);
