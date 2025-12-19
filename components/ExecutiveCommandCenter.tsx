@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Zap, 
@@ -375,7 +374,7 @@ export const ExecutiveCommandCenter: React.FC = () => {
          <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-3">
                <MapPin size={14} className="text-[#D4AF37]" />
-               <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.25em]">Fleet Monitoring: Carrara -> SF</span>
+               <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.25em]">Fleet Monitoring: Carrara {"->"} SF</span>
             </div>
             <div className="w-px h-6 bg-white/10"></div>
             <div className="flex items-center space-x-3 text-brand-success">
