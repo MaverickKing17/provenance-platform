@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as Sentry from "@sentry/react";
 import { AlertCircle, RefreshCw, Hammer, Settings2 } from 'lucide-react';
 
 interface ErrorProps {
@@ -13,14 +14,37 @@ export default function GlobalError({ error, reset }: ErrorProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Logic: Check if error contains 401 or 403
+    // 1. Capture the exception in Sentry immediately
+    Sentry.captureException(error);
+
     const errorMessage = error.message || "";
+
+    // 2. Contextual Tagging: Specific check for token-related environment variable failures
+    if (errorMessage.includes('NEXT_PUBLIC_ALEX_TOKEN') || errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+      Sentry.setTag('error_type', 'missing_env_variable');
+    }
+
+    // 3. User Identification: Determine workspace context (Alex/Larry)
+    // Checking URL or LocalStorage as fallback for the current user context
+    const isAlexWorkspace = window.location.hash.includes('ALEX') || 
+                            localStorage.getItem('NEXT_PUBLIC_ALEX_TOKEN') !== null;
+    
+    const workspaceId = isAlexWorkspace ? 'ALEX_ADMIN' : 'LARRY_CUSTOMER';
+    
+    Sentry.setUser({ 
+      id: workspaceId,
+      username: isAlexWorkspace ? 'Alex' : 'Larry',
+      segment: isAlexWorkspace ? 'Admin' : 'Customer'
+    });
+    
+    Sentry.setTag('workspace', workspaceId);
+
+    // 4. Navigation Logic: Handle authentication failures
     if (errorMessage.includes('401') || errorMessage.includes('403')) {
-      // Redirection: Move to unauthorized portal
       navigate('/unauthorized');
     }
     
-    // Institutional logging
+    // Institutional logging for debugging
     console.error('Executive System Fault Detected:', error);
   }, [error, navigate]);
 
