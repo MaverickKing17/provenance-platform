@@ -5,8 +5,7 @@ import {
   ArrowLeft, ShieldCheck, Globe, TrendingUp, Cpu, 
   FileText, Users, Lock, ChevronRight, Briefcase, 
   Award, Scale, Database, Zap, Sparkles, Building2,
-  // Added missing MessageSquare import
-  MessageSquare
+  MessageSquare, Mail, Phone, MapPin, Search
 } from 'lucide-react';
 
 interface PageContent {
@@ -64,7 +63,7 @@ export const GenericPage: React.FC = () => {
       lead: 'We partner with the world’s leading financial institutions and logistics providers to create a frictionless procurement bridge.',
       sections: [
         { heading: 'Financial Integration', body: 'Seamlessly connect with Oracle Treasury and SWIFT/SEPA channels for automated capital movement and escrow management.', icon: <Database className="text-brand-gold" /> },
-        { heading: 'The Vetted Network', body: 'Our partners undergo a rigorous 42-point audit, covering everything from financial stability to ESG compliance and material provenance.', icon: <CheckCircle2 className="text-brand-gold" /> }
+        { heading: 'The Vetted Network', body: 'Our partners undergo a rigorous 42-point audit, covering everything from financial stability to ESG compliance and material provenance.', icon: <ShieldCheck className="text-brand-gold" /> }
       ]
     },
     'blog': {
@@ -107,22 +106,57 @@ export const GenericPage: React.FC = () => {
         { heading: 'Zero-Knowledge Auditing', body: 'We utilize SOC2-v4 protocols to ensure that your financial allocations and supplier negotiations remain private yet verifiable.', icon: <ShieldCheck className="text-brand-gold" /> },
         { heading: 'Institutional Partitioning', body: 'Our "God Mode" vs. "User Mode" logic ensures that C-suite oversight never compromises tactical-level privacy.', icon: <Lock className="text-brand-gold" /> }
       ]
+    },
+    'terms-of-service': {
+      eyebrow: 'Master Agreement',
+      title: 'Institutional Service Terms',
+      lead: 'Our Master Service Agreement (MSA) is engineered to provide legal certainty for multi-million dollar procurement cycles.',
+      sections: [
+        { heading: 'Transactional Finality', body: 'All material orders executed through the Classic Homes Bridge are governed by immutable smart-contract logic, ensuring payment only upon verified provenance.', icon: <FileText className="text-brand-gold" /> },
+        { heading: 'Dispute Resolution', body: 'Integrated arbitration protocols for high-value architectural assets, de-risking the relationship between developer and artisan.', icon: <Scale className="text-brand-gold" /> }
+      ],
+      sidebar: [
+        { label: 'Standard MSA v.', value: '2025.4' },
+        { label: 'Arbitration Node', value: 'London/NYC' },
+        { label: 'Liability Cover', value: '$50M+' }
+      ]
+    },
+    'cookies': {
+      eyebrow: 'Digital Privacy',
+      title: 'Digital Trace Protocol',
+      lead: 'We employ zero-knowledge tracking to maintain workspace security without compromising executive privacy.',
+      sections: [
+        { heading: 'Session Integrity', body: 'Ephemeral identifiers ensure that your sourcing queries remain isolated and encrypted, preventing market front-running.', icon: <ShieldCheck className="text-brand-gold" /> },
+        { heading: 'Analytical Opt-In', body: 'Choose which telemetry nodes are shared with your internal team vs. institutional partners.', icon: <Database className="text-brand-gold" /> }
+      ]
+    },
+    'contact': {
+      eyebrow: 'Executive Liaison',
+      title: 'Initialize Concierge Bridge',
+      lead: 'For urgent capital allocation inquiries or bespoke network vetting, our institutional team is on standby.',
+      sections: [
+        { heading: 'Global Headquarters', body: '100 Enterprise Way, Suite 500, San Francisco, CA 94105', icon: <MapPin className="text-brand-gold" /> },
+        { heading: 'Institutional Line', body: '+1 (888) 555-0123 (Verified Partners Only)', icon: <Phone className="text-brand-gold" /> },
+        { heading: 'Digital Gateway', body: 'executive.support@classichomes.ai', icon: <Mail className="text-brand-gold" /> }
+      ]
     }
   };
 
   const page = contentMap[slug] || {
-    eyebrow: 'Error 404',
+    eyebrow: 'Security Clearance Required',
     title: 'Resource Unattainable',
-    lead: 'The requested intelligence node is currently offline or unauthorized for your current access level.',
-    sections: []
+    lead: 'The requested intelligence node is currently offline or requires an elevated access tier.',
+    sections: [
+      { heading: 'Access Protocol 404', body: 'Your session token does not currently authorize entry to this logical perimeter. Please re-authenticate via the Main Cockpit.', icon: <Lock className="text-brand-gold" /> }
+    ]
   };
 
   return (
-    <div className="min-h-screen bg-[#0F172A] pt-32 pb-24 px-4 sm:px-6 lg:px-8 selection:bg-brand-gold selection:text-brand-darkNavy">
+    <div className="min-h-screen bg-[#0A1628] pt-32 pb-24 px-4 sm:px-6 lg:px-8 selection:bg-brand-gold selection:text-brand-darkNavy">
       <div className="max-w-7xl mx-auto">
         
         {/* Navigation Breadcrumb */}
-        <Link to="/" className="inline-flex items-center space-x-3 text-[10px] font-black text-brand-gold uppercase tracking-[0.3em] hover:text-white transition-all group mb-12">
+        <Link to="/" className="inline-flex items-center space-x-3 text-[11px] font-black text-brand-gold uppercase tracking-[0.4em] hover:text-white transition-all group mb-16">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span>Return to Cockpit</span>
         </Link>
@@ -130,36 +164,36 @@ export const GenericPage: React.FC = () => {
         <div className="grid grid-cols-12 gap-16 lg:gap-24">
           
           {/* Main Content Node */}
-          <div className="col-span-12 lg:col-span-8 space-y-16">
-            <header className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-               <div className="inline-flex items-center space-x-3 px-4 py-1.5 rounded-full bg-brand-gold/5 border border-brand-gold/20 backdrop-blur-md">
-                 <div className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse"></div>
-                 <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">{page.eyebrow}</span>
+          <div className="col-span-12 lg:col-span-8 space-y-20">
+            <header className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+               <div className="inline-flex items-center space-x-4 px-6 py-2 rounded-full bg-brand-gold/5 border border-brand-gold/30 backdrop-blur-md">
+                 <div className="w-2 h-2 rounded-full bg-brand-gold animate-pulse shadow-[0_0_10px_#D4AF37]"></div>
+                 <span className="text-[12px] font-black text-brand-gold uppercase tracking-[0.3em]">{page.eyebrow}</span>
                </div>
-               <h1 className="text-5xl lg:text-7xl font-serif font-bold text-white leading-[1.1] tracking-tight">
+               <h1 className="text-6xl lg:text-8xl font-sans font-black text-white leading-[1] tracking-tighter">
                  {page.title}
                </h1>
-               <p className="text-xl lg:text-2xl text-brand-offWhite/70 leading-relaxed font-sans max-w-3xl">
+               <p className="text-2xl lg:text-3xl text-brand-offWhite/80 leading-relaxed font-normal max-w-3xl">
                  {page.lead}
                </p>
             </header>
 
-            <div className="space-y-20 pt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+            <div className="space-y-24 pt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
               {page.sections.map((section, idx) => (
                 <section key={idx} className="group relative">
-                  <div className="flex items-start space-x-8">
-                    <div className="shrink-0 p-5 bg-white/5 border border-white/10 rounded-2xl group-hover:border-brand-gold/30 transition-all duration-500 shadow-xl">
-                      {section.icon || <Sparkles size={24} className="text-brand-gold" />}
+                  <div className="flex items-start space-x-10">
+                    <div className="shrink-0 p-6 bg-white/5 border border-white/10 rounded-3xl group-hover:border-brand-gold/50 transition-all duration-500 shadow-2xl">
+                      {section.icon || <Sparkles size={28} className="text-brand-gold" />}
                     </div>
-                    <div className="space-y-4">
-                      <h3 className="text-2xl font-serif font-bold text-white group-hover:text-brand-gold transition-colors">{section.heading}</h3>
-                      <p className="text-lg text-brand-offWhite/60 leading-relaxed max-w-2xl font-sans">
+                    <div className="space-y-6">
+                      <h3 className="text-3xl font-sans font-black text-white uppercase tracking-tight group-hover:text-brand-gold transition-colors">{section.heading}</h3>
+                      <p className="text-xl text-brand-offWhite/60 leading-relaxed max-w-2xl font-normal">
                         {section.body}
                       </p>
                     </div>
                   </div>
                   {idx < page.sections.length - 1 && (
-                    <div className="absolute -bottom-10 left-0 w-full h-px bg-white/5"></div>
+                    <div className="absolute -bottom-12 left-0 w-full h-px bg-white/10"></div>
                   )}
                 </section>
               ))}
@@ -167,41 +201,41 @@ export const GenericPage: React.FC = () => {
           </div>
 
           {/* Sidebar Metadata Hub */}
-          <aside className="col-span-12 lg:col-span-4 space-y-10 animate-in fade-in slide-in-from-right-8 duration-1000 delay-500">
+          <aside className="col-span-12 lg:col-span-4 space-y-12 animate-in fade-in slide-in-from-right-8 duration-1000 delay-500">
              
              {page.sidebar && (
-               <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                  <h4 className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em] mb-10">Institutional Metrics</h4>
-                  <div className="space-y-8">
+               <div className="bg-brand-navy/60 border border-brand-gold/20 p-12 rounded-[3.5rem] backdrop-blur-3xl shadow-[0_60px_120px_rgba(0,0,0,0.6)] relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-brand-gold/10 blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+                  <h4 className="text-[11px] font-black text-brand-gold uppercase tracking-[0.4em] mb-12">Institutional Metrics</h4>
+                  <div className="space-y-10">
                     {page.sidebar.map((stat, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <p className="text-[10px] font-bold text-brand-offWhite/30 uppercase tracking-widest">{stat.label}</p>
-                        <p className="text-2xl font-serif font-bold text-white tracking-tight">{stat.value}</p>
+                      <div key={idx} className="space-y-2 border-l-2 border-brand-gold/30 pl-6">
+                        <p className="text-[11px] font-black text-white/30 uppercase tracking-widest">{stat.label}</p>
+                        <p className="text-3xl font-sans font-black text-white tracking-tighter">{stat.value}</p>
                       </div>
                     ))}
                   </div>
                </div>
              )}
 
-             <div className="bg-brand-gold/5 border border-brand-gold/20 p-10 rounded-[2.5rem] space-y-8">
-                <div className="flex items-center space-x-4">
-                   <div className="p-3 bg-brand-gold/10 rounded-xl">
-                      <MessageSquare size={20} className="text-brand-gold" />
+             <div className="bg-brand-gold/5 border border-brand-gold/30 p-12 rounded-[3.5rem] space-y-10 shadow-2xl">
+                <div className="flex items-center space-x-5">
+                   <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
+                      <MessageSquare size={24} className="text-brand-gold" />
                    </div>
-                   <h4 className="text-sm font-black text-white uppercase tracking-widest">Priority Access</h4>
+                   <h4 className="text-sm font-black text-white uppercase tracking-[0.2em]">Priority Access</h4>
                 </div>
-                <p className="text-sm text-brand-offWhite/60 leading-relaxed font-sans">
+                <p className="text-base text-brand-offWhite/70 leading-relaxed font-normal">
                   For immediate consultation regarding capital allocation or custom sourcing nodes, please initialize our secure concierge bridge.
                 </p>
-                <button className="w-full py-5 bg-brand-gold text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white transition-all shadow-xl shadow-brand-gold/10">
+                <button className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-[12px] uppercase tracking-[0.35em] rounded-2xl hover:bg-white transition-all shadow-2xl shadow-brand-gold/20 transform active:scale-95">
                   Request C-Suite Demo
                 </button>
              </div>
 
-             <div className="px-6 flex items-center space-x-3 opacity-30">
-                <ShieldCheck size={16} className="text-brand-gold" />
-                <span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Verified Secure Protocol v2.5</span>
+             <div className="px-8 flex items-center space-x-4 opacity-40">
+                <ShieldCheck size={20} className="text-brand-gold" />
+                <span className="text-[11px] font-black text-white uppercase tracking-[0.25em]">Verified Secure Protocol v2.5</span>
              </div>
           </aside>
         </div>
@@ -209,13 +243,9 @@ export const GenericPage: React.FC = () => {
 
       {/* Background Ambience */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_rgba(212,175,55,0.05)_0%,_transparent_50%)]"></div>
-        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-brand-gold/5 blur-[120px] rounded-full"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_rgba(212,175,55,0.08)_0%,_transparent_50%)]"></div>
+        <div className="absolute bottom-[-10%] right-[-5%] w-[800px] h-[800px] bg-brand-gold/5 blur-[150px] rounded-full"></div>
       </div>
     </div>
   );
 };
-
-function CheckCircle2(props: any) {
-  return <ShieldCheck {...props} />;
-}
