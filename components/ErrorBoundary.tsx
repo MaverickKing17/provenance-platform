@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+
+import React, { ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 interface Props {
@@ -12,9 +13,9 @@ interface State {
 
 /**
  * ErrorBoundary component that catches runtime errors in the component tree.
- * Explicitly extends Component from React to ensure inherited properties are recognized.
+ * Explicitly extends React.Component to ensure inherited properties are recognized.
  */
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null
@@ -37,7 +38,7 @@ export class ErrorBoundary extends Component<Props, State> {
    * This method is provided as a callback to the fallback error UI.
    */
   public reset = () => {
-    // Fix for line 39: Accessing inherited setState from the Component base class
+    // FIX: Accessing inherited setState from the React.Component base class
     this.setState({ hasError: false, error: null });
   };
 
@@ -47,7 +48,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
-    // Fix for line 49: Accessing children through this.props as required in React class components
+    // FIX: Accessing children through this.props as required in React class components
     return this.props.children;
   }
 }
