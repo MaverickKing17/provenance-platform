@@ -1,8 +1,21 @@
+import * as Sentry from "@sentry/react";
+
 /**
  * Institutional Xano Fetch Wrapper
  * Handles specialized error propagation for the Global Error Boundary.
  */
 export async function xanoFetch(url: string, options: RequestInit = {}) {
+  // Requirement 4: Breadcrumbs for Xano API requests
+  Sentry.addBreadcrumb({
+    category: 'api',
+    message: `Xano Request: ${options.method || 'GET'}`,
+    data: {
+      url,
+      method: options.method || 'GET'
+    },
+    level: 'info',
+  });
+
   const response = await fetch(url, {
     ...options,
     headers: {

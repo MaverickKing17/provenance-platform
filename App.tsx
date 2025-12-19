@@ -34,8 +34,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App: React.FC = () => {
   return (
-    <ErrorBoundary>
-      <Router>
+    <Router>
+      {/* 
+          Architectural Fix: ErrorBoundary must be nested inside Router 
+          to allow its fallback UI (GlobalError) to use useNavigate and other routing hooks.
+      */}
+      <ErrorBoundary>
         <Layout>
           <Routes>
             <Route path="/" element={<Hero />} />
@@ -51,8 +55,8 @@ const App: React.FC = () => {
             <Route path="/:slug" element={<GenericPage />} />
           </Routes>
         </Layout>
-      </Router>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </Router>
   );
 };
 

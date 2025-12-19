@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './sentry.client.config.js'; // Initialize Sentry first
 import App from './App';
 
 const rootElement = document.getElementById('root');

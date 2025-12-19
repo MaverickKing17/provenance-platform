@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as Sentry from "@sentry/react";
 import { 
   Users, 
   Plus, 
@@ -61,6 +62,15 @@ export const Dashboard: React.FC = () => {
     name: '',
     valuation: ''
   });
+
+  // Requirement 2: Identify Users (Alex/Larry) in Sentry
+  useEffect(() => {
+    Sentry.setUser({ 
+      id: currentUser, 
+      username: currentUser, 
+      workspace: currentUser 
+    });
+  }, [currentUser]);
 
   const TOKENS = {
     ALEX: config.alexToken,
