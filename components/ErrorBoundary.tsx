@@ -17,16 +17,13 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Use Component directly to ensure proper property inheritance of state, props, and setState
+// Extending Component directly to ensure setState and props are correctly inherited and recognized by the TypeScript compiler
 export class ErrorBoundary extends Component<Props, State> {
-  // Fix: Initialize state within the constructor after calling super(props)
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null
-    };
-  }
+  // Initialize state directly as a class property for better TypeScript recognition
+  public state: State = {
+    hasError: false,
+    error: null
+  };
 
   /**
    * Static lifecycle method used to update state after an error has been caught.
@@ -48,18 +45,19 @@ export class ErrorBoundary extends Component<Props, State> {
    * Resets the error boundary state to allow re-rendering of children.
    * This is passed as a callback to the GlobalError component.
    */
-  // Fix: ensure setState is correctly recognized as inherited from Component
   public reset = () => {
+    // Fix: setState is now correctly recognized as an inherited member of Component
     this.setState({ hasError: false, error: null });
   };
 
-  // Fix: props and state are now correctly recognized as members of the class via inheritance from Component
   public render() {
+    // Correctly access inherited state and props members
     if (this.state.hasError && this.state.error) {
       // If an error is caught, render the specialized fallback UI (GlobalError)
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
+    // Fix: props is now correctly recognized as an inherited member of Component
     return this.props.children;
   }
 }

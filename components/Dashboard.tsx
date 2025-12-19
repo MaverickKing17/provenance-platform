@@ -31,7 +31,8 @@ import {
   Wallet,
   BarChart3,
   Cpu,
-  Leaf
+  Leaf,
+  Database
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
@@ -60,6 +61,8 @@ export const Dashboard: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<'ALEX' | 'LARRY'>('ALEX');
   const [valuations, setValuations] = useState<Valuation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false); // Optimistic UI state
+  const [ledgerStatus, setLedgerStatus] = useState<'LIVE' | 'STALE' | 'CACHED_FALLBACK'>('LIVE');
   const [error, setError] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
@@ -86,29 +89,37 @@ export const Dashboard: React.FC = () => {
       return;
     }
 
-    setValuations([]);
-    setLoading(true);
+    // Ghost Loading: Don't clear data if we already have some
+    if (valuations.length > 0) {
+      setIsSyncing(true);
+    } else {
+      setLoading(true);
+    }
+    
     setError(null);
 
     const token = TOKENS[user];
     if (!token) {
       setError(`Identity Access Denied: Missing Token for ${user}`);
       setLoading(false);
+      setIsSyncing(false);
       return;
     }
 
     try {
-      const data = await xanoFetch(`${config.baseUrl}/valuation`, {
+      const response = await xanoFetch<Valuation[]>(`${config.baseUrl}/valuation`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
       
-      setValuations(Array.isArray(data) ? data : []);
+      setValuations(Array.isArray(response.data) ? response.data : []);
+      setLedgerStatus(response.status);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ledger Synchronization Failed');
     } finally {
-      setTimeout(() => setLoading(false), 800);
+      setLoading(false);
+      setIsSyncing(false);
     }
   };
 
@@ -220,8 +231,10 @@ export const Dashboard: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 bg-brand-navy/60 rounded-3xl border border-white/5 backdrop-blur-xl shadow-2xl">
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></div>
-                <span className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">C-Suite Cockpit</span>
+                <div className={`w-2 h-2 rounded-full ${isSyncing ? 'bg-brand-gold animate-pulse' : 'bg-brand-success'}`}></div>
+                <span className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">
+                  {isSyncing ? 'Self-Healing Sync Active' : 'C-Suite Cockpit'}
+                </span>
               </div>
               <h1 className="text-3xl font-sans font-bold text-white tracking-tight">Executive Procurement Hub</h1>
             </div>
@@ -268,28 +281,28 @@ export const Dashboard: React.FC = () => {
               value={valuations.length > 0 ? (valuations.length * 1.2).toFixed(1) + "M" : "$0"} 
               icon={<DollarSign className="text-brand-gold" />} 
               trend="+12.5%" 
-              loading={loading}
+              loading={loading && valuations.length === 0}
             />
             <StatCard 
               title="Sourcing Velocity" 
               value={(valuations.length + 8).toString() + " Days"} 
               icon={<Clock className="text-brand-gold" />} 
               trend="-2 Days" 
-              loading={loading}
+              loading={loading && valuations.length === 0}
             />
             <StatCard 
               title="Risk Exposure" 
               value={valuations.length > 0 ? "Low" : "Minimal"} 
               icon={<Scale className="text-brand-gold" />} 
               trend="Stable" 
-              loading={loading}
+              loading={loading && valuations.length === 0}
             />
             <StatCard 
               title="Portfolio Governance" 
               value={valuations.length > 0 ? "98%" : "100%"} 
               icon={<ShieldCheck className="text-brand-success" />} 
               trend="Verified" 
-              loading={loading}
+              loading={loading && valuations.length === 0}
             />
           </div>
 
@@ -301,15 +314,15 @@ export const Dashboard: React.FC = () => {
               <div className="bg-brand-navy/40 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl shadow-2xl flex-grow flex flex-col">
                 <div className="px-8 py-7 border-b border-white/5 flex items-center justify-between bg-white/5">
                   <div className="flex items-center space-x-5">
-                    <div className={`w-3 h-3 rounded-full ${loading ? 'bg-brand-gold animate-pulse' : 'bg-brand-success shadow-[0_0_15px_rgba(16,185,129,0.5)]'}`}></div>
+                    <div className={`w-3 h-3 rounded-full ${isSyncing || loading ? 'bg-brand-gold animate-pulse' : 'bg-brand-success shadow-[0_0_15px_rgba(16,185,129,0.5)]'}`}></div>
                     <h2 className="font-sans font-bold text-2xl text-white">Immutable Procurement Ledger</h2>
                   </div>
                   <div className="flex items-center space-x-4">
-                     <span className={`text-[9px] font-bold text-brand-gold/60 uppercase tracking-[0.2em] ${loading ? 'animate-pulse' : ''}`}>
-                       {loading ? 'Syncing Blockchain State' : 'Ledger Verified'}
+                     <span className={`text-[9px] font-bold uppercase tracking-[0.2em] transition-all ${isSyncing || loading ? 'text-brand-gold animate-pulse' : 'text-brand-success'}`}>
+                       {isSyncing ? 'Optimistic Syncing...' : loading ? 'Initializing Bridge' : ledgerStatus === 'CACHED_FALLBACK' ? 'Verified Legacy Cache' : 'System Live'}
                      </span>
-                     <button onClick={() => fetchValuations(currentUser)} disabled={!config.baseUrl || loading} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all text-brand-gold disabled:opacity-20">
-                       <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                     <button onClick={() => fetchValuations(currentUser)} disabled={!config.baseUrl || loading || isSyncing} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all text-brand-gold disabled:opacity-20">
+                       <RefreshCw className={`w-4 h-4 ${isSyncing || loading ? 'animate-spin' : ''}`} />
                      </button>
                   </div>
                 </div>
@@ -324,7 +337,7 @@ export const Dashboard: React.FC = () => {
                         <button onClick={() => setIsConfigModalOpen(true)} className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-2xl hover:bg-brand-goldHover transition-all shadow-xl">Secure Initialization</button>
                       </div>
                     </div>
-                  ) : error ? (
+                  ) : error && valuations.length === 0 ? (
                     <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
                       <div className="space-y-6">
                         <ServerCrash className="w-20 h-20 text-red-400 mx-auto opacity-50" />
@@ -334,7 +347,7 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="overflow-x-auto">
+                    <div className={`overflow-x-auto transition-opacity duration-300 ${isSyncing ? 'opacity-60' : 'opacity-100'}`}>
                       <table className="w-full text-left">
                         <thead>
                           <tr className="border-b border-white/5 bg-brand-navy/20">
@@ -344,7 +357,7 @@ export const Dashboard: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                          {loading ? (
+                          {loading && valuations.length === 0 ? (
                             <TableSkeleton />
                           ) : valuations.length === 0 ? (
                             <tr><td colSpan={3} className="px-8 py-40 text-center text-brand-offWhite/10 italic font-sans text-2xl">No capital allocated to {currentUser}'s division.</td></tr>
@@ -390,6 +403,15 @@ export const Dashboard: React.FC = () => {
                       </table>
                     </div>
                   )}
+                  {/* Subtle Stale Data Overlay Indicator */}
+                  {(isSyncing || ledgerStatus === 'CACHED_FALLBACK') && (
+                    <div className="absolute top-2 right-8 flex items-center space-x-2 px-3 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-full animate-in fade-in zoom-in">
+                       <Database size={10} className="text-brand-gold" />
+                       <span className="text-[8px] font-black text-brand-gold uppercase tracking-widest">
+                         {isSyncing ? 'Synchronizing Intelligence' : 'Serving High-Fidelity Cache'}
+                       </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -416,7 +438,7 @@ export const Dashboard: React.FC = () => {
                       <input required disabled={!config.baseUrl} type="text" value={formData.valuation} onChange={(e) => setFormData({...formData, valuation: e.target.value})} placeholder="0.00" className="w-full bg-brand-darkNavy border border-white/10 rounded-2xl pl-14 pr-6 py-5 text-white placeholder-white/5 focus:border-brand-gold/50 outline-none transition-all text-sm font-mono shadow-inner" />
                     </div>
                   </div>
-                  <button disabled={loading || !config.baseUrl} type="submit" className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-sm uppercase tracking-widest rounded-2xl hover:bg-brand-goldHover transition-all disabled:opacity-30 disabled:grayscale transform active:scale-95 shadow-2xl shadow-brand-gold/20">
+                  <button disabled={loading || isSyncing || !config.baseUrl} type="submit" className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-sm uppercase tracking-widest rounded-2xl hover:bg-brand-goldHover transition-all disabled:opacity-30 disabled:grayscale transform active:scale-95 shadow-2xl shadow-brand-gold/20">
                     {loading ? 'Processing Transaction...' : 'Finalize Allocation'}
                   </button>
                 </form>
