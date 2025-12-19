@@ -24,12 +24,24 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   return (
     <div className="min-h-screen bg-brand-navy flex flex-col font-sans text-brand-offWhite selection:bg-brand-gold selection:text-brand-darkNavy">
+      {/* 
+          Requirement: Banner at the very top. 
+          Being part of the flex-col flow, it pushes everything below it.
+      */}
       <ExecutiveAlertBanner />
-      {!hideGlobalNav && <Navbar />}
-      <main className="flex-grow">
-        {children}
-      </main>
-      {!hideGlobalNav && <Footer />}
+      
+      {/* 
+          Wrapper for Navbar and Content. 
+          Making this 'relative' ensures the 'absolute' Navbar inside it 
+          stays at the top of THIS container, not overlapping the Banner.
+      */}
+      <div className="relative flex-grow flex flex-col">
+        {!hideGlobalNav && <Navbar />}
+        <main className="flex-grow">
+          {children}
+        </main>
+        {!hideGlobalNav && <Footer />}
+      </div>
     </div>
   );
 };
@@ -38,8 +50,8 @@ const App: React.FC = () => {
   return (
     <Router>
       {/* 
-          Architectural Fix: ErrorBoundary must be nested inside Router 
-          to allow its fallback UI (GlobalError) to use useNavigate and other routing hooks.
+          Architectural Fix: ErrorBoundary nested inside Router 
+          so GlobalError can access routing hooks (useNavigate).
       */}
       <ErrorBoundary>
         <Layout>
