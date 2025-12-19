@@ -14,6 +14,7 @@ import { WalletPage } from './components/Wallet';
 import { SettingsPage } from './components/Settings';
 import { Unauthorized } from './components/Unauthorized';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { ExecutiveAlertBanner } from './components/ExecutiveAlertBanner';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   
   return (
     <div className="min-h-screen bg-brand-navy flex flex-col font-sans text-brand-offWhite selection:bg-brand-gold selection:text-brand-darkNavy">
+      <ExecutiveAlertBanner />
       {!hideGlobalNav && <Navbar />}
       <main className="flex-grow">
         {children}

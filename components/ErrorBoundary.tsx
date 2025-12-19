@@ -1,9 +1,9 @@
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React from 'react';
 import GlobalError from '../error';
 
 interface Props {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 interface State {
@@ -13,9 +13,9 @@ interface State {
 
 /**
  * ErrorBoundary component that catches runtime errors in the component tree.
- * Explicitly extends Component to ensure inherited properties are recognized.
+ * Explicitly extends React.Component to ensure inherited properties like props and setState are correctly recognized.
  */
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null
@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // Log the error for observability
     console.error("Uncaught institutional error:", error, errorInfo);
   }
@@ -38,7 +38,7 @@ export class ErrorBoundary extends Component<Props, State> {
    * This method is provided as a callback to the fallback error UI.
    */
   public reset = () => {
-    // Fix: Correctly access inherited setState from the Component base class
+    // Fix: Correctly access inherited setState from the React.Component base class
     this.setState({ hasError: false, error: null });
   };
 
