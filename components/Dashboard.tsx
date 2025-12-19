@@ -30,9 +30,10 @@ import {
   Box,
   Wallet,
   BarChart3,
-  Cpu
+  Cpu,
+  Leaf
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
 import { SourcingInsights } from './SourcingInsights';
 import { xanoFetch } from '../lib/xanoClient';
@@ -48,6 +49,7 @@ const getEnv = (key: string): string => {
 };
 
 export const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [config, setConfig] = useState({
     baseUrl: getEnv('NEXT_PUBLIC_XANO_BASE_URL'),
     alexToken: getEnv('NEXT_PUBLIC_ALEX_TOKEN'),
@@ -65,7 +67,6 @@ export const Dashboard: React.FC = () => {
     valuation: ''
   });
 
-  // Requirement 2: Identify Users (Alex/Larry) in Sentry
   useEffect(() => {
     Sentry.setUser({ 
       id: currentUser, 
@@ -170,7 +171,7 @@ export const Dashboard: React.FC = () => {
             <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
               <div className="w-4 h-4 bg-brand-gold"></div>
             </div>
-            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter text-nowrap">Classic Homes</span>
+            <span className="text-white font-sans font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter text-nowrap">Classic Homes</span>
           </Link>
         </div>
 
@@ -222,10 +223,19 @@ export const Dashboard: React.FC = () => {
                 <div className="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></div>
                 <span className="text-[10px] font-bold text-brand-gold uppercase tracking-[0.3em]">C-Suite Cockpit</span>
               </div>
-              <h1 className="text-3xl font-serif font-bold text-white tracking-tight">Executive Procurement Hub</h1>
+              <h1 className="text-3xl font-sans font-bold text-white tracking-tight">Executive Procurement Hub</h1>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 md:gap-8">
+              <div className="bg-brand-darkNavy/80 px-6 py-2.5 rounded-2xl border border-white/10 flex items-center space-x-6">
+                 <div className="text-right">
+                    <p className="text-[9px] font-black text-white/30 uppercase tracking-widest">ESG Score</p>
+                    <p className="text-xl font-sans font-bold text-white leading-none">98.4</p>
+                 </div>
+                 <div className="w-px h-6 bg-white/10"></div>
+                 <Leaf className="text-brand-success" size={18} />
+              </div>
+              
               <GlobalSearch />
               <button onClick={() => setIsConfigModalOpen(true)} className="flex items-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all group">
                 <Settings2 className="w-4 h-4 text-brand-gold group-hover:rotate-90 transition-transform" />
@@ -283,11 +293,6 @@ export const Dashboard: React.FC = () => {
             />
           </div>
 
-          {/* NEW MODULE: Predictive Sourcing Insights */}
-          <div className="p-1">
-             <SourcingInsights />
-          </div>
-
           {/* Operational Workspace */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
@@ -297,7 +302,7 @@ export const Dashboard: React.FC = () => {
                 <div className="px-8 py-7 border-b border-white/5 flex items-center justify-between bg-white/5">
                   <div className="flex items-center space-x-5">
                     <div className={`w-3 h-3 rounded-full ${loading ? 'bg-brand-gold animate-pulse' : 'bg-brand-success shadow-[0_0_15px_rgba(16,185,129,0.5)]'}`}></div>
-                    <h2 className="font-serif font-bold text-2xl text-white">Immutable Procurement Ledger</h2>
+                    <h2 className="font-sans font-bold text-2xl text-white">Immutable Procurement Ledger</h2>
                   </div>
                   <div className="flex items-center space-x-4">
                      <span className={`text-[9px] font-bold text-brand-gold/60 uppercase tracking-[0.2em] ${loading ? 'animate-pulse' : ''}`}>
@@ -314,7 +319,7 @@ export const Dashboard: React.FC = () => {
                     <div className="absolute inset-0 flex items-center justify-center p-12 text-center bg-brand-darkNavy/50 backdrop-blur-sm">
                       <div className="space-y-8 max-w-sm">
                         <Terminal className="w-16 h-16 text-brand-gold mx-auto animate-pulse" />
-                        <h3 className="text-2xl font-serif font-bold text-white">Handshake Pending</h3>
+                        <h3 className="text-2xl font-sans font-bold text-white">Handshake Pending</h3>
                         <p className="text-brand-offWhite/40 text-sm">Waiting for identity bridge configuration. Please provide enterprise API endpoints to begin sourcing.</p>
                         <button onClick={() => setIsConfigModalOpen(true)} className="w-full py-4 bg-brand-gold text-brand-darkNavy font-bold rounded-2xl hover:bg-brand-goldHover transition-all shadow-xl">Secure Initialization</button>
                       </div>
@@ -323,7 +328,7 @@ export const Dashboard: React.FC = () => {
                     <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
                       <div className="space-y-6">
                         <ServerCrash className="w-20 h-20 text-red-400 mx-auto opacity-50" />
-                        <h4 className="text-white font-serif text-xl">Connectivity Disruption</h4>
+                        <h4 className="text-white font-sans text-xl">Connectivity Disruption</h4>
                         <p className="text-red-400/80 font-mono text-xs bg-red-400/5 p-4 rounded-xl border border-red-400/10">{error}</p>
                         <button onClick={() => fetchValuations(currentUser)} className="px-10 py-4 bg-brand-gold text-brand-darkNavy rounded-2xl font-black transition-all hover:scale-105">Retry Secure Auth</button>
                       </div>
@@ -342,13 +347,13 @@ export const Dashboard: React.FC = () => {
                           {loading ? (
                             <TableSkeleton />
                           ) : valuations.length === 0 ? (
-                            <tr><td colSpan={3} className="px-8 py-40 text-center text-brand-offWhite/10 italic font-serif text-2xl">No capital allocated to {currentUser}'s division.</td></tr>
+                            <tr><td colSpan={3} className="px-8 py-40 text-center text-brand-offWhite/10 italic font-sans text-2xl">No capital allocated to {currentUser}'s division.</td></tr>
                           ) : (
-                            valuations.map((v) => (
+                            valuations.map((v, i) => (
                               <tr key={v.id} className="hover:bg-brand-gold/[0.02] transition-colors group">
                                 <td className="px-8 py-7">
                                   <div className="flex flex-col">
-                                    <span className="font-serif font-bold text-lg text-white group-hover:text-brand-gold transition-colors">
+                                    <span className="font-sans font-bold text-lg text-white group-hover:text-brand-gold transition-colors">
                                       {v.name || `PRJ-${new Date().getFullYear()}-${v.id.toString().padStart(3, '0')}`}
                                     </span>
                                     <div className="flex items-center space-x-2 mt-1.5">
@@ -363,10 +368,20 @@ export const Dashboard: React.FC = () => {
                                   </span>
                                 </td>
                                 <td className="px-8 py-7 text-right">
-                                  <div className="inline-flex items-center space-x-2 px-3 py-1.5 bg-brand-success/5 border border-brand-success/20 rounded-lg text-[10px] font-bold text-brand-success uppercase tracking-widest">
-                                    <Activity className="w-3.5 h-3.5" />
-                                    <span>Active Tracking</span>
-                                  </div>
+                                  {i === 0 ? (
+                                    <button 
+                                      onClick={() => navigate('/executive-command')}
+                                      className="inline-flex items-center space-x-3 px-4 py-2 bg-brand-gold text-brand-darkNavy text-[9px] font-black tracking-widest uppercase rounded-lg shadow-lg hover:scale-105 transition-all"
+                                    >
+                                      <Zap size={14} className="fill-brand-darkNavy" />
+                                      <span>AI Resolve</span>
+                                    </button>
+                                  ) : (
+                                    <div className="inline-flex items-center space-x-2 px-3 py-1.5 bg-brand-success/5 border border-brand-success/20 rounded-lg text-[10px] font-bold text-brand-success uppercase tracking-widest">
+                                      <Activity className="w-3.5 h-3.5" />
+                                      <span>Active Tracking</span>
+                                    </div>
+                                  )}
                                 </td>
                               </tr>
                             ))
@@ -386,7 +401,7 @@ export const Dashboard: React.FC = () => {
                 
                 <div className="flex items-center space-x-4 mb-8">
                   <div className="p-4 bg-brand-gold/10 rounded-2xl"><TrendingUp className="w-6 h-6 text-brand-gold" /></div>
-                  <h3 className="font-serif font-bold text-xl text-white">Allocate Capital</h3>
+                  <h3 className="font-sans font-bold text-xl text-white">Allocate Capital</h3>
                 </div>
 
                 <form onSubmit={createValuation} className="space-y-7 relative z-10">
@@ -432,7 +447,7 @@ export const Dashboard: React.FC = () => {
                 <div className="flex items-center space-x-6">
                   <div className="p-5 bg-brand-gold/10 rounded-[28px]"><Terminal className="w-10 h-10 text-brand-gold" /></div>
                   <div>
-                    <h3 className="text-3xl font-serif font-bold text-white tracking-tight">Enterprise Setup Assistant</h3>
+                    <h3 className="text-3xl font-sans font-bold text-white tracking-tight">Enterprise Setup Assistant</h3>
                     <p className="text-brand-offWhite/40 leading-relaxed">Bridge your institutional Xano backend with this executive interface.</p>
                   </div>
                 </div>
@@ -491,7 +506,7 @@ const StatCard: React.FC<{ title: string; value: string; icon: React.ReactNode; 
         {loading ? (
           <div className="h-9 w-32 bg-white/5 rounded-lg animate-pulse mb-3"></div>
         ) : (
-          <p className="text-4xl font-serif font-bold text-white group-hover:text-brand-gold transition-colors duration-500">{value}</p>
+          <p className="text-4xl font-sans font-bold text-white group-hover:text-brand-gold transition-colors duration-500">{value}</p>
         )}
         {loading ? (
           <div className="h-3 w-16 bg-white/5 rounded animate-pulse"></div>
