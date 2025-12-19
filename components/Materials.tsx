@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
@@ -31,8 +32,8 @@ const MATCHED_MATERIALS = [
     matchScore: 94,
     price: 395,
     leadTime: 8,
-    // High-fidelity white marble with gold/warm veining
-    image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=1200&auto=format&fit=crop',
+    // High-fidelity Calacatta Oro: Creamy white with distinct gold and grey veining
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop',
     tags: ['±0.02mm Tol', 'FSC Certified']
   },
   {
@@ -43,8 +44,8 @@ const MATCHED_MATERIALS = [
     matchScore: 91,
     price: 420,
     leadTime: 12,
-    // Striking white marble with thick grey veins
-    image: 'https://images.unsplash.com/photo-1596434300655-e48d3ff3dd5e?q=80&w=1200&auto=format&fit=crop',
+    // High-fidelity Statuario Venato: Bright white with heavy, dramatic grey veins
+    image: 'https://images.unsplash.com/photo-1615529328331-f8917597711f?q=80&w=1200&auto=format&fit=crop',
     tags: ['LEED Platinum', 'Hand-Picked']
   },
   {
@@ -55,8 +56,8 @@ const MATCHED_MATERIALS = [
     matchScore: 86,
     price: 310,
     leadTime: 6,
-    // Complex, dark brecciated marble pattern
-    image: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=1200&auto=format&fit=crop',
+    // High-fidelity Arabescato: White background with dark grey "ovoid" or "clastic" brecciated patterns
+    image: 'https://images.unsplash.com/photo-1590274853856-f22d5ee3d228?q=80&w=1200&auto=format&fit=crop',
     tags: ['Net Zero Log', 'High Gloss']
   }
 ];
@@ -143,7 +144,7 @@ export const Materials: React.FC = () => {
           {/* Results Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {MATCHED_MATERIALS.map((material) => (
-              <div key={material.id} className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full">
+              <div key={material.id} className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full shadow-sm">
                 
                 {/* Visual Preview */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex items-center justify-center">
@@ -159,7 +160,6 @@ export const Materials: React.FC = () => {
                     onLoad={() => handleImageLoad(material.id)}
                     className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ${loadedImages[material.id] ? 'opacity-100' : 'opacity-0'}`} 
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-darkNavy/80 via-transparent to-transparent opacity-40"></div>
                   
                   {/* AI Overlays */}
                   <div className="absolute top-4 right-4 bg-brand-darkNavy/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-brand-gold/30 shadow-xl">
@@ -171,7 +171,8 @@ export const Materials: React.FC = () => {
                     <span className="text-[9px] font-black text-brand-darkNavy uppercase tracking-widest">GENERATE TEXTURE</span>
                   </button>
 
-                  <div className="absolute bottom-4 left-6 flex items-center space-x-2 drop-shadow-md">
+                  {/* Improved bottom bar for provenance */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-darkNavy/90 via-brand-darkNavy/40 to-transparent pt-12 pb-4 px-6 flex items-center space-x-2">
                     <ShieldCheck size={14} className="text-brand-gold" />
                     <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">PROVENANCE VERIFIED</span>
                   </div>
@@ -182,7 +183,7 @@ export const Materials: React.FC = () => {
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xl font-serif font-bold text-brand-darkNavy leading-tight">{material.name}</h3>
-                      <span className="text-[10px] text-brand-mutedGray font-black uppercase tracking-widest">{material.location}</span>
+                      <span className="text-[10px] text-brand-mutedGray font-black uppercase tracking-widest whitespace-nowrap">{material.location}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                        <span className="text-[11px] font-medium text-brand-mutedGray">{material.supplier}</span>
@@ -205,11 +206,11 @@ export const Materials: React.FC = () => {
                   </div>
 
                   <div className="space-y-4 mt-auto">
-                    <button className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md transition-all flex items-center justify-center space-x-3 shadow-lg shadow-brand-gold/10">
+                    <button className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md transition-all flex items-center justify-center space-x-3 shadow-lg shadow-brand-gold/10 group/vis">
                       <span>Proceed to Visualization</span>
-                      <Eye size={16} />
+                      <Eye size={16} className="group-hover/vis:scale-110 transition-transform" />
                     </button>
-                    <button className="w-full bg-white border border-brand-darkNavy/10 text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md hover:bg-slate-50 transition-all flex items-center justify-center space-x-3">
+                    <button className="w-full bg-white border border-brand-darkNavy/10 text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md hover:bg-slate-50 transition-all flex items-center justify-center space-x-3 shadow-sm">
                       <History size={16} className="text-brand-mutedGray" />
                       <span>View Audit Chain</span>
                     </button>
