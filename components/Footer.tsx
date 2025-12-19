@@ -6,6 +6,8 @@ import {
   ShieldCheck, 
   Linkedin, 
   Twitter, 
+  Youtube,
+  Instagram,
   MapPin,
   Phone
 } from 'lucide-react';
@@ -115,6 +117,12 @@ export const Footer: React.FC = () => {
                  </a>
                  <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener noreferrer" className="text-brand-offWhite/50 hover:text-brand-gold transition-colors">
                     <Twitter className="w-5 h-5" />
+                 </a>
+                 <a href="https://youtube.com" aria-label="YouTube" target="_blank" rel="noopener noreferrer" className="text-brand-offWhite/50 hover:text-brand-gold transition-colors">
+                    <Youtube className="w-5 h-5" />
+                 </a>
+                 <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer" className="text-brand-offWhite/50 hover:text-brand-gold transition-colors">
+                    <Instagram className="w-5 h-5" />
                  </a>
                </div>
             </div>
