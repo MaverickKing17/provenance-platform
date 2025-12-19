@@ -36,9 +36,9 @@ export const Hero: React.FC = () => {
             </div>
             
             <div className="space-y-4">
-              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-sans font-bold text-white leading-[1.05] tracking-tight">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-sans font-black text-white leading-[1.05] tracking-tight">
                 The Global <br />
-                <span className="text-brand-gold italic font-serif">Marketplace</span><br />
+                <span className="text-brand-gold">Marketplace</span><br />
                 <span className="text-white/95">for Artisans.</span>
               </h1>
             </div>
