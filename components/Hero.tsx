@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShieldCheck, Globe, Lock, Search, Scan, Database, Activity, CheckCircle2, Tablet, Cpu, Layers } from 'lucide-react';
+import { ShieldCheck, Globe, Lock, Search, Scan, Database, Activity, CheckCircle2, Tablet, Cpu, Layers, Fingerprint, ShieldAlert, Zap } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -185,31 +185,60 @@ export const Hero: React.FC = () => {
                  </div>
               </div>
 
-              {/* FLOATING COMMAND TABLET */}
-              <div className="absolute -bottom-16 -left-16 z-50 transform -rotate-12 translate-z-[80px] group/tablet transition-all duration-700 hover:-rotate-6 hover:scale-105">
-                 <div className="bg-[#111827]/95 border border-white/10 rounded-[2rem] p-8 w-[320px] shadow-[0_50px_100px_rgba(0,0,0,0.9)] backdrop-blur-3xl">
-                    <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                       <Tablet size={20} className="text-brand-gold" />
+              {/* ENHANCED 3D FLOATING COMMAND TABLET: INSTITUTIONAL AUDIT BRIDGE */}
+              <div className="absolute -bottom-16 -left-16 z-50 transform -rotate-12 translate-z-[120px] group/tablet transition-all duration-700 hover:-rotate-6 hover:scale-110 hover:translate-z-[150px]">
+                 <div className="bg-[#0A1628]/95 border border-brand-gold/30 rounded-[2.5rem] p-10 w-[360px] shadow-[0_60px_120px_rgba(0,0,0,1)] backdrop-blur-3xl overflow-hidden relative">
+                    
+                    {/* Animated Scanning Light Effect */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-40 animate-[scan_3s_linear_infinite] blur-sm"></div>
+                    
+                    <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6 relative z-10">
+                       <div className="flex items-center space-x-4">
+                          <div className="p-2.5 bg-brand-gold/10 rounded-xl">
+                             <ShieldCheck size={22} className="text-brand-gold" />
+                          </div>
+                          <div>
+                             <span className="block text-[10px] font-black text-brand-gold uppercase tracking-[0.25em] leading-none mb-1">Audit Node</span>
+                             <span className="block text-[11px] font-sans font-bold text-white uppercase tracking-widest">Institutional Bridge</span>
+                          </div>
+                       </div>
                        <div className="flex space-x-2">
-                          <div className="w-2 h-2 rounded-full bg-red-500/40 animate-pulse"></div>
-                          <div className="w-2 h-2 rounded-full bg-brand-gold/40 animate-pulse delay-75"></div>
-                          <div className="w-2 h-2 rounded-full bg-brand-success shadow-[0_0_10px_#10B981]"></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-brand-gold/30 animate-pulse"></div>
+                          <div className="w-2.5 h-2.5 rounded-full bg-brand-success shadow-[0_0_15px_#10B981]"></div>
                        </div>
                     </div>
-                    <div className="space-y-6">
-                       <div className="flex justify-between items-center">
-                          <span className="text-[10px] font-black text-brand-offWhite/30 uppercase tracking-[0.2em]">Procurement Stream</span>
-                          <span className="text-[10px] font-mono text-brand-gold">SECURE_SYNC</span>
+
+                    <div className="space-y-8 relative z-10">
+                       <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5">
+                          <div>
+                             <span className="block text-[9px] font-black text-brand-offWhite/30 uppercase tracking-[0.2em] mb-1">Material Integrity</span>
+                             <span className="text-sm font-sans font-bold text-white uppercase tracking-normal">99.8% VERIFIED</span>
+                          </div>
+                          <Fingerprint size={24} className="text-brand-gold/40" />
                        </div>
-                       <div className="space-y-2">
-                          <div className="h-1.5 bg-white/5 rounded-full"></div>
-                          <div className="h-1.5 bg-white/5 rounded-full w-2/3"></div>
+
+                       <div className="space-y-4">
+                          <div className="flex justify-between items-center text-[10px] font-black text-brand-offWhite/40 uppercase tracking-[0.25em]">
+                             <span>Real-time Ledger Hash</span>
+                             <span className="text-brand-gold/60 font-mono">SECURE_SYNC_V4</span>
+                          </div>
+                          <div className="h-1.5 bg-white/5 rounded-full overflow-hidden flex space-x-1 p-0.5">
+                             <div className="h-full bg-brand-gold/80 w-1/3 rounded-full animate-pulse"></div>
+                             <div className="h-full bg-brand-gold/40 w-1/4 rounded-full"></div>
+                             <div className="h-full bg-brand-gold w-1/5 rounded-full animate-pulse delay-75"></div>
+                          </div>
                        </div>
-                       <button className="w-full py-4 bg-brand-gold text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:bg-white transition-all shadow-xl shadow-brand-gold/10">
-                          Confirm Project Hash
+
+                       <button className="w-full py-5 bg-brand-gold text-brand-darkNavy font-black text-[12px] uppercase tracking-[0.3em] rounded-2xl hover:bg-white hover:scale-[1.02] transition-all duration-300 shadow-[0_20px_40px_rgba(212,175,55,0.15)] flex items-center justify-center space-x-3 group/btn">
+                          <Zap size={18} className="fill-brand-darkNavy group-hover/btn:scale-125 transition-transform" />
+                          <span>Finalize Project Audit</span>
                        </button>
                     </div>
                  </div>
+                 
+                 {/* 3D "Shadow" Depth Effect for the box base */}
+                 <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/40 blur-2xl rounded-full -z-10"></div>
               </div>
 
             </div>
@@ -244,6 +273,16 @@ export const Hero: React.FC = () => {
             </div>
          </div>
       </div>
+
+      <style>{`
+        @keyframes scan {
+          0% { transform: translateY(-50px) scaleX(1); opacity: 0; }
+          20% { opacity: 0.4; }
+          50% { transform: translateY(180px) scaleX(1.2); opacity: 0.6; }
+          80% { opacity: 0.4; }
+          100% { transform: translateY(350px) scaleX(1); opacity: 0; }
+        }
+      `}</style>
 
     </section>
   );

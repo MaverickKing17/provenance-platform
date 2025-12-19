@@ -1,13 +1,12 @@
-
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
-// Fix: Defined Props interface for strict type checking
+// Props interface for strict type checking
 interface Props {
   children?: ReactNode;
 }
 
-// Fix: Refined State interface to match the signature expected by the fallback UI and React's error boundary requirements
+// State interface to match the signature expected by the fallback UI and React's error boundary requirements
 interface State {
   hasError: boolean;
   error: (Error & { digest?: string }) | null;
@@ -17,13 +16,16 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Explicitly extending React.Component to ensure props and setState are correctly inherited and recognized by the type checker.
-export class ErrorBoundary extends React.Component<Props, State> {
-  // Fix: State initialization as a class property ensures it is correctly recognized as part of the component's state.
-  public state: State = {
-    hasError: false,
-    error: null
-  };
+// Fix: Extending Component directly to resolve issues with property inheritance recognition in some environments
+export class ErrorBoundary extends Component<Props, State> {
+  // Fix: Initializing state in the constructor to guarantee proper base class initialization
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null
+    };
+  }
 
   /**
    * Static lifecycle method used to update state after an error has been caught.
@@ -45,19 +47,18 @@ export class ErrorBoundary extends React.Component<Props, State> {
    * Resets the error boundary state to allow re-rendering of children.
    * This is passed as a callback to the GlobalError component.
    */
-  // Fix: Defined as an arrow function to preserve 'this' context for calling setState, which is now available via React.Component.
   public reset = () => {
+    // Fix: Explicitly calling this.setState inherited from Component
     this.setState({ hasError: false, error: null });
   };
 
   public render() {
-    // Fix: Accessing state from the instance to check for errors.
+    // Fix: Using this.state and this.props inherited from Component
     if (this.state.hasError && this.state.error) {
       // If an error is caught, render the specialized fallback UI (GlobalError)
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
-    // Fix: Accessing children from props which are now correctly inherited from React.Component.
     return this.props.children;
   }
 }
