@@ -32,6 +32,7 @@ import {
 import { Link } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
 import { SourcingInsights } from './SourcingInsights';
+import { xanoFetch } from '../lib/xanoClient';
 
 const getEnv = (key: string): string => {
   if (typeof window !== 'undefined') {
@@ -84,24 +85,16 @@ export const Dashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${config.baseUrl}/valuation`, {
+      const data = await xanoFetch(`${config.baseUrl}/valuation`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       });
       
-      if (!response.ok) {
-        if (response.status === 401) throw new Error('Identity Verification Failed: Invalid Token');
-        throw new Error(`Enterprise API Fault: ${response.statusText}`);
-      }
-      
-      const data = await response.json();
       setValuations(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ledger Synchronization Failed');
     } finally {
-      // Simulate a slightly longer sync for visual smoothness of skeletons
       setTimeout(() => setLoading(false), 800);
     }
   };
@@ -112,19 +105,16 @@ export const Dashboard: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${config.baseUrl}/create_valuation`, {
+      await xanoFetch(`${config.baseUrl}/create_valuation`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${TOKENS[currentUser]}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${TOKENS[currentUser]}`
         },
         body: JSON.stringify({
           name: formData.name || `PRJ-${new Date().getFullYear()}-${Math.floor(Math.random() * 900) + 100}`,
           valuation: formData.valuation
         })
       });
-      
-      if (!response.ok) throw new Error('Transaction Rejected: Compliance Check Failed');
       
       setFormData({ name: '', valuation: '' });
       fetchValuations(currentUser);

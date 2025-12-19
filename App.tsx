@@ -12,11 +12,13 @@ import { Orders } from './components/Orders';
 import { Analytics } from './components/Analytics';
 import { WalletPage } from './components/Wallet';
 import { SettingsPage } from './components/Settings';
+import { Unauthorized } from './components/Unauthorized';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   // Hide global navbar on specialized internal workspace views for C-Suite consistency
-  const internalRoutes = ['/projects', '/materials', '/orders', '/network', '/analytics', '/sourcing-hub', '/wallet', '/settings'];
+  const internalRoutes = ['/projects', '/materials', '/orders', '/network', '/analytics', '/sourcing-hub', '/wallet', '/settings', '/unauthorized'];
   const hideGlobalNav = internalRoutes.includes(location.pathname);
   
   return (
@@ -32,22 +34,25 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Hero />} />
-          <Route path="/sourcing-hub" element={<Dashboard />} />
-          <Route path="/network" element={<Network />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/materials" element={<Materials />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/wallet" element={<WalletPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/:slug" element={<GenericPage />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Hero />} />
+            <Route path="/sourcing-hub" element={<Dashboard />} />
+            <Route path="/network" element={<Network />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/materials" element={<Materials />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/wallet" element={<WalletPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/:slug" element={<GenericPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ErrorBoundary>
   );
 };
 
