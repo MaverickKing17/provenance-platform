@@ -86,38 +86,38 @@ export const ExecutiveAlertBanner: React.FC = () => {
   if (isDismissed) return null;
 
   return (
-    <div className="relative z-[100] w-full bg-[#0A1628] border-b border-white/10 py-3 px-6 shadow-2xl overflow-hidden">
+    <div className="relative z-[100] w-full bg-[#0A1628] border-b border-white/10 py-4 px-8 shadow-2xl overflow-hidden">
       <div className="absolute inset-0 bg-brand-gold/[0.03] animate-pulse pointer-events-none"></div>
       
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 relative z-10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-10 relative z-10">
         
-        <div className="flex items-center space-x-6 flex-grow min-w-0">
-          <div className="flex items-center space-x-2.5 shrink-0">
+        <div className="flex items-center space-x-8 flex-grow min-w-0">
+          <div className="flex items-center space-x-4 shrink-0">
             <div className="relative flex items-center justify-center">
-              <Activity size={16} className={`${isScanning ? 'text-brand-gold animate-spin' : 'text-brand-success'} transition-colors`} />
+              <Activity size={18} className={`${isScanning ? 'text-brand-gold animate-spin' : 'text-brand-success'} transition-colors`} />
             </div>
-            <span className="text-xs font-semibold text-white/90 tracking-wide whitespace-nowrap">
+            <span className="text-sm font-bold text-white tracking-normal whitespace-nowrap">
               {isScanning ? 'Syncing Network...' : 'STRATEGIC FEED ACTIVE'}
             </span>
           </div>
 
-          <div className="h-4 w-px bg-white/20 shrink-0"></div>
+          <div className="h-5 w-px bg-white/20 shrink-0"></div>
 
           <div className="flex-grow overflow-hidden relative">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-5">
               {riskItem ? (
-                <div className="flex items-center space-x-3 animate-in slide-in-from-left duration-700">
-                  <AlertTriangle size={16} className="text-brand-gold shrink-0" />
-                  <p className="text-sm font-medium text-white tracking-normal truncate">
+                <div className="flex items-center space-x-4 animate-in slide-in-from-left duration-700">
+                  <AlertTriangle size={18} className="text-brand-gold shrink-0" />
+                  <p className="text-base font-medium text-white tracking-tight truncate">
                     <span className="text-brand-gold font-bold mr-2 uppercase tracking-wide">Volatility Alert:</span>
-                    <span className="opacity-100">{riskItem.material_name} lead period extended to {riskItem.lead_time_days} days for </span>
+                    <span className="opacity-90">{riskItem.material_name} lead period extended to {riskItem.lead_time_days} days for </span>
                     <span className="text-brand-gold font-bold underline decoration-brand-gold/30">{riskItem.project_name}</span>
                   </p>
                 </div>
               ) : (
-                <div className="flex items-center space-x-3 text-brand-success animate-in fade-in duration-1000">
-                  <ShieldCheck size={16} />
-                  <p className="text-xs font-bold uppercase tracking-[0.15em]">
+                <div className="flex items-center space-x-4 text-brand-success animate-in fade-in duration-1000">
+                  <ShieldCheck size={18} />
+                  <p className="text-sm font-bold uppercase tracking-widest">
                     Supply Chain Perimeter Secured • 0 Anomalies • Global Hubs Operational
                   </p>
                 </div>
@@ -126,17 +126,17 @@ export const ExecutiveAlertBanner: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-6 shrink-0 border-l border-white/10 pl-6">
-          <button className="flex items-center space-x-2 group">
-            <Zap size={14} className="text-brand-gold group-hover:scale-125 transition-transform" />
-            <span className="text-xs font-bold text-brand-gold uppercase tracking-wider">Mitigate</span>
+        <div className="flex items-center space-x-8 shrink-0 border-l border-white/10 pl-8">
+          <button className="flex items-center space-x-3 group bg-brand-gold/10 px-4 py-2 rounded-lg border border-brand-gold/20 hover:bg-brand-gold hover:text-brand-darkNavy transition-all">
+            <Zap size={16} className="text-brand-gold group-hover:text-brand-darkNavy transition-colors" />
+            <span className="text-xs font-bold uppercase tracking-widest">Mitigate Risk</span>
           </button>
           <button 
             onClick={handleDismiss}
-            className="p-1.5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all"
+            className="p-2 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all"
             aria-label="Dismiss Alert"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
       </div>

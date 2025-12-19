@@ -48,19 +48,21 @@ export const Footer: React.FC = () => {
           
           {/* Column 1: Branding */}
           <div className="space-y-6">
-            <Link to="/" className="flex items-center space-x-2 text-white group w-fit">
-              <Building2 className="w-8 h-8 stroke-1 text-brand-gold" />
-              <span className="text-2xl font-serif font-bold tracking-tight">Classic Homes</span>
+            <Link to="/" className="flex items-center space-x-3 text-white group w-fit">
+              <div className="w-10 h-10 border-2 border-brand-gold flex items-center justify-center rounded-sm">
+                 <div className="w-5 h-5 bg-brand-gold"></div>
+              </div>
+              <span className="text-2xl font-sans font-bold tracking-tight uppercase">Classic Homes</span>
             </Link>
             
-            <p className="text-brand-offWhite/90 font-medium tracking-wide">
+            <p className="text-brand-offWhite/70 font-medium tracking-wide">
               Verified Provenance. <br />Digital Certainty.
             </p>
 
             {/* SOC 2 Badge Placeholder */}
-            <div className="inline-flex items-center px-3 py-2 border border-white/15 rounded bg-white/5 space-x-2">
+            <div className="inline-flex items-center px-4 py-2 border border-white/15 rounded bg-white/5 space-x-2">
                 <ShieldCheck className="w-5 h-5 text-brand-gold" />
-                <span className="text-xs font-bold tracking-widest text-brand-offWhite">SOC 2 TYPE II COMPLIANT</span>
+                <span className="text-[10px] font-bold tracking-widest text-brand-offWhite">SOC 2 TYPE II COMPLIANT</span>
             </div>
 
             {/* Address / Contact Placeholder */}
@@ -78,32 +80,32 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Platform */}
           <div className="lg:pl-8">
-            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Platform</h3>
-            <ul className="space-y-4">
-              <li><Link to="/" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Home</Link></li>
-              <li><Link to="/about-us" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">About Us</Link></li>
-              <li><Link to="/careers" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Careers</Link></li>
-              <li><Link to="/partners" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Partners</Link></li>
+            <h3 className="text-xl font-sans font-bold text-white mb-8 tracking-tight">Platform</h3>
+            <ul className="space-y-5">
+              <li><Link to="/" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Home</Link></li>
+              <li><Link to="/about-us" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">About Us</Link></li>
+              <li><Link to="/careers" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Careers</Link></li>
+              <li><Link to="/partners" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Partners</Link></li>
             </ul>
           </div>
 
           {/* Column 3: Insights */}
           <div>
-            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Insights</h3>
-            <ul className="space-y-4">
-              <li><Link to="/blog" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">The Blueprint Hub</Link></li>
-              <li><Link to="/case-studies" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Case Studies</Link></li>
-              <li><Link to="/help" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">FAQ / Help Center</Link></li>
+            <h3 className="text-xl font-sans font-bold text-white mb-8 tracking-tight">Insights</h3>
+            <ul className="space-y-5">
+              <li><Link to="/blog" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">The Blueprint Hub</Link></li>
+              <li><Link to="/case-studies" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Case Studies</Link></li>
+              <li><Link to="/help" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">FAQ / Help Center</Link></li>
             </ul>
           </div>
 
           {/* Column 4: Trust */}
           <div className="flex flex-col h-full">
-            <h3 className="text-lg font-serif font-bold text-white mb-6 tracking-wide">Trust</h3>
-            <ul className="space-y-4 mb-8">
-              <li><Link to="/privacy-policy" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Terms of Service</Link></li>
-              <li><Link to="/cookies" className="text-brand-offWhite/70 hover:text-brand-gold transition-colors text-sm">Cookie Preferences</Link></li>
+            <h3 className="text-xl font-sans font-bold text-white mb-8 tracking-tight">Trust</h3>
+            <ul className="space-y-5 mb-8">
+              <li><Link to="/privacy-policy" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Terms of Service</Link></li>
+              <li><Link to="/cookies" className="text-brand-offWhite/60 hover:text-brand-gold transition-colors text-sm font-medium">Cookie Preferences</Link></li>
             </ul>
             
             <div className="mt-auto pt-6 border-t border-white/10 md:border-none md:pt-0">
@@ -123,7 +125,7 @@ export const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-offWhite/40">
             <p>&copy; {new Date().getFullYear()} Classic Homes Marketplace Inc. All rights reserved.</p>
-            <p>Designed for Enterprise Excellence.</p>
+            <p className="font-medium tracking-widest uppercase text-[10px]">Designed for Enterprise Excellence</p>
         </div>
       </div>
     </footer>
