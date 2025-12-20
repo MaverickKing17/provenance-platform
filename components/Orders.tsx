@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, 
   Search, Filter, FileText, MoreHorizontal, AlertCircle, Clock, ShieldCheck, Globe, TrendingUp, CheckCircle2, Lock, MessageSquare
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRisk } from '../context/RiskContext';
 
 const ORDERS_DATA = [
   {
@@ -61,6 +63,8 @@ const ORDERS_DATA = [
 ];
 
 export const Orders: React.FC = () => {
+  const { isLocked } = useRisk();
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
@@ -119,7 +123,14 @@ export const Orders: React.FC = () => {
                       <td className="px-8 py-6 flex flex-col"><span className="text-sm font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{order.id}</span><span className="text-[11px] text-brand-mutedGray">{order.project}</span></td>
                       <td className="px-8 py-6"><div className="flex flex-col"><span className="text-xs font-bold text-brand-darkNavy">{order.supplier}</span><span className="text-[11px] text-brand-mutedGray italic">{order.item}</span></div></td>
                       <td className="px-8 py-6"><div className="space-y-2 max-w-[180px]"><div className="flex justify-between items-center text-[10px] font-bold"><span className="text-brand-darkNavy uppercase">{order.stage}</span><span className="text-brand-mutedGray">{order.progress}%</span></div><div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-brand-navy rounded-full transition-all duration-1000" style={{ width: `${order.progress}%` }}></div></div><div className="flex items-center space-x-1.5 text-[9px] text-brand-mutedGray"><Clock size={10} /><span>Next: {order.nextMilestone}</span></div></div></td>
-                      <td className="px-8 py-6"><div className={`inline-flex px-3 py-1.5 rounded-md text-[9px] font-black tracking-widest border ${order.financialStatus === 'ESCROW LOCKED' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 border-slate-200 text-brand-darkNavy'}`}>{order.financialStatus}</div></td>
+                      <td className="px-8 py-6">
+                        <button 
+                          disabled={isLocked}
+                          className={`px-3 py-1.5 rounded-md text-[9px] font-black tracking-widest border transition-all ${isLocked ? 'bg-red-500/10 border-red-500/20 text-red-500' : order.financialStatus === 'ESCROW LOCKED' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 border-slate-200 text-brand-darkNavy'}`}
+                        >
+                          {isLocked ? 'LOCKED: RESOLVE RISK' : order.financialStatus}
+                        </button>
+                      </td>
                       <td className="px-8 py-6"><div className={`flex items-center space-x-2 text-[10px] font-black tracking-widest uppercase ${order.riskColor}`}><div className="w-1.5 h-1.5 rounded-full bg-current"></div><span>{order.risk}</span></div></td>
                       <td className="px-8 py-6 text-right font-bold text-sm text-brand-darkNavy">${order.value.toLocaleString()}</td>
                       <td className="px-8 py-6 text-right"><button className="text-slate-300 hover:text-brand-darkNavy p-1"><MoreHorizontal size={20} /></button></td>

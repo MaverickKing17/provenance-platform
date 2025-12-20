@@ -18,10 +18,10 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { ExecutiveAlertBanner } from './components/ExecutiveAlertBanner';
 import { ExecutiveCommandCenter } from './components/ExecutiveCommandCenter';
 import { ExecutiveReport } from './components/ExecutiveReport';
+import { RiskProvider } from './context/RiskContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  // Hide global navbar on specialized internal workspace views for C-Suite consistency
   const internalRoutes = [
     '/projects', 
     '/materials', 
@@ -55,25 +55,27 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const App: React.FC = () => {
   return (
     <Router>
-      <ErrorBoundary>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Hero />} />
-            <Route path="/sourcing-hub" element={<Dashboard />} />
-            <Route path="/network" element={<Network />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/materials" element={<Materials />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/wallet" element={<WalletPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route path="/executive-command" element={<ExecutiveCommandCenter />} />
-            <Route path="/executive-report" element={<ExecutiveReport />} />
-            <Route path="/:slug" element={<GenericPage />} />
-          </Routes>
-        </Layout>
-      </ErrorBoundary>
+      <RiskProvider>
+        <ErrorBoundary>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Hero />} />
+              <Route path="/sourcing-hub" element={<Dashboard />} />
+              <Route path="/network" element={<Network />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/materials" element={<Materials />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/wallet" element={<WalletPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="/executive-command" element={<ExecutiveCommandCenter />} />
+              <Route path="/executive-report" element={<ExecutiveReport />} />
+              <Route path="/:slug" element={<GenericPage />} />
+            </Routes>
+          </Layout>
+        </ErrorBoundary>
+      </RiskProvider>
     </Router>
   );
 };

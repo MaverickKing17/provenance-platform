@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, 
-  ArrowUpRight, ArrowDownRight, ShieldCheck, Lock, Globe, TrendingUp, MessageSquare, CreditCard, History
+  ArrowUpRight, ArrowDownRight, ShieldCheck, Lock, Globe, TrendingUp, MessageSquare, CreditCard, History, ShieldAlert
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRisk } from '../context/RiskContext';
 
 export const WalletPage: React.FC = () => {
+  const { tier, isLocked } = useRisk();
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
@@ -41,10 +45,27 @@ export const WalletPage: React.FC = () => {
             <h1 className="text-3xl font-serif font-bold text-brand-darkNavy tracking-tight">Institutional Wallet</h1>
             <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]"><span>Capital Reserves</span><span className="w-1 h-1 bg-brand-gold rounded-full"></span><span className="text-brand-success">Liquidity Active</span></div>
           </div>
-          <button className="px-6 py-3 bg-brand-gold text-brand-darkNavy rounded-lg text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10">Add Capital</button>
+          <button 
+            disabled={isLocked}
+            className={`px-6 py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all shadow-lg ${isLocked ? 'bg-red-500/20 text-red-500 cursor-not-allowed border border-red-500/30' : 'bg-brand-gold text-brand-darkNavy hover:bg-brand-goldHover shadow-brand-gold/10'}`}
+          >
+            {isLocked ? 'LOCKED: Resolve Critical Risk' : 'Add Capital'}
+          </button>
         </div>
 
         <div className="px-12 py-10 space-y-10">
+          {isLocked && (
+            <div className="bg-red-500/5 border border-red-500/20 p-8 rounded-2xl flex items-center space-x-6 animate-pulse">
+              <ShieldAlert className="text-red-500 w-10 h-10" />
+              <div>
+                <h4 className="text-lg font-black text-red-500 uppercase tracking-tight">Financial Kill-Switch Active</h4>
+                <p className="text-xs text-red-400 font-bold uppercase tracking-widest mt-1">
+                  Capital movements are suspended due to a Tier 1 Supply Chain Emergency. Resolve risk nodes in Command Center to proceed.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-brand-darkNavy rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden group">
               <p className="text-[10px] font-black text-brand-offWhite/40 uppercase tracking-[0.25em] mb-4">Total Liquidity</p>
@@ -69,13 +90,6 @@ export const WalletPage: React.FC = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
-
-        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 opacity-40">
-            <div className="flex items-center space-x-3"><Lock size={14} className="text-brand-gold" /><span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span></div>
-            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]"><span className="flex items-center space-x-2"><Globe size={14} /> <span>SWIFT / SEPA</span></span><span className="flex items-center space-x-2"><TrendingUp size={14} /> <span>Corporate Treasury</span></span><span className="flex items-center space-x-2"><ShieldCheck size={14} /> <span>Audit Ready</span></span></div>
           </div>
         </div>
       </main>

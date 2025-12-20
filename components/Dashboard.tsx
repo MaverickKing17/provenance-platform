@@ -30,6 +30,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
 import { xanoFetch } from '../lib/xanoClient';
+import { useRisk } from '../context/RiskContext';
 
 const getEnv = (key: string): string => {
   if (typeof window !== 'undefined') {
@@ -43,6 +44,7 @@ const getEnv = (key: string): string => {
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { tier, color } = useRisk();
   const [config, setConfig] = useState({
     baseUrl: getEnv('NEXT_PUBLIC_XANO_BASE_URL'),
     alexToken: getEnv('NEXT_PUBLIC_ALEX_TOKEN'),
@@ -129,6 +131,9 @@ export const Dashboard: React.FC = () => {
     if (config.baseUrl) { fetchValuations(currentUser); } else { setLoading(false); }
   }, [currentUser, config.baseUrl]);
 
+  // Requirement: Risk Pulse for Tier 3 or higher
+  const showPulse = tier <= 3;
+
   return (
     <div className="flex h-screen bg-brand-darkNavy overflow-hidden font-sans">
       
@@ -145,7 +150,13 @@ export const Dashboard: React.FC = () => {
 
         <nav className="flex-grow px-4 space-y-1">
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active />
-          <NavItem icon={<Cpu size={18} className="text-brand-gold" />} label="Command Center" to="/executive-command" special />
+          <NavItem 
+            icon={<Cpu size={18} className={showPulse ? "animate-pulse" : "text-brand-gold"} />} 
+            label="Command Center" 
+            to="/executive-command" 
+            special 
+            style={showPulse ? { boxShadow: `0 0 20px ${color}44`, borderColor: color } : {}}
+          />
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
           <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
@@ -184,7 +195,6 @@ export const Dashboard: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-6 md:gap-10">
-              {/* ENHANCED ESG SCORE BLOCK */}
               <div className="bg-brand-darkNavy/80 px-8 py-4 rounded-[1.5rem] border border-brand-gold/20 flex items-center space-x-8 shadow-2xl">
                  <div className="text-right">
                     <p className="text-xs font-black text-white/50 uppercase tracking-[0.15em] mb-1">ESG Score</p>
@@ -388,8 +398,8 @@ export const Dashboard: React.FC = () => {
   );
 };
 
-const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string; special?: boolean }> = ({ icon, label, active, to, special }) => (
-  <Link to={to || '#'} className={`flex items-center space-x-4 px-5 py-4 rounded-xl transition-all duration-300 group ${active ? 'bg-brand-gold text-brand-darkNavy shadow-xl shadow-brand-gold/10 scale-[1.02]' : special ? 'bg-brand-gold/10 border border-brand-gold/30 text-brand-gold hover:bg-brand-gold hover:text-brand-darkNavy' : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'}`}>
+const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string; special?: boolean; style?: React.CSSProperties }> = ({ icon, label, active, to, special, style }) => (
+  <Link to={to || '#'} style={style} className={`flex items-center space-x-4 px-5 py-4 rounded-xl transition-all duration-300 group ${active ? 'bg-brand-gold text-brand-darkNavy shadow-xl shadow-brand-gold/10 scale-[1.02]' : special ? 'bg-brand-gold/10 border border-brand-gold/30 text-brand-gold hover:bg-brand-gold hover:text-brand-darkNavy' : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'}`}>
     <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'} transition-colors`}>{icon}</div>
     <span className="text-xs font-black uppercase tracking-widest">{label}</span>
   </Link>
