@@ -33,7 +33,8 @@ import {
   Cpu,
   Lock,
   MapPin,
-  Clock
+  Clock,
+  ShieldAlert
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleGenAI } from "@google/genai";
@@ -186,16 +187,16 @@ export const Materials: React.FC = () => {
   const activeAuditMaterial = materials.find(m => m.id === activeAuditId);
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
+    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       
       {/* SIDEBAR */}
-      <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
+      <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20 shrink-0">
         <div className="p-8">
           <Link to="/" className="flex flex-col space-y-1">
             <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
               <div className="w-4 h-4 bg-brand-gold"></div>
             </div>
-            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase">Classic Homes</span>
+            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter">Classic Homes</span>
           </Link>
         </div>
         <nav className="flex-grow px-4 space-y-1">
@@ -212,7 +213,7 @@ export const Materials: React.FC = () => {
           <div className="flex items-center space-x-3 p-2 rounded-xl">
             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full border border-brand-gold/50 shadow-lg" alt="V. Sterling" />
             <div className="flex flex-col min-w-0">
-              <span className="text-white text-xs font-bold">V. Sterling</span>
+              <span className="text-white text-xs font-bold truncate">V. Sterling</span>
               <span className="text-[10px] text-brand-offWhite/40 uppercase tracking-widest">Chief Procurement</span>
             </div>
           </div>
@@ -220,12 +221,12 @@ export const Materials: React.FC = () => {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-grow flex flex-col overflow-y-auto">
+      <main className="flex-grow flex flex-col overflow-y-auto relative">
         <div className="max-w-7xl mx-auto w-full px-12 py-12">
           
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12 animate-in fade-in slide-in-from-top-4 duration-700">
             <div className="space-y-2">
-              <Link to="/projects" className="flex items-center space-x-2 text-[10px] font-bold text-brand-mutedGray uppercase tracking-[0.2em] hover:text-brand-gold transition-colors mb-4">
+              <Link to="/projects" className="flex items-center space-x-2 text-[10px] font-black text-brand-mutedGray uppercase tracking-[0.2em] hover:text-brand-gold transition-colors mb-4">
                 <ArrowLeft size={12} />
                 <span>Back to Specs</span>
               </Link>
@@ -238,7 +239,7 @@ export const Materials: React.FC = () => {
                 <select 
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white border border-brand-navy/10 rounded-md pl-10 pr-10 py-2.5 text-xs font-bold text-brand-darkNavy appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all shadow-sm"
+                  className="bg-white border border-brand-navy/10 rounded-xl pl-10 pr-10 py-3 text-xs font-black text-brand-darkNavy appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all shadow-sm uppercase tracking-widest"
                 >
                   <option>Best Match</option>
                   <option>Lowest Risk</option>
@@ -250,14 +251,14 @@ export const Materials: React.FC = () => {
               </div>
               <button 
                 onClick={() => setIsCustomModalOpen(true)}
-                className="flex items-center space-x-2 px-6 py-2.5 bg-brand-gold text-brand-darkNavy text-xs font-black uppercase tracking-widest rounded-md hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 transform active:scale-95"
+                className="flex items-center space-x-2 px-8 py-3.5 bg-brand-gold text-brand-darkNavy text-xs font-black uppercase tracking-widest rounded-xl hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 transform active:scale-95"
               >
                 <Sparkles size={14} />
                 <span>Generate Custom</span>
               </button>
               <button 
                 onClick={() => setIsFilterOpen(true)}
-                className="flex items-center space-x-2 px-5 py-2.5 bg-white border border-brand-navy/10 rounded-md text-xs font-bold text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm relative"
+                className="flex items-center space-x-2 px-5 py-3.5 bg-white border border-brand-navy/10 rounded-xl text-xs font-black text-brand-darkNavy hover:bg-slate-50 transition-all shadow-sm relative uppercase tracking-widest"
               >
                 <FilterIcon size={14} />
                 <span>Filter Results</span>
@@ -270,7 +271,7 @@ export const Materials: React.FC = () => {
             {filteredAndSortedMaterials.map((material, idx) => (
               <div 
                 key={material.id} 
-                className="bg-white border border-brand-navy/5 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full shadow-sm animate-in fade-in slide-in-from-bottom-8"
+                className="bg-white border border-brand-navy/5 rounded-[2.5rem] overflow-hidden hover:shadow-2xl transition-all duration-700 group flex flex-col h-full shadow-sm animate-in fade-in slide-in-from-bottom-8"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex items-center justify-center">
@@ -286,64 +287,64 @@ export const Materials: React.FC = () => {
                     src={material.image} 
                     alt={material.name} 
                     onLoad={() => handleImageLoad(material.id)}
-                    className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ${loadedImages[material.id] && activeGeneratingId !== material.id ? 'opacity-100' : 'opacity-0'}`} 
+                    className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-[2000ms] ${loadedImages[material.id] && activeGeneratingId !== material.id ? 'opacity-100' : 'opacity-0'}`} 
                   />
-                  <div className="absolute top-4 right-4 bg-brand-darkNavy/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-brand-gold/30 shadow-xl z-10">
+                  <div className="absolute top-4 right-4 bg-brand-darkNavy/90 backdrop-blur-md px-4 py-2 rounded-xl border border-brand-gold/30 shadow-xl z-10">
                      <span className="text-[10px] font-black text-white uppercase tracking-widest">{material.matchScore}% MATCH</span>
                   </div>
                   <button 
                     onClick={(e) => { e.stopPropagation(); generateTexture(material.id, material.name); }}
                     disabled={activeGeneratingId !== null}
-                    className="absolute top-4 left-4 flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-xl border border-white/20 px-4 py-2 rounded-md transition-all group/btn shadow-lg z-10 active:scale-95 disabled:opacity-50"
+                    className="absolute top-4 left-4 flex items-center space-x-2 bg-white/95 hover:bg-white backdrop-blur-xl border border-white/20 px-4 py-2.5 rounded-xl transition-all group/btn shadow-lg z-10 active:scale-95 disabled:opacity-50"
                   >
                     <Sparkles size={12} className="text-brand-gold group-hover/btn:rotate-12 transition-transform" />
                     <span className="text-[9px] font-black text-brand-darkNavy uppercase tracking-widest">GENERATE TEXTURE</span>
                   </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-darkNavy/90 via-brand-darkNavy/40 to-transparent pt-12 pb-4 px-6 flex items-center space-x-2 z-10">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-darkNavy/90 via-brand-darkNavy/40 to-transparent pt-12 pb-6 px-8 flex items-center space-x-2 z-10">
                     <ShieldCheck size={14} className="text-brand-gold" />
                     <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">PROVENANCE VERIFIED</span>
                   </div>
                 </div>
 
-                <div className="p-8 space-y-8 flex-grow flex flex-col">
-                  <div className="space-y-1">
+                <div className="p-10 space-y-8 flex-grow flex flex-col">
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-serif font-bold text-brand-darkNavy leading-tight">{material.name}</h3>
+                      <h3 className="text-2xl font-serif font-bold text-brand-darkNavy leading-tight">{material.name}</h3>
                       <span className="text-[10px] text-brand-mutedGray font-black uppercase tracking-widest">{material.location}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                       <span className="text-[11px] font-medium text-brand-mutedGray">{material.supplier}</span>
-                       <div className="flex items-center space-x-1.5 px-1.5 py-0.5 bg-brand-success/5 border border-brand-success/10 rounded">
+                       <span className="text-[11px] font-bold text-brand-mutedGray uppercase tracking-widest">{material.supplier}</span>
+                       <div className="flex items-center space-x-1.5 px-2 py-1 bg-brand-success/5 border border-brand-success/10 rounded-lg">
                           <CheckCircle2 size={10} className="text-brand-success" />
                           <span className="text-[8px] font-black text-brand-success uppercase tracking-widest">VERIFIED</span>
                        </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-8 py-6 border-y border-slate-100">
-                    <div className="space-y-1">
+                  <div className="grid grid-cols-2 gap-10 py-8 border-y border-slate-100">
+                    <div className="space-y-2">
                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Price Point</span>
-                      <p className="text-lg font-bold text-brand-darkNavy">${material.price}<span className="text-xs text-brand-mutedGray font-normal"> /sq ft</span></p>
+                      <p className="text-xl font-bold text-brand-darkNavy">${material.price}<span className="text-xs text-brand-mutedGray font-normal"> /sq ft</span></p>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       <span className="text-[9px] font-black text-brand-mutedGray uppercase tracking-widest">Lead Period</span>
-                      <p className="text-lg font-bold text-brand-darkNavy">{material.leadTime}<span className="text-xs text-brand-mutedGray font-normal"> weeks</span></p>
+                      <p className="text-xl font-bold text-brand-darkNavy">{material.leadTime}<span className="text-xs text-brand-mutedGray font-normal"> weeks</span></p>
                     </div>
                   </div>
 
                   <div className="space-y-4 mt-auto">
                     <button 
                       onClick={() => handleVisualize(material)}
-                      className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md transition-all flex items-center justify-center space-x-3 shadow-lg group/vis transform active:scale-95"
+                      className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[11px] uppercase tracking-[0.2em] py-5 rounded-2xl transition-all flex items-center justify-center space-x-3 shadow-xl group/vis transform active:scale-95"
                     >
                       <span>Proceed to Visualization</span>
-                      <Eye size={16} className="group-hover/vis:scale-110 transition-transform" />
+                      <Eye size={18} className="group-hover/vis:scale-110 transition-transform" />
                     </button>
                     <button 
                       onClick={() => setActiveAuditId(material.id)}
-                      className="w-full bg-white border border-brand-darkNavy/10 text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md hover:bg-slate-50 transition-all flex items-center justify-center space-x-3 shadow-sm transform active:scale-95"
+                      className="w-full bg-white border border-brand-darkNavy/10 text-brand-darkNavy font-black text-[11px] uppercase tracking-[0.2em] py-5 rounded-2xl hover:bg-slate-50 transition-all flex items-center justify-center space-x-3 shadow-sm transform active:scale-95"
                     >
-                      <History size={16} className="text-brand-mutedGray" />
+                      <History size={18} className="text-brand-mutedGray" />
                       <span>View Audit Chain</span>
                     </button>
                   </div>
@@ -451,29 +452,69 @@ export const Materials: React.FC = () => {
                     />
                  </div>
 
-                 {/* FINAL SEAL SECTION */}
-                 <div className="mt-8 bg-brand-darkNavy p-10 rounded-[2.5rem] relative overflow-hidden shadow-2xl">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(212,175,55,0.05)_0%,_transparent_60%)] opacity-50"></div>
-                    <div className="relative z-10 flex items-center justify-between">
-                       <div className="flex items-center space-x-6">
+                 {/* OVERHAULED FINAL SEAL SECTION - C-SUITE REFINED */}
+                 <div className="mt-8 relative group">
+                    {/* Depth/Glint Layer */}
+                    <div className="absolute inset-0 bg-brand-darkNavy rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.6)]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold/5 via-transparent to-brand-gold/10 rounded-[3rem] opacity-40"></div>
+                    
+                    {/* Glint Animation Overlay */}
+                    <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
+                      <div className="absolute top-0 left-[-150%] w-[100%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-[glint_6s_infinite] opacity-50"></div>
+                    </div>
+
+                    <div className="relative z-10 p-12 border-t border-white/5 rounded-[3rem] flex items-center justify-between">
+                       <div className="flex items-center space-x-8">
+                          {/* Biometric Frame */}
                           <div className="relative">
-                             <div className="absolute -inset-3 bg-brand-gold/20 blur-lg rounded-full animate-pulse"></div>
-                             <Fingerprint className="text-brand-gold relative" size={40} />
+                             <div className="absolute -inset-4 bg-brand-gold/15 blur-2xl rounded-full animate-pulse-slow"></div>
+                             <div className="relative w-20 h-20 bg-brand-darkNavy border-2 border-brand-gold/30 rounded-3xl flex items-center justify-center shadow-inner group-hover:border-brand-gold/60 transition-colors duration-500">
+                                <Fingerprint className="text-brand-gold" size={36} />
+                                <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-success border-2 border-brand-darkNavy rounded-full flex items-center justify-center shadow-lg">
+                                   <ShieldCheck size={10} className="text-brand-darkNavy" />
+                                </div>
+                             </div>
                           </div>
-                          <div className="space-y-1">
-                             <p className="text-[9px] font-black text-brand-gold/60 uppercase tracking-[0.3em]">Institutional Verification Signature</p>
-                             <p className="text-xs font-mono text-brand-offWhite/40 leading-relaxed uppercase">
-                                Block: 18085089 <br /> 
-                                Auth: 0x{Math.random().toString(16).slice(2, 10).toUpperCase()}
-                             </p>
+                          
+                          <div className="space-y-4">
+                             <div className="space-y-1">
+                                <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.4em] leading-none mb-1">Institutional Verification Signature</p>
+                                <div className="flex items-center space-x-6">
+                                   <div className="space-y-0.5">
+                                      <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">Ledger Block</span>
+                                      <p className="text-sm font-mono font-bold text-white tracking-widest">18085089</p>
+                                   </div>
+                                   <div className="w-px h-6 bg-white/10"></div>
+                                   <div className="space-y-0.5">
+                                      <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">Auth Protocol</span>
+                                      <p className="text-sm font-mono font-bold text-brand-gold tracking-widest uppercase">0x{Math.random().toString(16).slice(2, 10).toUpperCase()}</p>
+                                   </div>
+                                </div>
+                             </div>
+                             
+                             <div className="flex items-center space-x-4 opacity-40">
+                                <div className="flex items-center space-x-2">
+                                   <Database size={12} className="text-white" />
+                                   <span className="text-[9px] font-black text-white uppercase tracking-widest">Latency: 12ms</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                   <Globe size={12} className="text-white" />
+                                   <span className="text-[9px] font-black text-white uppercase tracking-widest">Region: EU-WEST-CARRARA</span>
+                                </div>
+                             </div>
                           </div>
                        </div>
-                       <div className="flex flex-col items-end space-y-2">
-                          <div className="flex items-center space-x-2 px-4 py-2 bg-brand-success/10 border border-brand-success/30 rounded-xl">
-                             <ShieldCheck size={18} className="text-brand-success shadow-[0_0_10px_#10B981]" />
-                             <span className="text-[10px] font-black text-brand-success uppercase tracking-[0.25em]">LEDGER SEALED</span>
+
+                       <div className="flex flex-col items-end space-y-3">
+                          {/* Status Badge with Glass Sheen */}
+                          <div className="relative px-6 py-3 bg-brand-success/10 border border-brand-success/30 rounded-2xl overflow-hidden shadow-2xl group/badge cursor-pointer active:scale-95 transition-transform">
+                             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-40"></div>
+                             <div className="relative z-10 flex items-center space-x-3">
+                                <div className="w-2 h-2 rounded-full bg-brand-success shadow-[0_0_12px_#10B981] animate-pulse"></div>
+                                <span className="text-[11px] font-black text-brand-success uppercase tracking-[0.3em]">Ledger Sealed</span>
+                             </div>
                           </div>
-                          <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Immutable Record Node v2.5</span>
+                          <span className="text-[9px] font-bold text-white/20 uppercase tracking-[0.4em]">Immutable Record Node v2.5.42</span>
                        </div>
                     </div>
                  </div>
@@ -546,6 +587,10 @@ export const Materials: React.FC = () => {
           90% { opacity: 0.4; }
           100% { transform: translateY(600px); opacity: 0; }
         }
+        @keyframes glint {
+          0% { left: -150%; }
+          100% { left: 250%; }
+        }
       `}</style>
     </div>
   );
@@ -554,7 +599,7 @@ export const Materials: React.FC = () => {
 const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean; to?: string }> = ({ icon, label, active, to }) => (
   <Link to={to || '#'} className={`flex items-center space-x-4 px-5 py-3.5 rounded-xl transition-all duration-300 group ${active ? 'bg-brand-gold text-brand-darkNavy shadow-lg shadow-brand-gold/10' : 'text-brand-offWhite/40 hover:bg-white/5 hover:text-white'}`}>
     <div className={`${active ? 'text-brand-darkNavy' : 'text-brand-offWhite/30 group-hover:text-brand-gold'} transition-colors`}>{icon}</div>
-    <span className="text-xs font-bold tracking-wider">{label}</span>
+    <span className="text-xs font-bold tracking-wider uppercase tracking-widest leading-none">{label}</span>
   </Link>
 );
 
