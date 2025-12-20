@@ -2,9 +2,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, 
-  Search, Filter, FileText, MoreHorizontal, AlertCircle, Clock, ShieldCheck, Globe, TrendingUp, CheckCircle2, Lock, MessageSquare, X, Command, Loader2
+  Search, Filter, FileText, MoreHorizontal, AlertCircle, Clock, ShieldCheck, Globe, TrendingUp, CheckCircle2, Lock, MessageSquare, X, Command, Loader2, Download, Zap, Database, Terminal, Check
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRisk } from '../context/RiskContext';
 
 const ORDERS_DATA = [
@@ -80,9 +80,13 @@ const Highlight: React.FC<{ text: string; query: string }> = ({ text, query }) =
 };
 
 export const Orders: React.FC = () => {
+  const navigate = useNavigate();
   const { isLocked } = useRisk();
   const [searchTerm, setSearchTerm] = useState('');
   const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportStage, setExportStage] = useState('');
+  const [showExportHUD, setShowExportHUD] = useState(false);
 
   // Requirement: Live filtering logic
   const filteredOrders = useMemo(() => {
@@ -108,12 +112,41 @@ export const Orders: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleExport = () => {
+  const handleExportInitiate = () => {
     setIsExporting(true);
-    setTimeout(() => {
-      setIsExporting(false);
-      alert("Institutional Audit Report Generated: order_ledger_q4_2025.pdf");
-    }, 1500);
+    setShowExportHUD(true);
+    setExportProgress(0);
+    
+    const stages = [
+      "Aggregating Active Ledger...",
+      "Syncing Provenance Nodes...",
+      "Applying ESG Audit Layer...",
+      "Compiling Boardroom Q4 PDF..."
+    ];
+
+    let currentStageIndex = 0;
+    const interval = setInterval(() => {
+      setExportProgress(prev => {
+        const next = prev + 1;
+        if (next % 25 === 0 && currentStageIndex < stages.length - 1) {
+          currentStageIndex++;
+          setExportStage(stages[currentStageIndex]);
+        }
+        if (next >= 100) {
+          clearInterval(interval);
+          setExportStage("Synthesis Complete.");
+        }
+        return next;
+      });
+    }, 40);
+
+    setExportStage(stages[0]);
+  };
+
+  const handleCloseHUD = () => {
+    setShowExportHUD(false);
+    setIsExporting(false);
+    setExportProgress(0);
   };
 
   return (
@@ -124,7 +157,7 @@ export const Orders: React.FC = () => {
             <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
               <div className="w-4 h-4 bg-brand-gold"></div>
             </div>
-            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase">Classic Homes</span>
+            <span className="text-white font-serif font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter">Classic Homes</span>
           </Link>
         </div>
         <nav className="flex-grow px-4 space-y-1">
@@ -187,13 +220,18 @@ export const Orders: React.FC = () => {
                 )}
               </div>
             </div>
+            
+            {/* THE "LIVE" EXPORT BUTTON */}
             <button 
-              onClick={handleExport}
+              onClick={handleExportInitiate}
               disabled={isExporting}
-              className="flex items-center space-x-3 px-6 py-3.5 bg-brand-gold text-brand-darkNavy rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 group active:scale-95 disabled:opacity-50"
+              className="flex items-center space-x-3 px-8 py-3.5 bg-brand-gold text-brand-darkNavy rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-brand-goldHover transition-all shadow-xl shadow-brand-gold/20 group active:scale-95 disabled:opacity-50 relative overflow-hidden"
             >
-              {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileText className="w-4 h-4 group-hover:rotate-6 transition-transform" />}
-              <span>{isExporting ? 'Generating...' : 'Export Report'}</span>
+              {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileText className="w-5 h-5 group-hover:rotate-6 transition-transform" />}
+              <span>{isExporting ? 'Synthesizing...' : 'Export Report'}</span>
+              {isExporting && (
+                <div className="absolute bottom-0 left-0 h-1 bg-white/30 transition-all duration-300" style={{ width: `${exportProgress}%` }}></div>
+              )}
             </button>
           </div>
         </div>
@@ -300,7 +338,7 @@ export const Orders: React.FC = () => {
           </div>
         </div>
 
-        {/* SETTLEMENT FOOTER */}
+        {/* INSTITUTIONAL SETTLEMENT FOOTER */}
         <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center space-x-3">
@@ -321,10 +359,89 @@ export const Orders: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* EXPORT HUD MODAL - Professional Boardroom Feedback */}
+      {showExportHUD && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-3xl animate-in fade-in duration-300">
+           <div className="w-full max-w-2xl bg-white border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_50px_100px_rgba(0,0,0,1)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-gold/20 overflow-hidden">
+                 <div className="h-full bg-brand-gold shadow-[0_0_20px_#D4AF37] transition-all duration-100 ease-out" style={{ width: `${exportProgress}%` }}></div>
+              </div>
+              
+              <div className="flex items-center justify-between mb-12">
+                 <div className="flex items-center space-x-6">
+                    <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
+                       <Zap size={32} className="text-brand-gold animate-pulse" />
+                    </div>
+                    <div>
+                       <h3 className="text-2xl font-serif font-bold text-brand-darkNavy uppercase tracking-tight">Institutional Synthesis</h3>
+                       <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">Boardroom Q4 Audit Report</p>
+                    </div>
+                 </div>
+                 {exportProgress === 100 && (
+                   <button onClick={handleCloseHUD} className="p-2 hover:bg-slate-50 rounded-full transition-colors"><X size={28} className="text-slate-400" /></button>
+                 )}
+              </div>
+
+              <div className="space-y-8 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+                 <div className="space-y-4">
+                    <div className="flex items-center justify-between text-[11px] font-black text-brand-darkNavy uppercase tracking-widest">
+                       <span>Report Compilation Progress</span>
+                       <span>{exportProgress}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                       <div className="h-full bg-brand-darkNavy transition-all duration-100" style={{ width: `${exportProgress}%` }}></div>
+                    </div>
+                 </div>
+
+                 <div className="space-y-3 font-mono">
+                    <div className="flex items-center space-x-3 text-[10px] text-brand-darkNavy/60 uppercase tracking-widest">
+                       <Terminal size={12} />
+                       <span>System Log:</span>
+                    </div>
+                    <div className="h-32 bg-brand-darkNavy p-5 rounded-2xl text-[10px] text-brand-gold/80 font-mono space-y-2 overflow-hidden shadow-inner">
+                       <p className="animate-in slide-in-from-left duration-300">>> INITIALIZING DATA HUB...</p>
+                       {exportProgress > 25 && <p className="animate-in slide-in-from-left duration-300">>> FETCHING PROVENANCE NODES (4/4)...</p>}
+                       {exportProgress > 50 && <p className="animate-in slide-in-from-left duration-300">>> CALCULATING RISK-ADJUSTED MARGINS...</p>}
+                       {exportProgress > 75 && <p className="animate-in slide-in-from-left duration-300">>> VERIFYING ESG ESG-TIER COMPLIANCE...</p>}
+                       {exportProgress === 100 && <p className="text-brand-success font-black animate-pulse">>> LEDGER SEALED. DOWNLOAD READY.</p>}
+                    </div>
+                 </div>
+              </div>
+
+              <div className="mt-12">
+                 {exportProgress < 100 ? (
+                   <div className="flex flex-col items-center space-y-4 py-4">
+                      <Loader2 size={32} className="text-brand-gold animate-spin" />
+                      <span className="text-[10px] font-black text-brand-mutedGray uppercase tracking-[0.4em] animate-pulse">{exportStage}</span>
+                   </div>
+                 ) : (
+                   <div className="grid grid-cols-2 gap-6 animate-in zoom-in-95 duration-500">
+                      <button 
+                        onClick={() => navigate('/executive-report')}
+                        className="flex items-center justify-center space-x-3 py-5 bg-brand-darkNavy text-white font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl hover:bg-black transition-all shadow-xl"
+                      >
+                         <ShieldCheck size={18} className="text-brand-gold" />
+                         <span>Open Boardroom View</span>
+                      </button>
+                      <button 
+                        onClick={handleCloseHUD}
+                        className="flex items-center justify-center space-x-3 py-5 bg-brand-gold text-brand-darkNavy font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl hover:bg-brand-goldHover transition-all shadow-xl"
+                      >
+                         <Download size={18} />
+                         <span>Download PDF</span>
+                      </button>
+                   </div>
+                 )}
+              </div>
+           </div>
+        </div>
+      )}
+
       <div className="fixed bottom-10 right-10 z-50">
         <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all group">
-          <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center">
-            <MessageSquare size={20} className="text-brand-gold" />
+          <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+            <MessageSquare size={20} className="text-brand-gold fill-brand-gold" />
           </div>
           <div className="flex flex-col pr-2">
             <span className="text-[11px] text-brand-darkNavy font-black uppercase tracking-widest">Live Concierge</span>
