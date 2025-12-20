@@ -174,6 +174,11 @@ export const Materials: React.FC = () => {
     }
   };
 
+  const handleVisualize = (material: any) => {
+    // Requirements: Pass material context to visualization bridge
+    navigate('/executive-command', { state: { activeMaterial: material } });
+  };
+
   const activeAuditMaterial = materials.find(m => m.id === activeAuditId);
 
   return (
@@ -324,7 +329,7 @@ export const Materials: React.FC = () => {
 
                   <div className="space-y-4 mt-auto">
                     <button 
-                      onClick={() => navigate('/executive-command')}
+                      onClick={() => handleVisualize(material)}
                       className="w-full bg-brand-gold hover:bg-brand-goldHover text-brand-darkNavy font-black text-[10px] uppercase tracking-[0.2em] py-4 rounded-md transition-all flex items-center justify-center space-x-3 shadow-lg group/vis transform active:scale-95"
                     >
                       <span>Proceed to Visualization</span>
@@ -363,7 +368,7 @@ export const Materials: React.FC = () => {
                        {['All', 'Natural Stone', 'Sustainable Wood', 'Structural Metal', 'Glazing'].map(cat => (
                          <button 
                            key={cat}
-                           onClick={() => setActiveCategory(cat)}
+                           onClick={() => { setActiveCategory(cat); setIsFilterOpen(false); }}
                            className={`w-full flex items-center justify-between px-6 py-4 rounded-xl text-xs font-bold transition-all border ${activeCategory === cat ? 'bg-brand-darkNavy text-white border-brand-darkNavy' : 'bg-slate-50 border-slate-100 text-brand-darkNavy hover:bg-slate-100'}`}
                          >
                            <span>{cat}</span>
@@ -376,6 +381,43 @@ export const Materials: React.FC = () => {
                  <div className="pt-8 border-t border-slate-100">
                     <button onClick={() => { setActiveCategory('All'); setIsFilterOpen(false); }} className="w-full py-5 bg-slate-100 text-brand-darkNavy text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all">Clear All Parameters</button>
                  </div>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* CUSTOM GENERATION MODAL */}
+      {isCustomModalOpen && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-xl animate-in fade-in duration-300">
+           <div className="w-full max-w-2xl bg-white border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_60px_120px_rgba(0,0,0,1)] relative overflow-hidden">
+              <button onClick={() => setIsCustomModalOpen(false)} className="absolute top-8 right-8 text-brand-mutedGray hover:text-brand-darkNavy transition-colors"><X size={32} /></button>
+              <div className="flex items-center space-x-6 mb-10">
+                 <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
+                    <Sparkles size={32} className="text-brand-gold" />
+                 </div>
+                 <div>
+                    <h3 className="text-2xl font-serif font-bold text-brand-darkNavy uppercase tracking-tight">Custom Material Synthesis</h3>
+                    <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">AI-Driven Architectural Spec</p>
+                 </div>
+              </div>
+              <div className="space-y-8">
+                 <div className="space-y-3">
+                    <label className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest ml-1">Describe technical requirements</label>
+                    <textarea 
+                      value={customPrompt}
+                      onChange={(e) => setCustomPrompt(e.target.value)}
+                      placeholder="e.g. Translucent backlit onyx with structural honeycombing for high-traffic penthouse flooring..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-6 text-sm text-brand-darkNavy focus:border-brand-gold focus:outline-none transition-all h-40 resize-none font-medium"
+                    />
+                 </div>
+                 <button 
+                   onClick={synthesizeMaterial}
+                   disabled={isSynthesizing || !customPrompt}
+                   className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-brand-goldHover transition-all flex items-center justify-center space-x-4 shadow-2xl disabled:opacity-50"
+                 >
+                    {isSynthesizing ? <Loader2 size={24} className="animate-spin" /> : <Database size={24} />}
+                    <span>{isSynthesizing ? 'SYNTHESIZING LEDGER...' : 'INITIALIZE SYNTHESIS'}</span>
+                 </button>
               </div>
            </div>
         </div>
