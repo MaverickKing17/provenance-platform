@@ -60,10 +60,10 @@ export const Footer: React.FC = () => {
 
       {/* MAIN NAVIGATION & TRUST MATRIX */}
       <div className="max-w-7xl mx-auto px-8 py-32 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-20 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start">
           
           {/* COLUMN 1: CORPORATE IDENTITY */}
-          <div className="lg:col-span-4 space-y-16">
+          <div className="space-y-16">
             <Link to="/" className="flex items-center space-x-6 text-white group w-fit">
               <div className="w-16 h-16 border-2 border-brand-gold flex items-center justify-center rounded-sm group-hover:bg-brand-gold transition-all duration-500 shadow-[0_0_40px_rgba(212,175,55,0.15)]">
                  <div className="w-10 h-10 bg-brand-gold group-hover:bg-brand-darkNavy"></div>
@@ -72,28 +72,22 @@ export const Footer: React.FC = () => {
             </Link>
             
             <p className="text-slate-300 text-lg font-medium leading-loose uppercase tracking-[0.1em] opacity-80 border-l-2 border-brand-gold/30 pl-8">
-              The Global Infrastructure for Luxury Procurement and Vetted Artisan Provenance.
+              Global Infrastructure for Luxury Procurement.
             </p>
 
             <div className="grid grid-cols-1 gap-8">
               <TrustBadge 
                 icon={<ShieldCheck className="w-7 h-7 text-brand-success" />} 
-                label="Compliance Standard" 
-                value="SOC2 TYPE II CERTIFIED" 
+                label="Compliance" 
+                value="SOC2 TYPE II" 
                 status="Active"
-              />
-              <TrustBadge 
-                icon={<Lock className="w-7 h-7 text-brand-gold" />} 
-                label="Security Architecture" 
-                value="AES-256 ZERO KNOWLEDGE" 
-                status="Verified"
               />
             </div>
           </div>
 
-          {/* COLUMN 2: GOVERNANCE & INTEL - High Legibility C-Suite Version */}
-          <div className="lg:col-span-2 space-y-12 lg:pl-4">
-            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-brand-gold/30 pb-6 mb-4">Governance</h3>
+          {/* COLUMN 2: GOVERNANCE - Fixed Overlap */}
+          <div className="space-y-12">
+            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.4em] border-b border-brand-gold/30 pb-6 mb-4">Governance</h3>
             <ul className="space-y-8">
               <FooterLink label="Privacy Protocol" to="/privacy-policy" />
               <FooterLink label="Institutional Terms" to="/terms-of-service" />
@@ -102,9 +96,9 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* COLUMN 3: MARKET INTELLIGENCE - High Legibility C-Suite Version */}
-          <div className="lg:col-span-2 space-y-12">
-            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-brand-gold/30 pb-6 mb-4">Intelligence</h3>
+          {/* COLUMN 3: INTELLIGENCE - Fixed Overlap */}
+          <div className="space-y-12">
+            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.4em] border-b border-brand-gold/30 pb-6 mb-4">Intelligence</h3>
             <ul className="space-y-8">
               <FooterLink label="Blueprint Report" to="/blog" />
               <FooterLink label="Yield Analytics" to="/case-studies" />
@@ -114,36 +108,22 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* COLUMN 4: AUTHORIZED LIAISON BRIDGE */}
-          <div className="lg:col-span-4">
-            <div className="bg-brand-gold/10 border-2 border-brand-gold/30 p-12 rounded-[4rem] space-y-12 backdrop-blur-3xl relative group shadow-2xl">
-               <div className="absolute top-0 right-0 w-40 h-40 bg-brand-gold/20 blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-               
+          <div className="space-y-12">
+            <div className="bg-brand-gold/10 border-2 border-brand-gold/30 p-10 rounded-[3rem] space-y-10 backdrop-blur-3xl relative group shadow-2xl">
                <div className="flex items-center space-x-5">
-                  <div className="p-4 bg-brand-darkNavy border border-brand-gold/40 rounded-2xl">
-                    <HeadphonesIcon size={28} className="text-brand-gold" />
+                  <div className="p-3 bg-brand-darkNavy border border-brand-gold/40 rounded-xl">
+                    <HeadphonesIcon size={24} className="text-brand-gold" />
                   </div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-[0.4em]">Executive Liaison</h3>
+                  <h3 className="text-lg font-black text-white uppercase tracking-[0.4em]">Liaison</h3>
                </div>
-
-               <p className="text-base text-slate-300 font-medium leading-loose italic">
-                 "Authorized support bridge active for verified High-Value Capital Allocations and Strategic Treasury Cycles."
-               </p>
-
-               <div className="space-y-6">
-                  <div className="flex items-center space-x-4 text-brand-success">
-                     <CheckCircle2 size={18} className="animate-pulse" />
-                     <span className="text-[11px] font-black uppercase tracking-[0.5em]">Global Concierge Active</span>
-                  </div>
-                  <button className="w-full py-7 bg-brand-gold text-brand-darkNavy font-black text-xs uppercase tracking-[0.5em] rounded-3xl hover:bg-white transition-all shadow-[0_25px_50px_rgba(212,175,55,0.25)] transform hover:scale-[1.02]">
-                     Initialize Bridge
-                  </button>
-               </div>
+               <button className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-xs uppercase tracking-[0.5em] rounded-2xl hover:bg-white transition-all shadow-[0_25px_50px_rgba(212,175,55,0.25)]">
+                  Initialize Bridge
+               </button>
             </div>
             
-            <div className="flex justify-center lg:justify-end space-x-8 mt-16">
-              <SocialIcon icon={<Linkedin className="w-7 h-7" />} href="#" />
-              <SocialIcon icon={<Twitter className="w-7 h-7" />} href="#" />
-              <SocialIcon icon={<Youtube className="w-7 h-7" />} href="#" />
+            <div className="flex justify-center space-x-6">
+              <SocialIcon icon={<Linkedin className="w-6 h-6" />} href="#" />
+              <SocialIcon icon={<Twitter className="w-6 h-6" />} href="#" />
             </div>
           </div>
 
@@ -158,11 +138,6 @@ export const Footer: React.FC = () => {
                      <Activity size={18} className="text-brand-success" />
                      <span className="text-[12px] font-black text-brand-success uppercase tracking-[0.4em]">Network Optimized</span>
                   </div>
-                  <div className="hidden md:block w-px h-6 bg-white/20"></div>
-                  <div className="flex items-center space-x-3 text-white/30">
-                     <Server size={16} />
-                     <span className="text-[11px] font-mono font-bold uppercase tracking-widest">Build Node: v2.5.42-S</span>
-                  </div>
                </div>
             </div>
             
@@ -170,10 +145,6 @@ export const Footer: React.FC = () => {
                <div className="flex items-center space-x-5">
                   <Globe size={18} className="text-brand-gold" />
                   <span className="text-[12px] font-black text-white uppercase tracking-[0.4em]">Node: GLOBAL-TREASURY-01</span>
-               </div>
-               <div className="flex items-center space-x-5">
-                  <Database size={18} className="text-brand-gold" />
-                  <span className="text-[12px] font-black text-white uppercase tracking-[0.4em]">Silo: US-PROD-S1</span>
                </div>
             </div>
         </div>
@@ -188,10 +159,7 @@ const TrustBadge: React.FC<{ icon: React.ReactNode; label: string; value: string
       {icon}
     </div>
     <div className="flex flex-col space-y-1">
-      <div className="flex items-center space-x-3">
-        <span className="text-[11px] font-black text-white/40 uppercase tracking-[0.4em]">{label}</span>
-        <span className="text-[9px] font-black text-brand-success uppercase tracking-widest bg-brand-success/10 px-2 py-0.5 rounded">{status}</span>
-      </div>
+      <span className="text-[11px] font-black text-white/40 uppercase tracking-[0.4em]">{label}</span>
       <span className="text-sm font-black uppercase tracking-widest text-white group-hover:text-brand-gold transition-colors">{value}</span>
     </div>
   </div>
@@ -204,7 +172,7 @@ const FooterLink: React.FC<{ label: string; to: string }> = ({ label, to }) => (
       className="group flex items-center space-x-3 text-white/80 hover:text-white transition-all duration-300 py-1.5"
     >
       <div className="w-3.5 h-[2px] bg-brand-gold shrink-0 opacity-80 group-hover:opacity-100 group-hover:w-5 group-hover:shadow-[0_0_10px_#D4AF37] transition-all duration-500"></div>
-      <span className="text-[15px] font-bold uppercase tracking-[0.18em] whitespace-nowrap leading-none transition-all group-hover:translate-x-1">
+      <span className="text-[15px] font-bold uppercase tracking-[0.12em] leading-none transition-all group-hover:translate-x-1">
         {label}
       </span>
     </Link>
