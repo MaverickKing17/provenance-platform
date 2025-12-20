@@ -19,10 +19,11 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Explicitly extend React.Component to ensure properties like state, setState, and props are correctly inherited
-export class ErrorBoundary extends React.Component<Props, State> {
+// Fix: Explicitly extend Component from React to ensure properties like state, setState, and props are correctly inherited
+export class ErrorBoundary extends Component<Props, State> {
   // Initialize state property explicitly to provide a stable base state
-  public override state: State = {
+  // Fix: Removed override as inheritance was not being correctly identified by the compiler, and state is a property
+  public state: State = {
     hasError: false,
     error: null
   };
@@ -42,7 +43,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
   /**
    * Lifecycle method called after an error is thrown by a descendant component.
    */
-  public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  // Fix: Removed override modifier to resolve TS error where base class extension is not correctly detected
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log the error for executive observability and debugging
     console.error("Uncaught institutional error:", error, errorInfo);
   }
@@ -53,10 +55,12 @@ export class ErrorBoundary extends React.Component<Props, State> {
    */
   public reset = (): void => {
     // Reset the state using the inherited setState method
+    // Fix: Inheritance resolution via Component import ensures setState is available
     this.setState({ hasError: false, error: null });
   };
 
-  public override render(): ReactNode {
+  // Fix: Removed override modifier to resolve TS error
+  public render(): ReactNode {
     // Access current error state from Component.state
     const { hasError, error } = this.state;
     if (hasError && error) {
@@ -65,6 +69,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     }
 
     // Return children from Component.props
+    // Fix: Inheritance resolution via Component import ensures props is available
     return this.props.children;
   }
 }

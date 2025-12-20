@@ -6,10 +6,9 @@ import {
   TrendingUp, AlertTriangle, MessageSquare, Lock, 
   CheckCircle2, X, Database, ShieldAlert, Activity, 
   Zap, ArrowUpRight, Search, LayoutList, ChevronRight,
-  Fingerprint, Server, MoreHorizontal
+  Fingerprint, Server, MoreHorizontal, Image as ImageIcon
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GlobalSearch } from './GlobalSearch';
 
 interface Supplier {
   id: number;
@@ -28,16 +27,17 @@ interface Supplier {
 }
 
 const SUPPLIERS: Supplier[] = [
-  { id: 1, hash: '0X8B2...9A2F', name: 'Tuscany Stoneworks', location: 'Carrara, Italy', specialty: 'Marble & Travertine', rating: 4.9, risk: 'Stable', capacity: 85, tags: ['ISO 9001', 'Fair Trade'], image: 'https://images.unsplash.com/photo-1599557288647-73d8b8e0539f?q=80&w=400&auto=format&fit=crop', coords: { x: 52, y: 35 }, lastAudit: 'Oct 24, 2025', exposure: '$1.2M' },
-  { id: 2, hash: '0XC4A...1E1D', name: 'Apex Materials', location: 'New York, USA', specialty: 'Steel & Glass', rating: 4.8, risk: 'Stable', capacity: 40, tags: ['LEED Gold', 'Made in USA'], image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', coords: { x: 25, y: 38 }, lastAudit: 'Oct 12, 2025', exposure: '$450K' },
-  { id: 3, hash: '0XF1E...00D2', name: 'Kyoto Timber Co.', location: 'Kyoto, Japan', specialty: 'Sustainable Wood', rating: 5.0, risk: 'Elevated', capacity: 92, tags: ['FSC Certified', 'Carb Compliant'], image: 'https://images.unsplash.com/photo-1582234373447-28023367f16d?q=80&w=400&auto=format&fit=crop', coords: { x: 85, y: 42 }, lastAudit: 'Sep 30, 2025', exposure: '$890K' },
-  { id: 4, hash: '0X77B...CC1A', name: 'Nordic Slate', location: 'Oslo, Norway', specialty: 'Roofing Slate', rating: 4.7, risk: 'Critical', capacity: 60, tags: ['Nordic Swan', 'ISO 14001'], image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=400&auto=format&fit=crop', coords: { x: 50, y: 18 }, lastAudit: 'Oct 28, 2025', exposure: '$2.1M' }
+  { id: 1, hash: '0X8B2...9A2F', name: 'Tuscany Stoneworks', location: 'Carrara, Italy', specialty: 'Marble & Travertine', rating: 4.9, risk: 'Stable', capacity: 85, tags: ['ISO 9001'], image: 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=400&auto=format&fit=crop', coords: { x: 52, y: 35 }, lastAudit: 'Oct 24, 2025', exposure: '$1.2M' },
+  { id: 2, hash: '0XC4A...1E1D', name: 'Apex Materials', location: 'New York, USA', specialty: 'Steel & Glass', rating: 4.8, risk: 'Stable', capacity: 40, tags: ['LEED Gold'], image: 'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?q=80&w=400&auto=format&fit=crop', coords: { x: 25, y: 38 }, lastAudit: 'Oct 12, 2025', exposure: '$450K' },
+  { id: 3, hash: '0XF1E...00D2', name: 'Kyoto Timber Co.', location: 'Kyoto, Japan', specialty: 'Sustainable Wood', rating: 5.0, risk: 'Elevated', capacity: 92, tags: ['FSC Certified'], image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=400&auto=format&fit=crop', coords: { x: 85, y: 42 }, lastAudit: 'Sep 30, 2025', exposure: '$890K' },
+  { id: 4, hash: '0X77B...CC1A', name: 'Nordic Slate', location: 'Oslo, Norway', specialty: 'Roofing Slate', rating: 4.7, risk: 'Critical', capacity: 60, tags: ['ISO 14001'], image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?q=80&w=400&auto=format&fit=crop', coords: { x: 50, y: 18 }, lastAudit: 'Oct 28, 2025', exposure: '$2.1M' }
 ];
 
 export const Network: React.FC = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'ledger' | 'grid' | 'map'>('ledger');
   const [searchTerm, setSearchTerm] = useState('');
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
 
   const filteredSuppliers = useMemo(() => {
     if (!searchTerm.trim()) return SUPPLIERS;
@@ -46,6 +46,10 @@ export const Network: React.FC = () => {
       s.specialty.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm]);
+
+  const handleImageError = (id: number) => {
+    setImageErrors(prev => ({ ...prev, [id]: true }));
+  };
 
   const getRiskStyles = (risk: string) => {
     switch (risk) {
@@ -57,8 +61,6 @@ export const Network: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
-      
-      {/* INSTITUTIONAL SIDEBAR */}
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20 shrink-0">
         <div className="p-8">
           <Link to="/" className="flex flex-col space-y-1">
@@ -80,7 +82,7 @@ export const Network: React.FC = () => {
         </nav>
         <div className="p-6 border-t border-white/5">
           <div className="flex items-center space-x-3 p-2 rounded-xl">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full border border-brand-gold/50 shadow-lg" alt="V. Sterling" />
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full border border-brand-gold/50 shadow-lg" alt="V. Sterling" />
             <div className="flex flex-col min-w-0">
               <span className="text-white text-xs font-bold truncate">V. Sterling</span>
               <span className="text-[10px] text-brand-offWhite/40 uppercase tracking-widest font-black">Chief Procurement</span>
@@ -89,10 +91,7 @@ export const Network: React.FC = () => {
         </div>
       </aside>
 
-      {/* COMMAND VIEWPORT */}
       <main className="flex-grow flex flex-col overflow-y-auto relative">
-        
-        {/* EXECUTIVE HEADER COMMAND BAR */}
         <header className="bg-white border-b border-slate-200 px-12 py-10 flex flex-col xl:flex-row items-center justify-between gap-10 sticky top-0 z-40 backdrop-blur-3xl bg-white/90 shadow-sm">
           <div className="space-y-3">
             <h1 className="text-5xl font-serif font-bold text-brand-darkNavy tracking-tight leading-none">Global Network Nodes</h1>
@@ -117,22 +116,18 @@ export const Network: React.FC = () => {
                  onChange={(e) => setSearchTerm(e.target.value)}
                />
             </div>
-
             <div className="bg-slate-100 p-1.5 rounded-[1.8rem] flex items-center border border-slate-200 shadow-inner">
               <ViewToggle active={viewMode === 'ledger'} onClick={() => setViewMode('ledger')} icon={<LayoutList size={14} />} label="Executive Ledger" />
               <ViewToggle active={viewMode === 'grid'} onClick={() => setViewMode('grid')} icon={<Grid size={14} />} label="Sovereign Grid" />
               <ViewToggle active={viewMode === 'map'} onClick={() => setViewMode('map')} icon={<MapIcon size={14} />} label="Risk Topology" />
             </div>
-
-            <button className="px-10 py-4 bg-brand-darkNavy text-white rounded-xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-black transition-all shadow-xl shadow-brand-darkNavy/20 active:scale-95">
+            <button className="px-10 py-4 bg-brand-darkNavy text-white rounded-xl text-[11px] font-black uppercase tracking-[0.3em] hover:bg-black transition-all shadow-xl active:scale-95">
                Request New Node Audit
             </button>
           </div>
         </header>
 
         <div className="px-12 py-12 space-y-12">
-          
-          {/* TELEMETRY HUD */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
              <MetricHUD icon={<Users size={24} className="text-brand-darkNavy" />} label="Total Sourcing Nodes" value="1,248" sub="Global Registry" />
              <MetricHUD icon={<ShieldCheck size={24} className="text-brand-success" />} label="Compliance Integrity" value="98.4%" sub="SOC2 Certified" />
@@ -140,7 +135,6 @@ export const Network: React.FC = () => {
              <MetricHUD icon={<TrendingUp size={24} className="text-brand-gold" />} label="Market Volatility" value="Minimal" sub="Stable Cycles" />
           </div>
 
-          {/* VIEW SWITCHER CONTENT */}
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000">
             {viewMode === 'ledger' && (
               <div className="bg-white border border-slate-200 rounded-[3rem] overflow-hidden shadow-2xl">
@@ -159,12 +153,27 @@ export const Network: React.FC = () => {
                   <tbody className="divide-y divide-slate-100">
                     {filteredSuppliers.map((supplier) => {
                       const riskStyles = getRiskStyles(supplier.risk);
+                      const isBroken = imageErrors[supplier.id];
                       return (
                         <tr key={supplier.id} className="hover:bg-slate-50 transition-colors group cursor-pointer">
                           <td className="px-10 py-8">
                             <div className="flex items-center space-x-5">
                                <div className="relative shrink-0">
-                                  <img src={supplier.image} className="w-12 h-12 rounded-xl object-cover border border-slate-100 shadow-sm" alt={supplier.name} />
+                                  <div className="w-12 h-12 rounded-xl border border-slate-100 shadow-sm overflow-hidden bg-slate-50 flex items-center justify-center">
+                                    {!isBroken ? (
+                                      <img 
+                                        src={supplier.image} 
+                                        className="w-full h-full object-cover" 
+                                        alt={supplier.name} 
+                                        onError={() => handleImageError(supplier.id)}
+                                      />
+                                    ) : (
+                                      <div className="flex flex-col items-center justify-center p-1 bg-brand-gold/5 text-brand-gold/40">
+                                        <ImageIcon size={16} />
+                                        <span className="text-[6px] font-black uppercase mt-1">Node</span>
+                                      </div>
+                                    )}
+                                  </div>
                                   <div className="absolute -bottom-1 -right-1 p-0.5 bg-white rounded-full shadow-sm">
                                     <div className={`w-2 h-2 rounded-full ${riskStyles.bg}`}></div>
                                   </div>
@@ -218,13 +227,28 @@ export const Network: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 {filteredSuppliers.map((supplier) => {
                   const riskStyles = getRiskStyles(supplier.risk);
+                  const isBroken = imageErrors[supplier.id];
                   return (
                     <div key={supplier.id} className="bg-white border border-slate-200 rounded-[3rem] overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group flex flex-col h-full shadow-sm">
                       <div className="p-10 space-y-10 flex-grow flex flex-col">
                         <div className="flex flex-col items-center space-y-6">
                           <div className="relative group/avatar">
                             <div className="absolute inset-0 bg-brand-gold/10 blur-xl rounded-full opacity-0 group-hover/avatar:opacity-100 transition-opacity"></div>
-                            <img src={supplier.image} alt={supplier.name} className="relative w-28 h-28 rounded-[2rem] object-cover border-4 border-slate-50 group-hover:border-brand-gold/30 transition-all duration-700 shadow-xl" />
+                            <div className="relative w-28 h-28 rounded-[2rem] border-4 border-slate-50 group-hover:border-brand-gold/30 transition-all duration-700 shadow-xl overflow-hidden bg-slate-50 flex items-center justify-center">
+                              {!isBroken ? (
+                                <img 
+                                  src={supplier.image} 
+                                  alt={supplier.name} 
+                                  className="w-full h-full object-cover"
+                                  onError={() => handleImageError(supplier.id)}
+                                />
+                              ) : (
+                                <div className="text-brand-gold/40 flex flex-col items-center">
+                                  <ImageIcon size={32} />
+                                  <span className="text-[8px] font-black uppercase mt-2">Institution Asset</span>
+                                </div>
+                              )}
+                            </div>
                             <div className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg border border-slate-100">
                               {riskStyles.icon}
                             </div>
@@ -299,7 +323,6 @@ export const Network: React.FC = () => {
                 </div>
 
                 <div className="absolute inset-0 flex items-center justify-center opacity-40 grayscale group-hover:grayscale-0 transition-all duration-1000">
-                   {/* SIMULATED WORLD MAP VECTOR */}
                    <svg viewBox="0 0 1000 500" className="w-full h-full text-brand-gold/20 fill-none stroke-current">
                       <path d="M50,250 Q200,80 350,250 T650,250 T950,250" strokeWidth="0.5" strokeDasharray="10 5" />
                       <path d="M100,100 L900,100 M100,400 L900,400" strokeWidth="0.2" opacity="0.3" />
@@ -332,7 +355,6 @@ export const Network: React.FC = () => {
           </div>
         </div>
 
-        {/* INSTITUTIONAL FOOTER */}
         <footer className="mt-32 pt-20 bg-brand-darkNavy py-24 px-12 relative overflow-hidden shrink-0 border-t border-white/10">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent"></div>
           <div className="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-20 relative z-10">
