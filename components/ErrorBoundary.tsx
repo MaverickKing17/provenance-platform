@@ -19,10 +19,10 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Use Component directly to ensure properties like state, setState, and props are correctly inherited
-export class ErrorBoundary extends Component<Props, State> {
+// Explicitly extend React.Component to ensure properties like state, setState, and props are correctly inherited
+export class ErrorBoundary extends React.Component<Props, State> {
   // Initialize state property explicitly to provide a stable base state
-  public state: State = {
+  public override state: State = {
     hasError: false,
     error: null
   };
@@ -42,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
   /**
    * Lifecycle method called after an error is thrown by a descendant component.
    */
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log the error for executive observability and debugging
     console.error("Uncaught institutional error:", error, errorInfo);
   }
@@ -56,7 +56,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({ hasError: false, error: null });
   };
 
-  public render(): ReactNode {
+  public override render(): ReactNode {
     // Access current error state from Component.state
     const { hasError, error } = this.state;
     if (hasError && error) {
