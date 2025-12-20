@@ -28,7 +28,12 @@ import {
   Fingerprint,
   Search,
   SlidersHorizontal,
-  FileText
+  FileText,
+  Activity,
+  Cpu,
+  Lock,
+  MapPin,
+  Clock
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleGenAI } from "@google/genai";
@@ -175,7 +180,6 @@ export const Materials: React.FC = () => {
   };
 
   const handleVisualize = (material: any) => {
-    // Requirements: Pass material context to visualization bridge
     navigate('/executive-command', { state: { activeMaterial: material } });
   };
 
@@ -377,88 +381,100 @@ export const Materials: React.FC = () => {
                        ))}
                     </div>
                  </div>
-                 
-                 <div className="pt-8 border-t border-slate-100">
-                    <button onClick={() => { setActiveCategory('All'); setIsFilterOpen(false); }} className="w-full py-5 bg-slate-100 text-brand-darkNavy text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all">Clear All Parameters</button>
-                 </div>
               </div>
            </div>
         </div>
       )}
 
-      {/* CUSTOM GENERATION MODAL */}
-      {isCustomModalOpen && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-xl animate-in fade-in duration-300">
-           <div className="w-full max-w-2xl bg-white border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_60px_120px_rgba(0,0,0,1)] relative overflow-hidden">
-              <button onClick={() => setIsCustomModalOpen(false)} className="absolute top-8 right-8 text-brand-mutedGray hover:text-brand-darkNavy transition-colors"><X size={32} /></button>
-              <div className="flex items-center space-x-6 mb-10">
-                 <div className="p-4 bg-brand-gold/10 rounded-2xl border border-brand-gold/30">
-                    <Sparkles size={32} className="text-brand-gold" />
-                 </div>
-                 <div>
-                    <h3 className="text-2xl font-serif font-bold text-brand-darkNavy uppercase tracking-tight">Custom Material Synthesis</h3>
-                    <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">AI-Driven Architectural Spec</p>
-                 </div>
-              </div>
-              <div className="space-y-8">
-                 <div className="space-y-3">
-                    <label className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest ml-1">Describe technical requirements</label>
-                    <textarea 
-                      value={customPrompt}
-                      onChange={(e) => setCustomPrompt(e.target.value)}
-                      placeholder="e.g. Translucent backlit onyx with structural honeycombing for high-traffic penthouse flooring..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-6 text-sm text-brand-darkNavy focus:border-brand-gold focus:outline-none transition-all h-40 resize-none font-medium"
-                    />
-                 </div>
-                 <button 
-                   onClick={synthesizeMaterial}
-                   disabled={isSynthesizing || !customPrompt}
-                   className="w-full py-6 bg-brand-gold text-brand-darkNavy font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-brand-goldHover transition-all flex items-center justify-center space-x-4 shadow-2xl disabled:opacity-50"
-                 >
-                    {isSynthesizing ? <Loader2 size={24} className="animate-spin" /> : <Database size={24} />}
-                    <span>{isSynthesizing ? 'SYNTHESIZING LEDGER...' : 'INITIALIZE SYNTHESIS'}</span>
-                 </button>
-              </div>
-           </div>
-        </div>
-      )}
-
-      {/* PROVENANCE LEDGER (AUDIT CHAIN) */}
+      {/* PROVENANCE LEDGER (RE-DESIGNED AUDIT CHAIN) */}
       {activeAuditId && activeAuditMaterial && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-md animate-in fade-in duration-300">
-           <div className="w-full max-w-2xl bg-white border border-brand-gold/20 rounded-[3rem] overflow-hidden shadow-[0_80px_160px_rgba(0,0,0,0.6)] relative">
-              <div className="p-12 space-y-10">
-                 <div className="flex items-center justify-between border-b border-slate-100 pb-8">
-                    <div className="flex items-center space-x-5">
-                       <div className="p-4 bg-brand-gold/10 rounded-2xl">
-                          <Globe size={28} className="text-brand-gold" />
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-6 bg-[#050B15]/95 backdrop-blur-2xl animate-in fade-in duration-500">
+           <div className="w-full max-w-2xl bg-white rounded-[3.5rem] overflow-hidden shadow-[0_80px_160px_rgba(0,0,0,0.8)] relative border border-brand-gold/20">
+              
+              {/* Animated Scan Line */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-brand-gold shadow-[0_0_30px_#D4AF37] animate-[ledger-scan_4s_ease-in-out_infinite] z-20 opacity-30"></div>
+
+              <div className="p-12 space-y-12">
+                 {/* HEADER HUD */}
+                 <div className="flex items-center justify-between border-b border-slate-100 pb-10">
+                    <div className="flex items-center space-x-6">
+                       <div className="p-5 bg-brand-gold/10 rounded-[1.8rem] border border-brand-gold/20 relative group">
+                          <div className="absolute -inset-2 bg-brand-gold/10 blur-xl rounded-full group-hover:bg-brand-gold/20 transition-all"></div>
+                          <Globe size={32} className="text-brand-gold relative z-10" />
                        </div>
                        <div>
-                          <h3 className="text-xl font-serif font-bold text-brand-darkNavy uppercase tracking-tight">Provenance Ledger</h3>
-                          <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.25em]">Chain: {activeAuditMaterial.name}</p>
+                          <h3 className="text-2xl font-serif font-bold text-brand-darkNavy tracking-tight uppercase">Provenance Ledger</h3>
+                          <div className="flex items-center space-x-3 mt-1.5">
+                             <span className="text-[10px] font-black text-brand-gold uppercase tracking-[0.3em]">Chain ID:</span>
+                             <span className="text-[10px] font-mono font-bold text-brand-mutedGray uppercase tracking-widest bg-slate-50 px-2 py-0.5 rounded">CH-PROV-{activeAuditId}-001</span>
+                          </div>
                        </div>
                     </div>
-                    <button onClick={() => setActiveAuditId(null)} className="p-2 hover:bg-slate-50 rounded-full transition-colors"><X size={32} /></button>
+                    <button onClick={() => setActiveAuditId(null)} className="p-3 hover:bg-slate-50 rounded-full transition-all group">
+                       <X size={32} className="text-slate-300 group-hover:text-brand-darkNavy transition-colors" />
+                    </button>
                  </div>
 
-                 <div className="space-y-6">
-                    <AuditStep status="verified" label={`Extraction Site Verified: ${activeAuditMaterial.location}`} time="2025-02-14 09:12 GMT" />
-                    <AuditStep status="verified" label={`Quality Audit Completed by ${activeAuditMaterial.supplier}`} time="2025-02-15 11:45 GMT" />
-                    <AuditStep status="active" label="Logistics Transit Monitored via IoT-Node" time="LIVE TELEMETRY" />
-                    <AuditStep status="pending" label="Institutional Settlement Pending Receipt" time={`EST: ${activeAuditMaterial.leadTime} WEEKS`} />
+                 {/* THE CHAIN VISUALIZER */}
+                 <div className="relative pl-12 space-y-0">
+                    {/* Vertical Ledger Spine */}
+                    <div className="absolute left-6 top-2 bottom-2 w-1 bg-gradient-to-b from-brand-success via-brand-gold to-slate-100 rounded-full shadow-inner"></div>
+
+                    <AuditStep 
+                      status="verified" 
+                      label={`Extraction Site Authenticated: ${activeAuditMaterial.location}`} 
+                      time="2025-02-14 09:12 GMT" 
+                      sub="GPS: 44.0792° N, 10.0864° E • Node Carrara-01"
+                      icon={<MapPin size={16} />}
+                    />
+                    <AuditStep 
+                      status="verified" 
+                      label={`Quality Core Audit: ${activeAuditMaterial.supplier}`} 
+                      time="2025-02-15 11:45 GMT" 
+                      sub="Resonance Scan: NOMINAL • Tol: ±0.012mm"
+                      icon={<Cpu size={16} />}
+                    />
+                    <AuditStep 
+                      status="active" 
+                      label="Logistics Node: Real-time Telemetry" 
+                      time="LIVE MONITORING" 
+                      sub="IoT-Chain Sync: ACTIVE • Temp Control: 18.2°C"
+                      icon={<Activity size={16} />}
+                    />
+                    <AuditStep 
+                      status="pending" 
+                      label="Institutional Settlement Protocol" 
+                      time={`EST: ${activeAuditMaterial.leadTime} WEEKS`} 
+                      sub="Awaiting Terminal Hub Receipt • Tokenized Transfer Ready"
+                      icon={<Clock size={16} />}
+                      isLast
+                    />
                  </div>
 
-                 <div className="bg-slate-50 border border-slate-100 p-8 rounded-3xl flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                       <Fingerprint className="text-brand-gold/40" size={32} />
-                       <div className="text-[10px] font-mono text-brand-mutedGray leading-relaxed uppercase tracking-widest">
-                          Audit ID: 0x{Math.random().toString(16).slice(2, 8).toUpperCase()}...{activeAuditId}<br />
-                          Block: {Math.floor(Math.random() * 100000) + 18000000}
+                 {/* FINAL SEAL SECTION */}
+                 <div className="mt-8 bg-brand-darkNavy p-10 rounded-[2.5rem] relative overflow-hidden shadow-2xl">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(212,175,55,0.05)_0%,_transparent_60%)] opacity-50"></div>
+                    <div className="relative z-10 flex items-center justify-between">
+                       <div className="flex items-center space-x-6">
+                          <div className="relative">
+                             <div className="absolute -inset-3 bg-brand-gold/20 blur-lg rounded-full animate-pulse"></div>
+                             <Fingerprint className="text-brand-gold relative" size={40} />
+                          </div>
+                          <div className="space-y-1">
+                             <p className="text-[9px] font-black text-brand-gold/60 uppercase tracking-[0.3em]">Institutional Verification Signature</p>
+                             <p className="text-xs font-mono text-brand-offWhite/40 leading-relaxed uppercase">
+                                Block: 18085089 <br /> 
+                                Auth: 0x{Math.random().toString(16).slice(2, 10).toUpperCase()}
+                             </p>
+                          </div>
                        </div>
-                    </div>
-                    <div className="flex items-center space-x-2 text-brand-success">
-                       <ShieldCheck size={18} />
-                       <span className="text-[10px] font-black uppercase tracking-widest">LEDGER SEALED</span>
+                       <div className="flex flex-col items-end space-y-2">
+                          <div className="flex items-center space-x-2 px-4 py-2 bg-brand-success/10 border border-brand-success/30 rounded-xl">
+                             <ShieldCheck size={18} className="text-brand-success shadow-[0_0_10px_#10B981]" />
+                             <span className="text-[10px] font-black text-brand-success uppercase tracking-[0.25em]">LEDGER SEALED</span>
+                          </div>
+                          <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Immutable Record Node v2.5</span>
+                       </div>
                     </div>
                  </div>
               </div>
@@ -522,6 +538,15 @@ export const Materials: React.FC = () => {
             </div>
          </div>
       </div>
+
+      <style>{`
+        @keyframes ledger-scan {
+          0% { transform: translateY(0); opacity: 0; }
+          10% { opacity: 0.4; }
+          90% { opacity: 0.4; }
+          100% { transform: translateY(600px); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 };
@@ -533,15 +558,47 @@ const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
   </Link>
 );
 
-const AuditStep: React.FC<{ status: 'verified' | 'active' | 'pending'; label: string; time: string }> = ({ status, label, time }) => (
-  <div className="flex items-start space-x-6 group">
-     <div className="flex flex-col items-center">
-        <div className={`w-4 h-4 rounded-full border-2 ${status === 'verified' ? 'bg-brand-success border-brand-success shadow-[0_0_10px_#10B981]' : status === 'active' ? 'bg-brand-gold border-brand-gold animate-pulse shadow-[0_0_10px_#D4AF37]' : 'bg-transparent border-slate-200'}`}></div>
-        <div className="w-px h-12 bg-slate-100 mt-2"></div>
+const AuditStep: React.FC<{ 
+  status: 'verified' | 'active' | 'pending'; 
+  label: string; 
+  time: string; 
+  sub: string;
+  icon: React.ReactNode;
+  isLast?: boolean;
+}> = ({ status, label, time, sub, icon, isLast }) => (
+  <div className={`relative pl-12 pb-10 group ${isLast ? 'pb-0' : ''}`}>
+     <div className={`absolute left-4 top-1 w-5 h-5 rounded-full border-2 z-10 flex items-center justify-center transition-all duration-700 ${
+       status === 'verified' ? 'bg-brand-success border-brand-success shadow-[0_0_15px_#10B981]' : 
+       status === 'active' ? 'bg-brand-gold border-brand-gold animate-pulse shadow-[0_0_15px_#D4AF37]' : 
+       'bg-white border-slate-200'
+     }`}>
+        {status === 'verified' ? <CheckCircle2 size={12} className="text-white" /> : 
+         status === 'active' ? <Zap size={12} className="text-brand-darkNavy fill-brand-darkNavy" /> : null}
      </div>
-     <div className="space-y-1">
-        <p className={`text-sm font-bold uppercase tracking-tight ${status === 'pending' ? 'text-slate-300' : 'text-brand-darkNavy'}`}>{label}</p>
-        <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">{time}</p>
+     
+     <div className="space-y-2 group-hover:translate-x-2 transition-transform duration-500">
+        <div className="flex items-center space-x-3">
+           <p className={`text-base font-bold uppercase tracking-tight ${status === 'pending' ? 'text-slate-300' : 'text-brand-darkNavy'}`}>
+             {label}
+           </p>
+           <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+             status === 'verified' ? 'bg-brand-success/10 text-brand-success' : 
+             status === 'active' ? 'bg-brand-gold/10 text-brand-gold' : 
+             'bg-slate-100 text-slate-400'
+           }`}>
+             {status === 'verified' ? 'SECURED' : status === 'active' ? 'MONITORING' : 'PENDING'}
+           </div>
+        </div>
+        <div className="flex items-center space-x-4">
+           <div className="flex items-center space-x-2 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-1 rounded">
+              <Clock size={10} />
+              <span>{time}</span>
+           </div>
+           <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold/60 uppercase tracking-widest">
+              {icon}
+              <span>{sub}</span>
+           </div>
+        </div>
      </div>
   </div>
 );

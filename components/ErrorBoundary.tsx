@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 // Props interface for strict type checking
@@ -16,8 +16,8 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Explicitly extend React.Component to ensure inherited members like setState and props are recognized.
-export class ErrorBoundary extends React.Component<Props, State> {
+// Explicitly importing Component and ensuring class correctly extends it to inherit setState and props.
+export class ErrorBoundary extends Component<Props, State> {
   // Initialize state directly as a class property for better TypeScript recognition
   public state: State = {
     hasError: false,
@@ -45,19 +45,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
    * This is passed as a callback to the GlobalError component.
    */
   public reset = () => {
-    // Fix: setState is now correctly inherited from React.Component.
+    // Fix: Accessing setState which is now correctly inherited from the Component base class.
     this.setState({ hasError: false, error: null });
   };
 
   public render() {
-    // Fix: state is now correctly inherited from React.Component.
+    // Accessing state inherited from the Component base class.
     const { hasError, error } = this.state;
     if (hasError && error) {
       // If an error is caught, render the specialized fallback UI (GlobalError)
       return <GlobalError error={error} reset={this.reset} />;
     }
 
-    // Fix: props is now correctly inherited from React.Component.
+    // Fix: Accessing children from props which is now correctly inherited from the Component base class.
     return this.props.children;
   }
 }
