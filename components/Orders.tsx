@@ -169,11 +169,8 @@ export const Orders: React.FC = () => {
       </aside>
 
       <main className="flex-grow flex flex-col overflow-y-auto relative">
-        {/* RE-ENGINEERED IMMACULATE HEADER */}
         <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200 px-12 py-10 shadow-sm overflow-visible">
           <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Title Section: Column 1-5 */}
             <div className="lg:col-span-5 space-y-2">
               <h1 className="text-4xl font-serif font-bold text-brand-darkNavy tracking-tight leading-none">Order Management</h1>
               <div className="flex items-center space-x-3 text-[10px] font-black text-brand-gold uppercase tracking-[0.25em]">
@@ -187,7 +184,6 @@ export const Orders: React.FC = () => {
               </div>
             </div>
 
-            {/* Controls Section: Column 6-12 */}
             <div className="lg:col-span-7 flex flex-col sm:flex-row items-center gap-5 justify-end">
               <div className="relative group w-full max-w-md">
                 <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-all duration-300 ${searchTerm ? 'text-brand-gold scale-110' : 'text-brand-mutedGray opacity-60'}`} />
@@ -228,17 +224,13 @@ export const Orders: React.FC = () => {
           </div>
         </header>
 
-        {/* DASHBOARD BODY */}
         <div className="px-12 py-12 space-y-12 max-w-[1600px] mx-auto w-full">
-          
-          {/* KPI GRID: Balanced and breathable */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <StatCard label="Active Volume" value="$114,150.00" sub="Across 4 active pipelines" icon={<Box className="text-blue-500" />} />
             <StatCard label="Supply Chain Health" value="92%" sub="On-time delivery rate" icon={<TrendingUp className="text-brand-success" />} />
             <StatCard label="Critical Actions" value="2 Pending" sub="1 Risk Flag, 1 Quality Audit" icon={<AlertCircle className="text-brand-amber" />} urgent />
           </div>
 
-          {/* TABLE MODULE: High-contrast scannability */}
           <div className="bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-2xl animate-in fade-in duration-1000">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
@@ -335,7 +327,6 @@ export const Orders: React.FC = () => {
           </div>
         </div>
 
-        {/* SETTLEMENT FOOTER */}
         <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-60 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center space-x-4">
@@ -351,7 +342,6 @@ export const Orders: React.FC = () => {
         </div>
       </main>
 
-      {/* EXPORT OVERLAY */}
       {showExportHUD && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-darkNavy/90 backdrop-blur-3xl animate-in fade-in duration-300">
            <div className="w-full max-w-2xl bg-white border border-brand-gold/30 rounded-[3rem] p-12 shadow-[0_50px_100px_rgba(0,0,0,1)] relative overflow-hidden">
@@ -370,10 +360,10 @@ export const Orders: React.FC = () => {
               </div>
               <div className="space-y-8 bg-slate-50/50 p-8 rounded-3xl border border-slate-100 font-mono">
                  <div className="h-40 bg-brand-darkNavy p-6 rounded-2xl text-[10px] text-brand-gold/80 space-y-2 overflow-hidden shadow-inner">
-                    <p className="animate-in slide-in-from-left duration-300">>> INITIALIZING DATA HUB...</p>
-                    {exportProgress > 25 && <p className="animate-in slide-in-from-left duration-300">>> FETCHING PROVENANCE NODES (4/4)...</p>}
-                    {exportProgress > 50 && <p className="animate-in slide-in-from-left duration-300">>> CALCULATING RISK-ADJUSTED MARGINS...</p>}
-                    {exportProgress === 100 && <p className="text-brand-success font-black animate-pulse">>> LEDGER SEALED. DOWNLOAD READY.</p>}
+                    <p className="animate-in slide-in-from-left duration-300">{'>> INITIALIZING DATA HUB...'}</p>
+                    {exportProgress > 25 && <p className="animate-in slide-in-from-left duration-300">{'>> FETCHING PROVENANCE NODES (4/4)...'}</p>}
+                    {exportProgress > 50 && <p className="animate-in slide-in-from-left duration-300">{'>> CALCULATING RISK-ADJUSTED MARGINS...'}</p>}
+                    {exportProgress === 100 && <p className="text-brand-success font-black animate-pulse">{'>> LEDGER SEALED. DOWNLOAD READY.'}</p>}
                  </div>
               </div>
               <div className="mt-12 flex justify-center">
