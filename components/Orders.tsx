@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, 
-  Search, Filter, FileText, MoreHorizontal, AlertCircle, Clock, ShieldCheck, Globe, TrendingUp, CheckCircle2, Lock, MessageSquare
+  Search, Filter, FileText, MoreHorizontal, AlertCircle, Clock, ShieldCheck, Globe, TrendingUp, CheckCircle2, Lock, MessageSquare, X, Command, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useRisk } from '../context/RiskContext';
@@ -64,6 +64,42 @@ const ORDERS_DATA = [
 
 export const Orders: React.FC = () => {
   const { isLocked } = useRisk();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  // Requirement: Live filtering logic
+  const filteredOrders = useMemo(() => {
+    if (!searchTerm.trim()) return ORDERS_DATA;
+    const lowerQuery = searchTerm.toLowerCase();
+    return ORDERS_DATA.filter(order => 
+      order.id.toLowerCase().includes(lowerQuery) ||
+      order.project.toLowerCase().includes(lowerQuery) ||
+      order.supplier.toLowerCase().includes(lowerQuery) ||
+      order.item.toLowerCase().includes(lowerQuery)
+    );
+  }, [searchTerm]);
+
+  // Command+K focus logic for C-suite speed
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('order-search-input')?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleExport = () => {
+    setIsExporting(true);
+    setTimeout(() => {
+      setIsExporting(false);
+      // Trigger a mock browser download if this were real
+      alert("Institutional Audit Report Generated: order_ledger_q4_2025.pdf");
+    }, 1500);
+  };
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
@@ -95,14 +131,49 @@ export const Orders: React.FC = () => {
       </aside>
 
       <main className="flex-grow flex flex-col overflow-y-auto">
-        <div className="bg-white border-b border-slate-200 px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-6 sticky top-0 z-10 shadow-sm">
+        <div className="bg-white border-b border-slate-200 px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6 sticky top-0 z-10 shadow-sm">
           <div className="space-y-1">
             <h1 className="text-3xl font-serif font-bold text-brand-darkNavy tracking-tight">Order Management</h1>
-            <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]"><span>Active Pipeline</span><span className="w-1 h-1 bg-brand-gold rounded-full"></span><span className="text-brand-mutedGray">Lifecycle Tracking</span></div>
+            <div className="flex items-center space-x-2 text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">
+              <span className="flex h-2 w-2 relative mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
+              </span>
+              <span>Active Pipeline</span><span className="w-1 h-1 bg-brand-gold rounded-full"></span><span className="text-brand-mutedGray">Lifecycle Tracking</span>
+            </div>
           </div>
           <div className="flex items-center space-x-4 w-full md:w-auto">
-            <div className="relative group flex-grow md:flex-grow-0"><Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray" /><input type="text" placeholder="Search orders, contracts..." className="pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm w-full md:w-80 focus:outline-none focus:ring-1 focus:ring-brand-gold transition-all" /></div>
-            <button className="flex items-center space-x-2 px-5 py-2.5 bg-brand-gold text-brand-darkNavy rounded-lg text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10"><FileText className="w-4 h-4" /><span>Export Report</span></button>
+            <div className="relative group flex-grow md:flex-grow-0 min-w-[320px]">
+              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${searchTerm ? 'text-brand-gold' : 'text-brand-mutedGray'}`} />
+              <input 
+                id="order-search-input"
+                type="text" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search orders, contracts, suppliers..." 
+                className="pl-11 pr-24 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm w-full focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold transition-all shadow-inner placeholder:text-slate-400 font-medium" 
+              />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+                {searchTerm ? (
+                  <button onClick={() => setSearchTerm('')} className="p-1 hover:bg-slate-200 rounded-full transition-colors">
+                    <X size={14} className="text-slate-500" />
+                  </button>
+                ) : (
+                  <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter shadow-sm pointer-events-none">
+                    <Command size={10} />
+                    <span>K</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <button 
+              onClick={handleExport}
+              disabled={isExporting}
+              className="flex items-center space-x-3 px-6 py-3 bg-brand-gold text-brand-darkNavy rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 group active:scale-95 disabled:opacity-50"
+            >
+              {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileText className="w-4 h-4 group-hover:rotate-6 transition-transform" />}
+              <span>{isExporting ? 'Generating...' : 'Export Report'}</span>
+            </button>
           </div>
         </div>
 
@@ -113,36 +184,94 @@ export const Orders: React.FC = () => {
             <StatCard label="Critical Actions" value="2 Pending" sub="1 Risk Flag, 1 Quality Audit" icon={<AlertCircle className="text-brand-amber" />} urgent />
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl animate-in fade-in duration-700">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-slate-50/50 border-b border-slate-200"><tr className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest"><th className="px-8 py-5">Order & Project</th><th className="px-8 py-5">Supplier & Items</th><th className="px-8 py-5">Lifecycle Stage</th><th className="px-8 py-5">Financial Status</th><th className="px-8 py-5">Risk Assessment</th><th className="px-8 py-5 text-right">Total Value</th><th className="px-8 py-5"></th></tr></thead>
+                <thead className="bg-slate-50/50 border-b border-slate-200">
+                  <tr className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">
+                    <th className="px-8 py-5">Order & Project</th>
+                    <th className="px-8 py-5">Supplier & Items</th>
+                    <th className="px-8 py-5">Lifecycle Stage</th>
+                    <th className="px-8 py-5">Financial Status</th>
+                    <th className="px-8 py-5">Risk Assessment</th>
+                    <th className="px-8 py-5 text-right">Total Value</th>
+                    <th className="px-8 py-5"></th>
+                  </tr>
+                </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {ORDERS_DATA.map((order) => (
-                    <tr key={order.id} className="hover:bg-slate-50/50 transition-colors group cursor-pointer">
-                      <td className="px-8 py-6 flex flex-col"><span className="text-sm font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{order.id}</span><span className="text-[11px] text-brand-mutedGray">{order.project}</span></td>
-                      <td className="px-8 py-6"><div className="flex flex-col"><span className="text-xs font-bold text-brand-darkNavy">{order.supplier}</span><span className="text-[11px] text-brand-mutedGray italic">{order.item}</span></div></td>
-                      <td className="px-8 py-6"><div className="space-y-2 max-w-[180px]"><div className="flex justify-between items-center text-[10px] font-bold"><span className="text-brand-darkNavy uppercase">{order.stage}</span><span className="text-brand-mutedGray">{order.progress}%</span></div><div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-brand-navy rounded-full transition-all duration-1000" style={{ width: `${order.progress}%` }}></div></div><div className="flex items-center space-x-1.5 text-[9px] text-brand-mutedGray"><Clock size={10} /><span>Next: {order.nextMilestone}</span></div></div></td>
-                      <td className="px-8 py-6">
-                        <button 
-                          disabled={isLocked}
-                          className={`px-3 py-1.5 rounded-md text-[9px] font-black tracking-widest border transition-all ${isLocked ? 'bg-red-500/10 border-red-500/20 text-red-500' : order.financialStatus === 'ESCROW LOCKED' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 border-slate-200 text-brand-darkNavy'}`}
-                        >
-                          {isLocked ? 'LOCKED: RESOLVE RISK' : order.financialStatus}
-                        </button>
+                  {filteredOrders.length > 0 ? (
+                    filteredOrders.map((order) => (
+                      <tr key={order.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer">
+                        <td className="px-8 py-6 flex flex-col">
+                          <span className="text-sm font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{order.id}</span>
+                          <span className="text-[11px] text-brand-mutedGray">{order.project}</span>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-brand-darkNavy">{order.supplier}</span>
+                            <span className="text-[11px] text-brand-mutedGray italic">{order.item}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="space-y-2 max-w-[180px]">
+                            <div className="flex justify-between items-center text-[10px] font-bold">
+                              <span className="text-brand-darkNavy uppercase">{order.stage}</span>
+                              <span className="text-brand-mutedGray">{order.progress}%</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-brand-navy rounded-full transition-all duration-1000" style={{ width: `${order.progress}%` }}></div>
+                            </div>
+                            <div className="flex items-center space-x-1.5 text-[9px] text-brand-mutedGray">
+                              <Clock size={10} />
+                              <span>Next: {order.nextMilestone}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <button 
+                            disabled={isLocked}
+                            className={`px-3 py-1.5 rounded-md text-[9px] font-black tracking-widest border transition-all ${isLocked ? 'bg-red-500/10 border-red-500/20 text-red-500' : order.financialStatus === 'ESCROW LOCKED' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 border-slate-200 text-brand-darkNavy'}`}
+                          >
+                            {isLocked ? 'LOCKED: RESOLVE RISK' : order.financialStatus}
+                          </button>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className={`flex items-center space-x-2 text-[10px] font-black tracking-widest uppercase ${order.riskColor}`}>
+                            <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+                            <span>{order.risk}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6 text-right font-bold text-sm text-brand-darkNavy">${order.value.toLocaleString()}</td>
+                        <td className="px-8 py-6 text-right">
+                          <button className="text-slate-300 hover:text-brand-darkNavy p-1 group-hover:scale-110 transition-transform">
+                            <MoreHorizontal size={20} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="px-8 py-20 text-center">
+                        <div className="flex flex-col items-center space-y-4">
+                          <div className="p-4 bg-slate-50 rounded-full text-slate-200">
+                            <Search size={40} />
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-lg font-serif font-bold text-brand-darkNavy">No matching records found</p>
+                            <p className="text-xs text-brand-mutedGray uppercase tracking-widest">Refine your institutional search parameters</p>
+                          </div>
+                          <button onClick={() => setSearchTerm('')} className="text-brand-gold text-[10px] font-black uppercase tracking-[0.2em] hover:underline">Clear Search</button>
+                        </div>
                       </td>
-                      <td className="px-8 py-6"><div className={`flex items-center space-x-2 text-[10px] font-black tracking-widest uppercase ${order.riskColor}`}><div className="w-1.5 h-1.5 rounded-full bg-current"></div><span>{order.risk}</span></div></td>
-                      <td className="px-8 py-6 text-right font-bold text-sm text-brand-darkNavy">${order.value.toLocaleString()}</td>
-                      <td className="px-8 py-6 text-right"><button className="text-slate-300 hover:text-brand-darkNavy p-1"><MoreHorizontal size={20} /></button></td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        {/* SETTLEMENT FOOTER - Functional Links Updated */}
+        {/* SETTLEMENT FOOTER */}
         <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center space-x-3">
@@ -163,7 +292,17 @@ export const Orders: React.FC = () => {
           </div>
         </div>
       </main>
-      <div className="fixed bottom-10 right-10 z-50"><div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all group"><div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center"><MessageSquare size={20} className="text-brand-gold" /></div><div className="flex flex-col pr-2"><span className="text-[11px] text-brand-darkNavy font-black uppercase tracking-widest">Live Concierge</span><span className="text-[10px] text-brand-darkNavy/70 font-bold">Priority Support</span></div></div></div>
+      <div className="fixed bottom-10 right-10 z-50">
+        <div className="bg-brand-gold p-4 rounded-2xl shadow-2xl flex items-center space-x-4 cursor-pointer hover:bg-brand-goldHover transition-all group">
+          <div className="w-10 h-10 bg-brand-darkNavy rounded-xl flex items-center justify-center">
+            <MessageSquare size={20} className="text-brand-gold" />
+          </div>
+          <div className="flex flex-col pr-2">
+            <span className="text-[11px] text-brand-darkNavy font-black uppercase tracking-widest">Live Concierge</span>
+            <span className="text-[10px] text-brand-darkNavy/70 font-bold">Priority Support</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -177,6 +316,15 @@ const NavItem: React.FC<{ icon: React.ReactNode; label: string; active?: boolean
 
 const StatCard: React.FC<{ label: string; value: string; sub: string; icon: React.ReactNode; urgent?: boolean }> = ({ label, value, sub, icon, urgent }) => (
   <div className={`bg-white border p-8 rounded-2xl shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 relative group ${urgent ? 'border-brand-amber/20' : 'border-slate-200'}`}>
-    <div className="flex items-start justify-between relative z-10"><div className="space-y-4"><p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-[0.25em]">{label}</p><div className="space-y-1"><h3 className="text-3xl font-serif font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{value}</h3><p className="text-[11px] font-medium text-brand-mutedGray">{sub}</p></div></div><div className={`p-4 rounded-xl ${urgent ? 'bg-brand-amber/10 text-brand-amber' : 'bg-slate-50 text-slate-400'}`}>{icon}</div></div>
+    <div className="flex items-start justify-between relative z-10">
+      <div className="space-y-4">
+        <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-[0.25em]">{label}</p>
+        <div className="space-y-1">
+          <h3 className="text-3xl font-serif font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{value}</h3>
+          <p className="text-[11px] font-medium text-brand-mutedGray">{sub}</p>
+        </div>
+      </div>
+      <div className={`p-4 rounded-xl ${urgent ? 'bg-brand-amber/10 text-brand-amber' : 'bg-slate-50 text-slate-400'}`}>{icon}</div>
+    </div>
   </div>
 );
