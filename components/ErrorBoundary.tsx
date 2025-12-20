@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 // Props interface for strict type checking
@@ -18,8 +18,8 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Explicitly extend Component to ensure inheritance is correctly resolved by the compiler
-export class ErrorBoundary extends Component<Props, State> {
+// Fix: Explicitly extend React.Component to ensure the class inherits setState and props correctly
+export class ErrorBoundary extends React.Component<Props, State> {
   // Initialize state property explicitly to provide a stable base state
   public state: State = {
     hasError: false,
@@ -51,7 +51,7 @@ export class ErrorBoundary extends Component<Props, State> {
    * This is passed as a callback to the GlobalError component.
    */
   public reset = (): void => {
-    // Use setState from the Component base class to clear the error state
+    // Fix: Call setState from the React.Component base class to clear the error state
     this.setState({ hasError: false, error: null });
   };
 
@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return <GlobalError error={error} reset={this.reset} />;
     }
 
-    // Return children from the Component instance props
+    // Fix: Return children from props, ensuring 'props' property is available via inheritance from React.Component
     return this.props.children;
   }
 }
