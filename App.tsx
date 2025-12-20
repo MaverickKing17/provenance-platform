@@ -19,6 +19,7 @@ import { ExecutiveAlertBanner } from './components/ExecutiveAlertBanner';
 import { ExecutiveCommandCenter } from './components/ExecutiveCommandCenter';
 import { ExecutiveReport } from './components/ExecutiveReport';
 import { SupplierOnboarding } from './components/SupplierOnboarding';
+import { ExecutiveToast } from './components/ExecutiveToast';
 import { RiskProvider } from './context/RiskContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -50,6 +51,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </main>
         {!hideGlobalNav && <Footer />}
       </div>
+      
+      {/* Global Executive Notification Hub */}
+      <ExecutiveToast />
     </div>
   );
 };

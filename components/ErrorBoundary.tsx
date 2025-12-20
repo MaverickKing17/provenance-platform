@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 // Props interface for strict type checking
@@ -18,10 +18,9 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Use React.Component explicitly to ensure inheritance is correctly resolved by the compiler
-export class ErrorBoundary extends React.Component<Props, State> {
+// Explicitly extend Component to ensure inheritance is correctly resolved by the compiler
+export class ErrorBoundary extends Component<Props, State> {
   // Initialize state property explicitly to provide a stable base state
-  // Fix: Extending React.Component ensures the state property is correctly linked to the base class
   public state: State = {
     hasError: false,
     error: null
@@ -52,21 +51,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
    * This is passed as a callback to the GlobalError component.
    */
   public reset = (): void => {
-    // Reset the state using the inherited setState method
-    // Fix: setState is a member of the React.Component base class and is now correctly accessible
+    // Use setState from the Component base class to clear the error state
     this.setState({ hasError: false, error: null });
   };
 
   public render(): ReactNode {
-    // Access current error state from Component.state
+    // Access current error state from the Component instance state
     const { hasError, error } = this.state;
     if (hasError && error) {
       // If an error is caught, render the specialized fallback UI (GlobalError)
       return <GlobalError error={error} reset={this.reset} />;
     }
 
-    // Return children from Component.props
-    // Fix: props is a member of the React.Component base class and is now correctly accessible
+    // Return children from the Component instance props
     return this.props.children;
   }
 }

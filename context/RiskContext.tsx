@@ -3,6 +3,13 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 export type RiskTier = 1 | 2 | 3 | 4 | 5;
 
+export interface OnboardingPayload {
+  supplier_name: string;
+  material_category: string;
+  compliance_score: number;
+  project_relevance: string;
+}
+
 interface RiskState {
   tier: RiskTier;
   color: string;
@@ -11,11 +18,14 @@ interface RiskState {
   showAIHedging: boolean;
   isLoading: boolean;
   isDemoMode: boolean;
+  activeNotification: OnboardingPayload | null;
 }
 
 interface RiskContextType extends RiskState {
   refreshRisk: () => Promise<void>;
   setDemoMode: (active: boolean) => void;
+  triggerOnboardingNotification: (payload: OnboardingPayload) => void;
+  clearNotification: () => void;
 }
 
 const RiskContext = createContext<RiskContextType | undefined>(undefined);
@@ -34,6 +44,7 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isDemoMode, setIsDemoMode] = useState(() => {
     return localStorage.getItem('DEMO_MODE_ACTIVE') === 'true';
   });
+  const [activeNotification, setActiveNotification] = useState<OnboardingPayload | null>(null);
 
   const getEnv = (key: string): string => {
     if (typeof window !== 'undefined') {
@@ -69,6 +80,12 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const triggerOnboardingNotification = (payload: OnboardingPayload) => {
+    setActiveNotification(payload);
+  };
+
+  const clearNotification = () => setActiveNotification(null);
+
   useEffect(() => {
     refreshRisk();
     const interval = setInterval(refreshRisk, 30000);
@@ -94,8 +111,11 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     ...TIER_CONFIG[currentTier as RiskTier],
     isLoading,
     isDemoMode,
+    activeNotification,
     refreshRisk,
-    setDemoMode
+    setDemoMode,
+    triggerOnboardingNotification,
+    clearNotification
   };
 
   return <RiskContext.Provider value={value}>{children}</RiskContext.Provider>;

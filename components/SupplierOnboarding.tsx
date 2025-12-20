@@ -20,8 +20,10 @@ import {
   LayoutDashboard
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRisk } from '../context/RiskContext';
 
 export const SupplierOnboarding: React.FC = () => {
+  const { triggerOnboardingNotification } = useRisk();
   const [kyvData, setKyvData] = useState({ companyName: '', taxId: '', category: 'Natural Stone' });
   const [files, setFiles] = useState<File[]>([]);
   const [isSigned, setIsSigned] = useState(false);
@@ -49,10 +51,18 @@ export const SupplierOnboarding: React.FC = () => {
 
   const handleVerify = () => {
     setIsVerifying(true);
-    // Simulate Xano backend validation
+    // Simulate Xano backend validation & Trigger Global Onboarding Completion
     setTimeout(() => {
       setIsVerifying(false);
       setIsVetted(true);
+      
+      // Trigger the "Victory Lap" for the CEO
+      triggerOnboardingNotification({
+        supplier_name: kyvData.companyName || "Artisan Stone Lab",
+        material_category: kyvData.category,
+        compliance_score: 98,
+        project_relevance: `New Node fills structural marble gap in Sterling Residence (+12% yield).`
+      });
     }, 3000);
   };
 
