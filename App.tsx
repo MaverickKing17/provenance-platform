@@ -24,6 +24,12 @@ import { RiskProvider } from './context/RiskContext';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
+  
+  // Requirement: Ensure high-end navigation experience by resetting scroll position
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const internalRoutes = [
     '/projects', 
     '/materials', 
