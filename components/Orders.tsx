@@ -62,10 +62,26 @@ const ORDERS_DATA = [
   }
 ];
 
+/**
+ * High-fidelity utility to highlight matching text for C-suite scannability
+ */
+const Highlight: React.FC<{ text: string; query: string }> = ({ text, query }) => {
+  if (!query.trim()) return <>{text}</>;
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <>
+      {parts.map((part, i) => 
+        part.toLowerCase() === query.toLowerCase() 
+          ? <span key={i} className="bg-brand-gold/20 text-brand-darkNavy font-black px-0.5 rounded-sm shadow-[0_0_8px_rgba(212,175,55,0.2)]">{part}</span> 
+          : part
+      )}
+    </>
+  );
+};
+
 export const Orders: React.FC = () => {
   const { isLocked } = useRisk();
   const [searchTerm, setSearchTerm] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   // Requirement: Live filtering logic
@@ -96,7 +112,6 @@ export const Orders: React.FC = () => {
     setIsExporting(true);
     setTimeout(() => {
       setIsExporting(false);
-      // Trigger a mock browser download if this were real
       alert("Institutional Audit Report Generated: order_ledger_q4_2025.pdf");
     }, 1500);
   };
@@ -143,23 +158,29 @@ export const Orders: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4 w-full md:w-auto">
-            <div className="relative group flex-grow md:flex-grow-0 min-w-[320px]">
-              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${searchTerm ? 'text-brand-gold' : 'text-brand-mutedGray'}`} />
+            {/* ENHANCED SEARCH BAR FOR C-SUITE */}
+            <div className="relative group flex-grow md:flex-grow-0 min-w-[380px]">
+              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-all duration-300 ${searchTerm ? 'text-brand-gold scale-110' : 'text-brand-mutedGray opacity-60'}`} />
               <input 
                 id="order-search-input"
                 type="text" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search orders, contracts, suppliers..." 
-                className="pl-11 pr-24 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm w-full focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold transition-all shadow-inner placeholder:text-slate-400 font-medium" 
+                placeholder="Search orders, projects, suppliers..." 
+                className={`pl-11 pr-24 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm w-full focus:outline-none focus:ring-2 focus:ring-brand-gold/20 focus:border-brand-gold focus:bg-white transition-all shadow-inner placeholder:text-slate-400 font-medium ${searchTerm ? 'border-brand-gold/50 ring-2 ring-brand-gold/10' : ''}`} 
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-3">
+                {searchTerm && (
+                  <span className="text-[10px] font-black text-brand-gold uppercase tracking-widest bg-brand-gold/10 px-2 py-0.5 rounded border border-brand-gold/20 animate-in fade-in zoom-in">
+                    {filteredOrders.length} FOUND
+                  </span>
+                )}
                 {searchTerm ? (
                   <button onClick={() => setSearchTerm('')} className="p-1 hover:bg-slate-200 rounded-full transition-colors">
                     <X size={14} className="text-slate-500" />
                   </button>
                 ) : (
-                  <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter shadow-sm pointer-events-none">
+                  <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[9px] font-black text-brand-mutedGray uppercase tracking-tighter shadow-sm pointer-events-none opacity-60">
                     <Command size={10} />
                     <span>K</span>
                   </div>
@@ -169,7 +190,7 @@ export const Orders: React.FC = () => {
             <button 
               onClick={handleExport}
               disabled={isExporting}
-              className="flex items-center space-x-3 px-6 py-3 bg-brand-gold text-brand-darkNavy rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 group active:scale-95 disabled:opacity-50"
+              className="flex items-center space-x-3 px-6 py-3.5 bg-brand-gold text-brand-darkNavy rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand-goldHover transition-all shadow-lg shadow-brand-gold/10 group active:scale-95 disabled:opacity-50"
             >
               {isExporting ? <Loader2 size={16} className="animate-spin" /> : <FileText className="w-4 h-4 group-hover:rotate-6 transition-transform" />}
               <span>{isExporting ? 'Generating...' : 'Export Report'}</span>
@@ -203,13 +224,21 @@ export const Orders: React.FC = () => {
                     filteredOrders.map((order) => (
                       <tr key={order.id} className="hover:bg-slate-50/80 transition-colors group cursor-pointer">
                         <td className="px-8 py-6 flex flex-col">
-                          <span className="text-sm font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">{order.id}</span>
-                          <span className="text-[11px] text-brand-mutedGray">{order.project}</span>
+                          <span className="text-sm font-bold text-brand-darkNavy group-hover:text-brand-gold transition-colors">
+                            <Highlight text={order.id} query={searchTerm} />
+                          </span>
+                          <span className="text-[11px] text-brand-mutedGray">
+                            <Highlight text={order.project} query={searchTerm} />
+                          </span>
                         </td>
                         <td className="px-8 py-6">
                           <div className="flex flex-col">
-                            <span className="text-xs font-bold text-brand-darkNavy">{order.supplier}</span>
-                            <span className="text-[11px] text-brand-mutedGray italic">{order.item}</span>
+                            <span className="text-xs font-bold text-brand-darkNavy">
+                              <Highlight text={order.supplier} query={searchTerm} />
+                            </span>
+                            <span className="text-[11px] text-brand-mutedGray italic">
+                              <Highlight text={order.item} query={searchTerm} />
+                            </span>
                           </div>
                         </td>
                         <td className="px-8 py-6">

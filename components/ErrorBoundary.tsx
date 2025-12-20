@@ -1,7 +1,5 @@
 
-
-
-import React, { ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 import GlobalError from '../error';
 
 // Props interface for strict type checking
@@ -19,8 +17,8 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Explicitly extend React.Component to ensure inherited members like setState and props are correctly recognized by TypeScript.
-export class ErrorBoundary extends React.Component<Props, State> {
+// Fix: Explicitly extend Component from 'react' to ensure inherited members like setState and props are correctly recognized by TypeScript.
+export class ErrorBoundary extends Component<Props, State> {
   // Initialize state directly as a class property for better TypeScript recognition
   public state: State = {
     hasError: false,
@@ -48,18 +46,19 @@ export class ErrorBoundary extends React.Component<Props, State> {
    * This is passed as a callback to the GlobalError component.
    */
   public reset = () => {
-    // Correctly call setState from the inherited React.Component class.
+    // Fix: Successfully call setState from the inherited base class.
     this.setState({ hasError: false, error: null });
   };
 
   public render() {
-    // Accessing inherited state members from the base React.Component class
-    if (this.state.hasError && this.state.error) {
+    // Fix: Correctly access state members from the base class.
+    const { hasError, error } = this.state;
+    if (hasError && error) {
       // If an error is caught, render the specialized fallback UI (GlobalError)
-      return <GlobalError error={this.state.error} reset={this.reset} />;
+      return <GlobalError error={error} reset={this.reset} />;
     }
 
-    // Access the inherited props member to render children from React.Component
+    // Fix: Access the inherited props member to render children from the base class.
     return this.props.children;
   }
 }
