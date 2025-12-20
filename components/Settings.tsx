@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { 
   LayoutDashboard, Layers, ShoppingBag, Box, Wallet, BarChart3, Users, Settings2, 
-  ShieldCheck, Lock, Globe, Key, User, Bell, Database, CheckCircle2, MessageSquare, TrendingUp
+  ShieldCheck, Lock, Globe, Key, User, Terminal, CheckCircle2, FlaskConical
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRisk } from '../context/RiskContext';
 
 export const SettingsPage: React.FC = () => {
+  const { isDemoMode, setDemoMode } = useRisk();
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden font-sans">
       <aside className="w-64 bg-brand-darkNavy flex flex-col border-r border-white/5 shadow-2xl z-20">
@@ -27,6 +31,20 @@ export const SettingsPage: React.FC = () => {
           <NavItem icon={<Users size={18} />} label="Vetted Suppliers" to="/network" />
           <NavItem icon={<Settings2 size={18} />} label="Settings" active />
         </nav>
+        
+        {/* Hidden Developer Toggle */}
+        <div className="mt-auto px-6 py-8 border-t border-white/5">
+          <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10 group cursor-pointer" onClick={() => setDemoMode(!isDemoMode)}>
+            <div className="flex items-center space-x-3">
+              <FlaskConical size={16} className={isDemoMode ? "text-brand-gold animate-pulse" : "text-white/20"} />
+              <span className="text-[10px] font-black text-white/40 uppercase tracking-widest group-hover:text-white/60">Demo Mode</span>
+            </div>
+            <div className={`w-8 h-4 rounded-full transition-colors relative ${isDemoMode ? 'bg-brand-gold' : 'bg-white/10'}`}>
+              <div className={`absolute top-0.5 w-3 h-3 bg-brand-darkNavy rounded-full transition-all ${isDemoMode ? 'left-[18px]' : 'left-0.5'}`}></div>
+            </div>
+          </div>
+        </div>
+
         <div className="p-6 border-t border-white/5">
           <div className="flex items-center space-x-3 p-2 rounded-xl">
             <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full border border-brand-gold/50 shadow-lg" alt="V. Sterling" />
@@ -52,15 +70,17 @@ export const SettingsPage: React.FC = () => {
 
           <section className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
             <div className="flex items-center space-x-4 mb-8 border-b border-slate-50 pb-6"><div className="p-3 bg-slate-50 rounded-xl text-brand-navy"><Key size={20} /></div><div><h3 className="font-serif font-bold text-brand-darkNavy text-lg">API & Integrations</h3><p className="text-xs text-brand-mutedGray uppercase tracking-widest font-bold">Institutional Data Bridges</p></div></div>
-            <div className="space-y-6"><div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl"><div><p className="text-xs font-bold text-brand-darkNavy">Xano Backend Bridge</p><p className="text-[10px] text-brand-mutedGray">Active Connection: Production-Node-01</p></div><div className="flex items-center space-x-2 text-brand-success text-[10px] font-black uppercase tracking-widest"><CheckCircle2 size={14} /><span>Connected</span></div></div><div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl"><div><p className="text-xs font-bold text-brand-darkNavy">Oracle Treasury Feed</p><p className="text-[10px] text-brand-mutedGray">Last sync: 12 minutes ago</p></div><div className="flex items-center space-x-2 text-brand-success text-[10px] font-black uppercase tracking-widest"><CheckCircle2 size={14} /><span>Connected</span></div></div></div>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl">
+                <div><p className="text-xs font-bold text-brand-darkNavy">Xano Backend Bridge</p><p className="text-[10px] text-brand-mutedGray">Active Connection: Production-Node-01</p></div>
+                <div className="flex items-center space-x-2 text-brand-success text-[10px] font-black uppercase tracking-widest"><CheckCircle2 size={14} /><span>Connected</span></div>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl opacity-50">
+                <div><p className="text-xs font-bold text-brand-darkNavy">Oracle Treasury Feed</p><p className="text-[10px] text-brand-mutedGray">Awaiting API Key Verification</p></div>
+                <div className="flex items-center space-x-2 text-brand-amber text-[10px] font-black uppercase tracking-widest"><Terminal size={14} /><span>Standby</span></div>
+              </div>
+            </div>
           </section>
-        </div>
-
-        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 opacity-40">
-            <div className="flex items-center space-x-3"><Lock size={14} className="text-brand-gold" /><span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span></div>
-            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]"><span className="flex items-center space-x-2"><Globe size={14} /> <span>SWIFT / SEPA</span></span><span className="flex items-center space-x-2"><TrendingUp size={14} /> <span>Corporate Treasury</span></span><span className="flex items-center space-x-2"><ShieldCheck size={14} /> <span>Audit Ready</span></span></div>
-          </div>
         </div>
       </main>
     </div>

@@ -22,14 +22,13 @@ import {
   BarChart3, 
   Cpu, 
   Leaf, 
-  Database,
   Terminal,
-  ServerCrash,
-  Activity
+  Activity,
+  AlertTriangle
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalSearch } from './GlobalSearch';
-import { xanoFetch } from '../lib/xanoClient';
+import { apiClient } from '../lib/apiClient';
 import { useRisk } from '../context/RiskContext';
 
 const getEnv = (key: string): string => {
@@ -44,7 +43,7 @@ const getEnv = (key: string): string => {
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { tier, color } = useRisk();
+  const { tier, color, isDemoMode } = useRisk();
   const [config, setConfig] = useState({
     baseUrl: getEnv('NEXT_PUBLIC_XANO_BASE_URL'),
     alexToken: getEnv('NEXT_PUBLIC_ALEX_TOKEN'),
@@ -80,7 +79,7 @@ export const Dashboard: React.FC = () => {
       setLoading(false); setIsSyncing(false); return;
     }
     try {
-      const response = await xanoFetch<Valuation[]>(`${config.baseUrl}/valuation`, {
+      const response = await apiClient<Valuation[]>(`${config.baseUrl}/valuation`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setValuations(Array.isArray(response.data) ? response.data : []);
@@ -97,7 +96,7 @@ export const Dashboard: React.FC = () => {
     if (!config.baseUrl || !TOKENS[currentUser]) return;
     setLoading(true);
     try {
-      await xanoFetch(`${config.baseUrl}/create_valuation`, {
+      await apiClient(`${config.baseUrl}/create_valuation`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${TOKENS[currentUser]}` },
         body: JSON.stringify({
@@ -144,14 +143,14 @@ export const Dashboard: React.FC = () => {
             <div className="w-8 h-8 border-2 border-brand-gold flex items-center justify-center rounded-sm">
               <div className="w-4 h-4 bg-brand-gold"></div>
             </div>
-            <span className="text-white font-sans font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter">Classic Homes</span>
+            <span className="text-white font-sans font-bold tracking-tight text-lg mt-2 uppercase tracking-tighter text-nowrap">Classic Homes</span>
           </Link>
         </div>
 
         <nav className="flex-grow px-4 space-y-1">
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active />
           <NavItem 
-            icon={<Cpu size={18} className={showPulse ? "animate-pulse" : "text-brand-gold"} />} 
+            icon={<Cpu size={18} className={showPulse ? "animate-pulse text-brand-gold" : "text-brand-gold"} />} 
             label="Command Center" 
             to="/executive-command" 
             special 
@@ -295,7 +294,29 @@ export const Dashboard: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                          {valuations.map((v, i) => (
+                          {/* Live Mock override for Sterling Residence */}
+                          {isDemoMode && (
+                             <tr className="bg-red-500/5 hover:bg-red-500/10 transition-colors group">
+                                <td className="px-10 py-8">
+                                  <div className="flex flex-col">
+                                    <span className="font-sans font-black text-xl text-white">Sterling Residence</span>
+                                    <div className="flex items-center space-x-2 mt-2">
+                                      <AlertTriangle className="w-4 h-4 text-brand-gold animate-pulse" />
+                                      <span className="text-[10px] text-brand-gold font-black tracking-widest uppercase">⚠️ NEEDS REVIEW</span>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-10 py-8 text-right">
+                                  <span className="text-white font-sans font-black text-xl tracking-tight">$4,520,000.00</span>
+                                </td>
+                                <td className="px-10 py-8 text-right">
+                                  <button onClick={() => navigate('/executive-command')} className="px-5 py-2.5 bg-brand-gold text-brand-darkNavy text-[10px] font-black uppercase tracking-widest rounded-xl shadow-xl hover:scale-105 transition-all">
+                                    AI Resolve
+                                  </button>
+                                </td>
+                             </tr>
+                          )}
+                          {valuations.filter(v => !(isDemoMode && (v.name?.includes('Sterling') || v.id === 1))).map((v, i) => (
                             <tr key={v.id} className="hover:bg-brand-gold/[0.03] transition-colors group">
                               <td className="px-10 py-8">
                                 <div className="flex flex-col">

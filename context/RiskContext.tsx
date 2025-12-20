@@ -7,13 +7,15 @@ interface RiskState {
   tier: RiskTier;
   color: string;
   label: string;
-  isLocked: boolean; // Tier 1 Kill Switch
-  showAIHedging: boolean; // Tier 2 Feature
+  isLocked: boolean;
+  showAIHedging: boolean;
   isLoading: boolean;
+  isDemoMode: boolean;
 }
 
 interface RiskContextType extends RiskState {
   refreshRisk: () => Promise<void>;
+  setDemoMode: (active: boolean) => void;
 }
 
 const RiskContext = createContext<RiskContextType | undefined>(undefined);
@@ -27,8 +29,11 @@ const TIER_CONFIG = {
 };
 
 export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [tier, setTier] = useState<RiskTier>(5); // Optimistic default: Stable
+  const [tier, setTier] = useState<RiskTier>(5);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(() => {
+    return localStorage.getItem('DEMO_MODE_ACTIVE') === 'true';
+  });
 
   const getEnv = (key: string): string => {
     if (typeof window !== 'undefined') {
@@ -39,6 +44,12 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const refreshRisk = async () => {
+    if (isDemoMode) {
+      setTier(2); // Volatile for Demo Mode
+      setIsLoading(false);
+      return;
+    }
+
     const baseUrl = getEnv('NEXT_PUBLIC_XANO_BASE_URL');
     const alexToken = getEnv('NEXT_PUBLIC_ALEX_TOKEN');
 
@@ -49,12 +60,10 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
       if (!response.ok) throw new Error('Fault');
       const data = await response.json();
-      // Assume backend returns { risk_score: 1-5 }
       const newTier = (data.risk_score as RiskTier) || 5;
       setTier(newTier);
     } catch (e) {
-      // Simulation mode for demo if backend not fully wired
-      setTier(3); // Default to Elevated for visual impact in demo
+      setTier(3);
     } finally {
       setIsLoading(false);
     }
@@ -62,23 +71,31 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     refreshRisk();
-    const interval = setInterval(refreshRisk, 30000); // Poll every 30s
+    const interval = setInterval(refreshRisk, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isDemoMode]);
 
-  // Dynamic Theme Injection
   useEffect(() => {
     const root = document.documentElement;
-    const config = TIER_CONFIG[tier];
+    const currentTier = isDemoMode ? 2 : tier;
+    const config = TIER_CONFIG[currentTier as RiskTier];
     root.style.setProperty('--risk-accent', config.color);
-    root.style.setProperty('--risk-glow', `${config.color}33`); // 20% opacity
-  }, [tier]);
+    root.style.setProperty('--risk-glow', `${config.color}33`);
+  }, [tier, isDemoMode]);
 
+  const setDemoMode = (active: boolean) => {
+    setIsDemoMode(active);
+    localStorage.setItem('DEMO_MODE_ACTIVE', active ? 'true' : 'false');
+  };
+
+  const currentTier = isDemoMode ? 2 : tier;
   const value = {
-    tier,
-    ...TIER_CONFIG[tier],
+    tier: currentTier as RiskTier,
+    ...TIER_CONFIG[currentTier as RiskTier],
     isLoading,
-    refreshRisk
+    isDemoMode,
+    refreshRisk,
+    setDemoMode
   };
 
   return <RiskContext.Provider value={value}>{children}</RiskContext.Provider>;
