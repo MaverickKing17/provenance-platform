@@ -18,8 +18,8 @@ interface State {
  * ErrorBoundary component that catches runtime errors in the component tree.
  * Provides a specialized fallback UI for institutional system faults.
  */
-// Fix: Use React.Component explicitly to ensure inherited members like setState and props are correctly recognized.
-export class ErrorBoundary extends React.Component<Props, State> {
+// Use Component directly to ensure inherited members like setState and props are correctly recognized by TypeScript.
+export class ErrorBoundary extends Component<Props, State> {
   // Initialize state directly as a class property for better TypeScript recognition
   public state: State = {
     hasError: false,
@@ -47,7 +47,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
    * This is passed as a callback to the GlobalError component.
    */
   public reset = () => {
-    // Fix: Access setState from the React.Component base class
+    // Correctly call setState from the inherited Component class.
     this.setState({ hasError: false, error: null });
   };
 
@@ -58,7 +58,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
       return <GlobalError error={this.state.error} reset={this.reset} />;
     }
 
-    // Fix: Access the inherited props member to render children from React.Component base class
+    // Access the inherited props member to render children.
     return this.props.children;
   }
 }

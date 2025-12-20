@@ -142,10 +142,24 @@ export const Orders: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40">
+        {/* SETTLEMENT FOOTER - Functional Links Updated */}
+        <div className="mt-auto bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center space-x-3"><Lock size={14} className="text-brand-gold" /><span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span></div>
-            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]"><span className="flex items-center space-x-2"><Globe size={14} /> <span>SWIFT / SEPA</span></span><span className="flex items-center space-x-2"><TrendingUp size={14} /> <span>Corporate Treasury</span></span><span className="flex items-center space-x-2"><ShieldCheck size={14} /> <span>Audit Ready</span></span></div>
+            <div className="flex items-center space-x-3">
+              <Lock size={14} className="text-brand-gold" />
+              <span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]">
+              <Link to="/partners" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                <Globe size={14} /> <span>SWIFT / SEPA</span>
+              </Link>
+              <Link to="/wallet" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                <TrendingUp size={14} /> <span>Corporate Treasury</span>
+              </Link>
+              <Link to="/privacy-policy" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                <ShieldCheck size={14} /> <span>Audit Ready</span>
+              </Link>
+            </div>
           </div>
         </div>
       </main>

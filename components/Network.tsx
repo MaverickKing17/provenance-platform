@@ -30,7 +30,6 @@ import {
   Maximize2,
   Activity,
   Zap,
-  // Fix: Added missing MapPin import
   MapPin
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -313,7 +312,7 @@ export const Network: React.FC = () => {
               </div>
             </div>
           ) : (
-            /* ENHANCED RISK MAP VIEW - Dark HUD Theme */
+            /* ENHANCED RISK MAP VIEW */
             <div className="flex-grow relative bg-[#050B15] overflow-hidden animate-in zoom-in-95 duration-700 flex flex-col">
               
               {/* Abstract High-Tech Map Background */}
@@ -331,7 +330,7 @@ export const Network: React.FC = () => {
                  </svg>
               </div>
 
-              {/* Institutional HUD HUD Indicators */}
+              {/* Institutional HUD indicators */}
               <div className="absolute top-12 left-12 z-20 space-y-6">
                  <div className="bg-[#0A1628]/90 backdrop-blur-2xl border border-white/10 p-6 rounded-2xl space-y-5 shadow-2xl min-w-[280px]">
                     <div className="flex items-center justify-between border-b border-white/5 pb-4">
@@ -355,17 +354,6 @@ export const Network: React.FC = () => {
                        </div>
                     </div>
                  </div>
-
-                 <div className="flex items-center space-x-4">
-                    <div className="bg-brand-navy/80 backdrop-blur-md px-4 py-2.5 rounded-xl border border-brand-gold/20 flex items-center space-x-3">
-                       <Activity size={14} className="text-brand-gold" />
-                       <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Scan Rate: 1.2Hz</span>
-                    </div>
-                    <div className="bg-brand-navy/80 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/10 flex items-center space-x-3">
-                       <Zap size={14} className="text-brand-success" />
-                       <span className="text-[9px] font-black text-white uppercase tracking-[0.2em]">AI Forecast On</span>
-                    </div>
-                 </div>
               </div>
 
               {/* Supply Chain Node Markers */}
@@ -382,66 +370,11 @@ export const Network: React.FC = () => {
                        onMouseEnter={() => setHoveredSupplier(supplier)}
                        onMouseLeave={() => setHoveredSupplier(null)}
                      >
-                        {/* Interactive Range Rings */}
-                        <div className={`absolute -inset-10 border border-current opacity-[0.05] rounded-full scale-150 animate-pulse transition-all ${riskStyles.text} ${isHovered ? 'scale-[2] opacity-10' : ''}`}></div>
                         <div className={`absolute -inset-6 rounded-full opacity-20 animate-ping ${riskStyles.bg}`}></div>
-                        
-                        {/* High-Fidelity HUD Marker */}
                         <div className={`relative p-3 rounded-full cursor-pointer border-2 transition-all duration-500 hover:scale-125 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex items-center justify-center ${riskStyles.bg} ${riskStyles.border} ${isHovered ? 'ring-4 ring-white/10' : ''}`}>
                            {supplier.risk === 'Low Risk' ? <ShieldCheck className="w-5 h-5 text-white" /> : 
                             supplier.risk === 'Medium Risk' ? <AlertTriangle className="w-5 h-5 text-white" /> : 
                             <ShieldAlert className="w-5 h-5 text-white" />}
-                           
-                           {/* Pulse Dot */}
-                           <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full translate-x-1/2 -translate-y-1/2 shadow-lg"></div>
-                        </div>
-
-                        {/* Interactive Data Terminal (on hover) */}
-                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-6 transition-all duration-500 transform ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95 pointer-events-none'}`}>
-                           <div className="bg-brand-darkNavy/95 backdrop-blur-3xl rounded-[2rem] border border-white/10 w-[300px] shadow-[0_40px_80px_rgba(0,0,0,0.8)] overflow-hidden">
-                              <div className="p-7 space-y-6">
-                                 <div className="flex items-center space-x-4">
-                                    <div className="relative">
-                                       <img src={supplier.image} className="w-14 h-14 rounded-2xl object-cover border border-white/10" alt={supplier.name} />
-                                       <div className={`absolute -bottom-1 -right-1 p-1 rounded-full bg-white shadow-xl scale-75`}>{riskStyles.icon}</div>
-                                    </div>
-                                    <div>
-                                       <h4 className="text-sm font-black text-white leading-none mb-1.5">{supplier.name}</h4>
-                                       <div className="flex items-center space-x-2">
-                                          <MapPin size={10} className="text-brand-gold" />
-                                          <span className="text-[9px] text-brand-offWhite/40 uppercase tracking-[0.2em] font-bold">{supplier.location}</span>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                                 <div className="grid grid-cols-2 gap-6 pt-5 border-t border-white/5">
-                                    <div className="space-y-1">
-                                       <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-widest">Throughput</span>
-                                       <div className="flex items-center space-x-2">
-                                          <TrendingUp size={12} className="text-brand-success" />
-                                          <span className="text-sm font-bold text-white">{supplier.capacity}%</span>
-                                       </div>
-                                    </div>
-                                    <div className="space-y-1">
-                                       <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-widest">Asset Rating</span>
-                                       <div className="flex items-center space-x-2">
-                                          <Star size={12} className="text-brand-gold fill-brand-gold" />
-                                          <span className="text-sm font-bold text-white">{supplier.rating} / 5.0</span>
-                                       </div>
-                                    </div>
-                                 </div>
-
-                                 <button 
-                                   onClick={(e) => { e.stopPropagation(); handleRequestQuote(supplier); }}
-                                   className="w-full py-4 bg-brand-gold text-brand-darkNavy text-[10px] font-black uppercase tracking-[0.25em] rounded-xl hover:bg-white transition-all flex items-center justify-center space-x-3 shadow-xl shadow-brand-gold/5"
-                                 >
-                                    <MessageSquare size={14} className="fill-brand-darkNavy" />
-                                    <span>Execute RFP Sequence</span>
-                                 </button>
-                              </div>
-                           </div>
-                           {/* Stem decoration */}
-                           <div className="w-4 h-4 bg-brand-darkNavy border-r border-b border-white/10 rotate-45 mx-auto -mt-2"></div>
                         </div>
                      </div>
                    );
@@ -459,25 +392,6 @@ export const Network: React.FC = () => {
                             <span className="text-sm font-bold text-white">Supply Chain Verified: 1,248 Nodes Active</span>
                          </div>
                       </div>
-                      <div className="hidden lg:block w-px h-12 bg-white/10"></div>
-                      <div className="hidden lg:flex flex-col space-y-2">
-                         <span className="text-[9px] font-black text-brand-offWhite/20 uppercase tracking-[0.3em]">Critical Anomalies</span>
-                         <div className="flex items-center space-x-4">
-                            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                            <span className="text-sm font-bold text-red-400">1 Logistical Hold (Nordic-Hub)</span>
-                         </div>
-                      </div>
-                   </div>
-                   
-                   <div className="flex items-center space-x-6">
-                      <div className="text-right hidden sm:block">
-                         <p className="text-[10px] font-black text-brand-gold uppercase tracking-[0.2em]">Risk Analysis API v4</p>
-                         <p className="text-[9px] text-brand-offWhite/30 uppercase tracking-widest mt-1">Last Update: 04:12 GMT</p>
-                      </div>
-                      <button className="flex items-center space-x-3 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-white uppercase tracking-[0.25em] hover:bg-white/10 hover:border-brand-gold transition-all group shadow-xl">
-                         <Maximize2 size={16} className="text-brand-gold group-hover:scale-110 transition-transform" />
-                         <span>Full Spatial Intelligence</span>
-                      </button>
                    </div>
                 </div>
               </div>
@@ -485,7 +399,7 @@ export const Network: React.FC = () => {
           )}
         </div>
 
-        {/* SETTLEMENT FOOTER - Luxury Persistence */}
+        {/* SETTLEMENT FOOTER - Functional Links Updated */}
         <div className="bg-brand-darkNavy py-12 px-12 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
              <div className="flex items-center space-x-3">
@@ -493,91 +407,22 @@ export const Network: React.FC = () => {
                 <span className="text-[10px] font-black text-white uppercase tracking-[0.25em]">Institutional Settlement Channels</span>
              </div>
              <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black text-white uppercase tracking-[0.2em]">
-                <span className="flex items-center space-x-2"><Globe size={14} /> <span>SWIFT / SEPA</span></span>
-                <span className="flex items-center space-x-2"><TrendingUp size={14} /> <span>Corporate Treasury</span></span>
-                <span className="flex items-center space-x-2"><ShieldCheck size={14} /> <span>Letter of Credit</span></span>
-                <span className="flex items-center space-x-2"><ArrowRight size={14} /> <span>Smart Contract</span></span>
+                <Link to="/partners" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                  <Globe size={14} /> <span>SWIFT / SEPA</span>
+                </Link>
+                <Link to="/wallet" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                  <TrendingUp size={14} /> <span>Corporate Treasury</span>
+                </Link>
+                <Link to="/privacy-policy" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                  <ShieldCheck size={14} /> <span>Letter of Credit</span>
+                </Link>
+                <Link to="/terms-of-service" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
+                  <ArrowRight size={14} /> <span>Smart Contract</span>
+                </Link>
              </div>
           </div>
         </div>
       </main>
-
-      {/* QUOTE REQUEST MODAL */}
-      {isQuoteModalOpen && selectedSupplier && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-darkNavy/80 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="w-full max-w-xl bg-white rounded-3xl overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border border-slate-100 transform animate-in slide-in-from-bottom-8 duration-500">
-            <div className="px-8 py-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-brand-darkNavy flex items-center justify-center text-brand-gold"><Lock size={20} /></div>
-                <div>
-                   <h3 className="text-lg font-serif font-bold text-brand-darkNavy">Institutional Quote Dispatch</h3>
-                   <p className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Supplier: {selectedSupplier.name}</p>
-                </div>
-              </div>
-              <button onClick={() => setIsQuoteModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={20} className="text-brand-mutedGray" /></button>
-            </div>
-
-            <form onSubmit={submitQuoteRequest} className="p-8 space-y-6">
-              {quoteSuccess ? (
-                <div className="py-12 flex flex-col items-center text-center space-y-4 animate-in zoom-in duration-300">
-                  <div className="w-16 h-16 bg-brand-success/10 rounded-full flex items-center justify-center text-brand-success"><CheckCircle2 size={32} /></div>
-                  <div className="space-y-1">
-                    <h4 className="text-xl font-serif font-bold text-brand-darkNavy">Dispatch Successful</h4>
-                    <p className="text-sm text-brand-mutedGray">RFP-2025-Q1 sequence has been initiated with {selectedSupplier.name}.</p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Project Association</label>
-                    <div className="relative">
-                      <select required className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm font-bold text-brand-darkNavy outline-none appearance-none focus:ring-1 focus:ring-brand-gold transition-all">
-                        <option value="">Select Target Project...</option>
-                        {MOCK_PROJECTS.map(p => <option key={p} value={p}>{p}</option>)}
-                      </select>
-                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-mutedGray pointer-events-none" />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-brand-mutedGray uppercase tracking-widest">Scope Specifications</label>
-                    <textarea placeholder="Detail the materials, quantities, and delivery milestones required..." className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-sm font-medium text-brand-darkNavy outline-none focus:ring-1 focus:ring-brand-gold transition-all min-h-[120px] resize-none"></textarea>
-                  </div>
-                  <div className="p-4 bg-brand-gold/5 rounded-xl border border-brand-gold/20 flex items-start space-x-3">
-                    <AlertTriangle className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
-                    <p className="text-[10px] text-brand-darkNavy font-medium leading-relaxed uppercase tracking-tight">By dispatching this request, you initiate a secure communication channel through the Classic Homes Enterprise Bridge.</p>
-                  </div>
-                  <button disabled={isSending} type="submit" className="w-full py-5 bg-brand-darkNavy text-white text-xs font-black uppercase tracking-[0.25em] rounded-xl hover:bg-black transition-all shadow-2xl flex items-center justify-center space-x-3 disabled:opacity-50">
-                    {isSending ? (<><Loader2 size={16} className="animate-spin text-brand-gold" /><span>Encrypting Message...</span></>) : (<><Send size={16} className="text-brand-gold" /><span>Dispatch RFP Sequence</span></>)}
-                  </button>
-                </>
-              )}
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* CONCIERGE */}
-      <div className="fixed bottom-10 right-10 z-50">
-         <div className="bg-brand-darkNavy p-3 rounded-2xl border border-brand-gold/30 shadow-2xl flex items-center space-x-4 cursor-pointer hover:scale-105 transition-all group">
-            <div className="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-               <MessageSquare size={20} className="fill-brand-darkNavy text-brand-darkNavy" />
-            </div>
-            <div className="pr-4">
-               <span className="block text-[10px] text-brand-gold font-black uppercase tracking-widest leading-none mb-1 text-nowrap">Concierge</span>
-               <span className="block text-xs text-white/60 font-medium text-nowrap">Priority Support</span>
-            </div>
-         </div>
-      </div>
-      
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
-        }
-        .animate-bounce-slow {
-          animation: bounce-slow 2s infinite ease-in-out;
-        }
-      `}} />
     </div>
   );
 };
