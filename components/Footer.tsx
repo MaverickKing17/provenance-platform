@@ -6,16 +6,13 @@ import {
   Linkedin, 
   Twitter, 
   Youtube,
-  Instagram,
   Globe,
-  ArrowUpRight,
   Database,
   Lock,
   Zap,
   CheckCircle2,
   Activity,
   HeadphonesIcon,
-  ChevronRight,
   Server
 } from 'lucide-react';
 
@@ -94,10 +91,10 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* COLUMN 2: GOVERNANCE & INTEL */}
+          {/* COLUMN 2: GOVERNANCE & INTEL - High Legibility C-Suite Version */}
           <div className="lg:col-span-2 space-y-12 lg:pl-4">
-            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-white/10 pb-6 mb-2">Governance</h3>
-            <ul className="space-y-6">
+            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-brand-gold/30 pb-6 mb-4">Governance</h3>
+            <ul className="space-y-8">
               <FooterLink label="Privacy Protocol" to="/privacy-policy" />
               <FooterLink label="Institutional Terms" to="/terms-of-service" />
               <FooterLink label="Compliance Center" to="/help" />
@@ -105,10 +102,10 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* COLUMN 3: MARKET INTELLIGENCE */}
+          {/* COLUMN 3: MARKET INTELLIGENCE - High Legibility C-Suite Version */}
           <div className="lg:col-span-2 space-y-12">
-            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-white/10 pb-6 mb-2">Intelligence</h3>
-            <ul className="space-y-6">
+            <h3 className="text-[14px] font-black text-brand-gold uppercase tracking-[0.6em] border-b border-brand-gold/30 pb-6 mb-4">Intelligence</h3>
+            <ul className="space-y-8">
               <FooterLink label="Blueprint Report" to="/blog" />
               <FooterLink label="Yield Analytics" to="/case-studies" />
               <FooterLink label="Artisan Network" to="/network" />
@@ -204,10 +201,12 @@ const FooterLink: React.FC<{ label: string; to: string }> = ({ label, to }) => (
   <li>
     <Link 
       to={to} 
-      className="group flex items-center space-x-4 text-brand-offWhite hover:text-brand-gold transition-all duration-300 py-1"
+      className="group flex items-center space-x-3 text-white/80 hover:text-white transition-all duration-300 py-1.5"
     >
-      <div className="w-3 h-[2px] bg-brand-gold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500"></div>
-      <span className="text-[16px] font-black uppercase tracking-[0.2em]">{label}</span>
+      <div className="w-3.5 h-[2px] bg-brand-gold shrink-0 opacity-80 group-hover:opacity-100 group-hover:w-5 group-hover:shadow-[0_0_10px_#D4AF37] transition-all duration-500"></div>
+      <span className="text-[15px] font-bold uppercase tracking-[0.18em] whitespace-nowrap leading-none transition-all group-hover:translate-x-1">
+        {label}
+      </span>
     </Link>
   </li>
 );
