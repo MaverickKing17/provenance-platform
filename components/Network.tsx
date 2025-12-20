@@ -56,11 +56,11 @@ export const Network: React.FC = () => {
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" to="/sourcing-hub" />
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
-          <NavItem icon={<Box size(18) />} label="Orders" to="/orders" />
+          <NavItem icon={<Box size={18} />} label="Orders" to="/orders" />
           <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
           <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
-          <NavItem icon={<Users size(18) />} label="Vetted Suppliers" active />
-          <NavItem icon={<Settings2 size(18) />} label="Settings" to="/settings" />
+          <NavItem icon={<Users size={18} />} label="Vetted Suppliers" active />
+          <NavItem icon={<Settings2 size={18} />} label="Settings" to="/settings" />
         </nav>
         <div className="p-6 border-t border-white/5">
           <div className="flex items-center space-x-3 p-2 rounded-xl">

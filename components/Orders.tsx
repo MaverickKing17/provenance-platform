@@ -134,7 +134,7 @@ export const Orders: React.FC = () => {
           <NavItem icon={<LayoutDashboard size={18} />} label="Dashboard" to="/sourcing-hub" />
           <NavItem icon={<Layers size={18} />} label="Projects" to="/projects" />
           <NavItem icon={<ShoppingBag size={18} />} label="Materials" to="/materials" />
-          <NavItem icon={<Box size(18) />} label="Orders" active />
+          <NavItem icon={<Box size={18} />} label="Orders" active />
           <NavItem icon={<Wallet size={18} />} label="Wallet" to="/wallet" />
           <NavItem icon={<BarChart3 size={18} />} label="Analytics" to="/analytics" />
           <NavItem icon={<Users size={18} />} label="Suppliers" to="/network" />
@@ -251,7 +251,7 @@ export const Orders: React.FC = () => {
                </ul>
             </div>
             <div className="space-y-8">
-               <h5 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Market Intelligence</h5>
+               <h5 className="text-[10px) font-black text-white uppercase tracking-[0.4em]">Market Intelligence</h5>
                <ul className="space-y-5">
                   <li><FooterLink label="Vetted Artisan Network" to="/network" /></li>
                   <li><FooterLink label="Real-time Sourcing Matrix" to="/analytics" /></li>
